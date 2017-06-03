@@ -12,8 +12,6 @@ create table Empleados (
     Sueldo double not null
 );
 
-
-
 create table Tecnicos (
 	Especializacion varchar(7) not null,
     Empleado bigint not null,
