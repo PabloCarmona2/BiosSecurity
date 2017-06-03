@@ -12,6 +12,8 @@ create table Empleados (
     Sueldo double not null
 );
 
+
+
 create table Tecnicos (
 	Especializacion varchar(7) not null,
     Empleado bigint not null,
@@ -35,12 +37,12 @@ create table Clientes (
 );
 
 create table Propiedades (
-	IdProp bigint auto_increment not null,
+	IdProp bigint not null,
     Tipo varchar(20) not null,
     Direccion varchar(50) not null,
     Cliente bigint not null,
-    primary key (IdProp),
-    foreign key (Cliente) references Clientes(Cedula)
+    foreign key (Cliente) references Clientes(Cedula),
+    primary key (IdProp, Cliente)
 );
 
 create table Dispositivos (
