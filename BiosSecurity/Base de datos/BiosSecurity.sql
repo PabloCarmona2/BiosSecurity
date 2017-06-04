@@ -26,6 +26,12 @@ create table Cobradores (
     primary key (Empleado)
 );
 
+create table Administradores (
+    Empleado bigint not null,
+    foreign key (Empleado) references Empleados(Cedula),
+    primary key (Empleado)
+);
+
 create table Clientes (
 	Cedula bigint primary key,
     Nombre varchar(25) not null,
