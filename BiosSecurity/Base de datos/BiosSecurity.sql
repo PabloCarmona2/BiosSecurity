@@ -51,7 +51,7 @@ create table Propiedades (
 
 create table Dispositivos (
 	NumInventario bigint auto_increment not null,
-    Tipo varchar(6) not null,
+    DescripcionUbucacion varchar(100),
     primary key (NumInventario)
 );
 
@@ -64,41 +64,39 @@ create table Servicios (
     foreign key (Propiedad) references Propiedades(IdProp)
 );
 
-create table ServicioVideo (
+create table ServicioVideoVigilancia (
 	Terminal boolean not null,
     NumServicio bigint not null,
     foreign key (NumServicio) references Servicios(NumServicio),
     primary key (NumServicio)
 );
 
-create table ServicioAlarma (
+create table ServicioAlarmas (
 	CodAnulacion bigint not null,
     NumServicio bigint not null,
     foreign key (NumServicio) references Servicios(NumServicio),
     primary key (NumServicio)
 );
 
-create table DispositivoServicioAlarma (
-	Descripcion varchar(100) not null,
-    Servicio bigint not null,
+create table Alarmas (
+    Servicio bigint,
     Dispositivo bigint not null,
-    Tecnico bigint not null,
+    Tecnico bigint,
 	foreign key (Servicio) references ServicioAlarma(NumServicio),
     foreign key (Dispositivo) references Dispositivos(NumInventario),
     foreign key (Tecnico) references Tecnicos(Empleado),
-    primary key (Dispositivo, Servicio)
+    primary key (Dispositivo)
 );
 
-create table DispositivoServicioVideo (
-	Descripcion varchar(100) not null,
-    Exterior Boolean not null,
-    Servicio bigint not null,
+create table Camaras (
+    Exterior boolean,
+    Servicio bigint,
     Dispositivo bigint not null,
-    Tecnico bigint not null,
+    Tecnico bigint,
 	foreign key (Servicio) references ServicioVideo(NumServicio),
     foreign key (Dispositivo) references Dispositivos(NumInventario),
     foreign key (Tecnico) references Tecnicos(Empleado),
-    primary key (Dispositivo, Servicio)
+    primary key (Dispositivo)
 );
 
 create table CabezalRecibo (
@@ -107,6 +105,7 @@ create table CabezalRecibo (
     Total double not null,
     Cliente bigint not null,
     Cobrador bigint not null,
+    Cobrado boolean not null,
     foreign key (Cliente) references Clientes(Cedula),
     foreign key (Cobrador) references Cobradores(Empleado),
     primary key (NumRecibo)
