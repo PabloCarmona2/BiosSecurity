@@ -9,6 +9,32 @@ package DataTypes;
  *
  * @author Geronimo
  */
-public class Dispositivo {
+public abstract class Dispositivo {
+    
+    private int numInventario;
+    private String descripcionUbicacion;
+
+    public int getNumInventario() {
+        return numInventario;
+    }
+
+    public void setNumInventario(int numInventario) {
+        this.numInventario = numInventario;
+    }
+
+    public String getDescripcionUbicacion() {
+        return descripcionUbicacion;
+    }
+
+    public void setDescripcionUbicacion(String descripcionUbicacion) {
+        this.descripcionUbicacion = descripcionUbicacion;
+    }
+    
+    public Dispositivo(int numInventario, String descripcionUbicacion){
+        
+        setNumInventario(numInventario);
+        setDescripcionUbicacion(descripcionUbicacion);
+        
+    }
     
 }

@@ -5,10 +5,16 @@
  */
 package DataTypes;
 
+import java.util.Date;
+
 /**
  *
  * @author Geronimo
  */
-public class Administrador {
+public class Administrador extends Empleado{
+    
+    public Administrador(int cedula, String nombre, String clave, Date fIngreso, double sueldo) {
+        super(cedula, nombre, clave, fIngreso, sueldo);
+    }
     
 }

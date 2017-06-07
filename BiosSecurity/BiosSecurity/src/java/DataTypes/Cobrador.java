@@ -5,10 +5,28 @@
  */
 package DataTypes;
 
+import java.util.Date;
+
 /**
  *
  * @author Geronimo
  */
-public class Cobrador {
+public class Cobrador extends Empleado{
+    
+    private  String transporte;
+    
+    public String getTransporte() {
+        return transporte;
+    }
+
+    public void setTransporte(String transporte) {
+        this.transporte = transporte;
+    }
+
+    public Cobrador(int cedula, String nombre, String clave, Date fIngreso, double sueldo, String transporte) {
+        super(cedula, nombre, clave, fIngreso, sueldo);
+        
+        setTransporte(transporte);
+    }
     
 }
