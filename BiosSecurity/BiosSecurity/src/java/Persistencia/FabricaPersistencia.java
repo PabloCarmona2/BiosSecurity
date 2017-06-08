@@ -5,10 +5,16 @@
  */
 package Persistencia;
 
+import Persistencia.Interfaces.IPersistenciaTecnico;
+import Persistencia.Trabajo.PersistenciaTecnico;
+
 /**
  *
  * @author Geronimo
  */
 public class FabricaPersistencia {
-    
+    public static IPersistenciaTecnico GetPersistenciaTecnico()
+    {
+        return (PersistenciaTecnico.GetInstancia());
+    }
 }
