@@ -5,10 +5,17 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Tecnico;
+import java.util.List;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaTecnico {
-    
+    Tecnico Buscar(int cedula) throws Exception;
+    void Agregar(Tecnico tecnico) throws Exception;
+    void Modificar(Tecnico tecnico) throws Exception;
+    void Eliminar(Tecnico tecnico) throws Exception;
+    List<Tecnico> ListarTecnicos() throws Exception;
 }

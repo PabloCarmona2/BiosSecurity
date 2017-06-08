@@ -5,13 +5,11 @@
  */
 package Persistencia.Trabajo;
 
-import Persistencia.Interfaces.IPersistenciaLineaRecibo;
-
 /**
  *
  * @author Geronimo
  */
-public class PersistenciaLineaRecibo implements IPersistenciaLineaRecibo{
+public class PersistenciaLineaRecibo {
     private static PersistenciaLineaRecibo _instancia = null;
     private PersistenciaLineaRecibo() { }
     public static PersistenciaLineaRecibo GetInstancia()
