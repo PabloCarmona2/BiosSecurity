@@ -67,4 +67,92 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
     }
     
+    public void Agregar(Camara camara) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL AgregarCamara(?, ?, ?, ?, ?) }")) {
+           
+            consulta.setNull(1, java.sql.Types.VARCHAR);
+            consulta.setNull(2, java.sql.Types.BOOLEAN);
+            consulta.setNull(3, java.sql.Types.INTEGER);
+            consulta.setInt(4, java.sql.Types.INTEGER);
+            consulta.registerOutParameter(5, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(7);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void Instalar(Camara camara) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL InstalarCamara(?, ?, ?, ?, ?) }")) {
+           
+            consulta.setString(1, camara.getDescripcionUbicacion());
+            consulta.setBoolean(2, camara.isExterior());
+            consulta.setInt(3, camara.getServicio().getNumServicio());
+            consulta.setInt(4, camara.getInstalador().getCedula());
+            consulta.registerOutParameter(5, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(7);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void Eliminar(Camara camara) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL EliminarCamara(?, ?) }")) {
+           
+            consulta.setInt(1, camara.getNumInventario());
+            consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(7);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    
 }
