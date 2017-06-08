@@ -53,6 +53,7 @@ create table Dispositivos (
 	NumInventario bigint auto_increment not null,
     DescripcionUbucacion varchar(100),
     primary key (NumInventario)
+    BajaLogica boolean not null
 );
 
 create table Servicios (
