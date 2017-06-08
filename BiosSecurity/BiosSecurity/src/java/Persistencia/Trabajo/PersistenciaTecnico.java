@@ -46,7 +46,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             
             Tecnico tecnico = null;
             
-            int _cedula;
+            
             String nombre;
             String clave;
             Date fIngreso;
@@ -54,14 +54,13 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             String especializacion;
             
             if(resultadoConsulta.next()){
-                _cedula = resultadoConsulta.getInt("Cedula");
                 nombre = resultadoConsulta.getString("Nombre");
                 clave = resultadoConsulta.getString("Clave");
                 fIngreso = resultadoConsulta.getDate("FIngreso");
                 sueldo = resultadoConsulta.getDouble("Sueldo");
                 especializacion = resultadoConsulta.getString("Especializacion");
                 
-                tecnico = new Tecnico(_cedula, nombre, clave, fIngreso, sueldo, especializacion);
+                tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, especializacion);
             }
             
             return tecnico;

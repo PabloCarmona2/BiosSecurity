@@ -11,15 +11,15 @@ package DataTypes;
  */
 public class Camara extends Dispositivo{
     
-    private boolean exterior;
+    private Boolean exterior;
     private ServicioVideoVigilancia servicio;
     private Tecnico instalador;
     
-    public boolean isExterior() {
+    public Boolean isExterior() {
         return exterior;
     }
 
-    public void setExterior(boolean exterior) {
+    public void setExterior(Boolean exterior) {
         this.exterior = exterior;
     }
 
@@ -39,7 +39,7 @@ public class Camara extends Dispositivo{
         this.instalador = instalador;
     }
     
-    public Camara(int numInventario, String descripcionUbicacion, boolean exterior, ServicioVideoVigilancia servicio, Tecnico instalador) {
+    public Camara(int numInventario, String descripcionUbicacion, Boolean exterior, ServicioVideoVigilancia servicio, Tecnico instalador) {
         super(numInventario, descripcionUbicacion);
         
         setExterior(exterior);

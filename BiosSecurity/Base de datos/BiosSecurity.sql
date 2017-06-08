@@ -16,20 +16,20 @@ create table Tecnicos (
 	Especializacion varchar(7) not null,
     Cedula bigint not null,
     foreign key (Cedula) references Empleados(Cedula),
-    primary key (Empleado)
+    primary key (Cedula)
 );
 
 create table Cobradores (
 	Transporte varchar(20),
     Cedula bigint not null,
     foreign key (Cedula) references Empleados(Cedula),
-    primary key (Empleado)
+    primary key (Cedula)
 );
 
 create table Administradores (
     Cedula bigint not null,
     foreign key (Cedula) references Empleados(Cedula),
-    primary key (Empleado)
+    primary key (Cedula)
 );
 
 create table Clientes (
@@ -51,9 +51,9 @@ create table Propiedades (
 
 create table Dispositivos (
 	NumInventario bigint auto_increment not null,
-    DescripcionUbucacion varchar(100),
+    DescripcionUbicacion varchar(100),
+    BajaLogica boolean not null,
     primary key (NumInventario)
-    BajaLogica boolean not null
 );
 
 create table Servicios (
@@ -84,9 +84,9 @@ create table Alarmas (
     NumInventario bigint not null,
     Tecnico bigint,
 	foreign key (Servicio) references ServicioAlarma(NumServicio),
-    foreign key (Dispositivo) references Dispositivos(NumInventario),
+    foreign key (NumInventario) references Dispositivos(NumInventario),
     foreign key (Tecnico) references Tecnicos(Empleado),
-    primary key (Dispositivo)
+    primary key (NumInventario)
 );
 
 create table Camaras (
@@ -95,9 +95,9 @@ create table Camaras (
     NumInventario bigint not null,
     Tecnico bigint,
 	foreign key (Servicio) references ServicioVideo(NumServicio),
-    foreign key (Dispositivo) references Dispositivos(NumInventario),
+    foreign key (NumInventario) references Dispositivos(NumInventario),
     foreign key (Tecnico) references Tecnicos(Empleado),
-    primary key (Dispositivo)
+    primary key (NumInventario)
 );
 
 create table CabezalRecibo (
@@ -120,5 +120,3 @@ create table LineaRecibo(
     foreign key (Servicio) references Servicios(NumServicio),
     primary key (Recibo, Servicio)
 );
-
-
