@@ -9,6 +9,6 @@ package Persistencia;
  *
  * @author Geronimo
  */
-public class PersistenciaServicioAlarma {
+public class FabricaPersistencia {
     
 }

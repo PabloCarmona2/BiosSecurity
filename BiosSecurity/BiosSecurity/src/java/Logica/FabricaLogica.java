@@ -9,6 +9,6 @@ package Logica;
  *
  * @author Geronimo
  */
-public class LogicaCliente {
+public class FabricaLogica {
     
 }

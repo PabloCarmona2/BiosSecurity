@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Persistencia;
+package Persistencia.Interfaces;
 
 /**
  *
  * @author Geronimo
  */
-public class PersistenciaCobrador {
+public interface IPersistenciaCobrador {
     
 }
