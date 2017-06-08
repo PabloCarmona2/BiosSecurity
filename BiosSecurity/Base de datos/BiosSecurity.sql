@@ -52,7 +52,8 @@ create table Propiedades (
 create table Dispositivos (
 	NumInventario bigint auto_increment not null,
     DescripcionUbicacion varchar(100),
-    primary key (NumInventario)
+    primary key (NumInventario),
+    BajaLogica boolean not null
 );
 
 create table Servicios (
