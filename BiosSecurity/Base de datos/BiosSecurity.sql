@@ -52,7 +52,6 @@ create table Propiedades (
 create table Dispositivos (
 	NumInventario bigint auto_increment not null,
     DescripcionUbicacion varchar(100),
-    BajaLogica boolean not null,
     primary key (NumInventario)
 );
 
@@ -83,9 +82,9 @@ create table Alarmas (
     Servicio bigint,
     NumInventario bigint not null,
     Tecnico bigint,
-	foreign key (Servicio) references ServicioAlarma(NumServicio),
+	foreign key (Servicio) references ServicioAlarmas(NumServicio),
     foreign key (NumInventario) references Dispositivos(NumInventario),
-    foreign key (Tecnico) references Tecnicos(Empleado),
+    foreign key (Tecnico) references Tecnicos(Cedula),
     primary key (NumInventario)
 );
 
@@ -94,9 +93,9 @@ create table Camaras (
     Servicio bigint,
     NumInventario bigint not null,
     Tecnico bigint,
-	foreign key (Servicio) references ServicioVideo(NumServicio),
+	foreign key (Servicio) references ServicioVideoVigilancia(NumServicio),
     foreign key (NumInventario) references Dispositivos(NumInventario),
-    foreign key (Tecnico) references Tecnicos(Empleado),
+    foreign key (Tecnico) references Tecnicos(Cedula),
     primary key (NumInventario)
 );
 
@@ -108,7 +107,7 @@ create table CabezalRecibo (
     Cobrador bigint not null,
     Cobrado boolean not null,
     foreign key (Cliente) references Clientes(Cedula),
-    foreign key (Cobrador) references Cobradores(Empleado),
+    foreign key (Cobrador) references Cobradores(Cedula),
     primary key (NumRecibo)
 );
 
