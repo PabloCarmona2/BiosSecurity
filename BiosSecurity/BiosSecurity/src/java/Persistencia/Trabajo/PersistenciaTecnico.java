@@ -40,7 +40,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Cedula = Empleados.Cedula WHERE Cedula = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
+                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Empleado = Empleados.Cedula WHERE Empleado = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
            
             consulta.setInt(1, cedula);
             
@@ -170,7 +170,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Cedula = Empleados.Cedula;"); 
+                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Empleado = Empleados.Cedula;"); 
                 ResultSet resultadoConsulta = consulta.executeQuery()) {
            
             

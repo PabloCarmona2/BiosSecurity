@@ -21,4 +21,5 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
         return _instancia;
     }
     
+    
 }

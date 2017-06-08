@@ -14,21 +14,21 @@ create table Empleados (
 
 create table Tecnicos (
 	Especializacion varchar(7) not null,
-    Empleado bigint not null,
-    foreign key (Empleado) references Empleados(Cedula),
+    Cedula bigint not null,
+    foreign key (Cedula) references Empleados(Cedula),
     primary key (Empleado)
 );
 
 create table Cobradores (
 	Transporte varchar(20),
-    Empleado bigint not null,
-    foreign key (Empleado) references Empleados(Cedula),
+    Cedula bigint not null,
+    foreign key (Cedula) references Empleados(Cedula),
     primary key (Empleado)
 );
 
 create table Administradores (
-    Empleado bigint not null,
-    foreign key (Empleado) references Empleados(Cedula),
+    Cedula bigint not null,
+    foreign key (Cedula) references Empleados(Cedula),
     primary key (Empleado)
 );
 
@@ -81,7 +81,7 @@ create table ServicioAlarmas (
 
 create table Alarmas (
     Servicio bigint,
-    Dispositivo bigint not null,
+    NumInventario bigint not null,
     Tecnico bigint,
 	foreign key (Servicio) references ServicioAlarma(NumServicio),
     foreign key (Dispositivo) references Dispositivos(NumInventario),
@@ -92,7 +92,7 @@ create table Alarmas (
 create table Camaras (
     Exterior boolean,
     Servicio bigint,
-    Dispositivo bigint not null,
+    NumInventario bigint not null,
     Tecnico bigint,
 	foreign key (Servicio) references ServicioVideo(NumServicio),
     foreign key (Dispositivo) references Dispositivos(NumInventario),

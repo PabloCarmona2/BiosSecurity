@@ -5,7 +5,14 @@
  */
 package Persistencia.Trabajo;
 
+import DataTypes.Camara;
+import DataTypes.ServicioVideoVigilancia;
+import DataTypes.Tecnico;
 import Persistencia.Interfaces.IPersistenciaCamara;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  *
@@ -20,5 +27,6 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             _instancia = new PersistenciaCamara();
         return _instancia;
     }
+    
     
 }
