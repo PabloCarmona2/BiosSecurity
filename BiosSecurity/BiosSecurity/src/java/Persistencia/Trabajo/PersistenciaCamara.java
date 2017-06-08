@@ -67,38 +67,4 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
     }
     
-    public void Agregar(Camara camara) throws Exception{
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
-        } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
-        }
-        
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AgregarCamara(?, ?, ?, ?, ?) }")) {
-           
-            consulta.setString(1, camara.getDescripcionUbicacion());
-            consulta.setBoolean(2, null);
-            consulta.setInt(3, camara.getServicio().getNumServicio());
-            consulta.setInt(4, camara.getInstalador().getCedula());
-            consulta.registerOutParameter(5, java.sql.Types.VARCHAR);
-            
-            consulta.executeUpdate();
-            
-            String error = consulta.getString(7);
-            
-            if(error != null){
-                throw new Exception("ERROR: " + error);
-            }
-            
-        }catch(Exception ex){
-            throw new Exception(ex.getMessage());
-        }
-    }
 }
-consulta.setString(1, camara.getDescripcionUbicacion());
-            consulta.setBoolean(2, camara.isExterior());
-            consulta.setInt(3, camara.getServicio().getNumServicio());
-            consulta.setInt(4, camara.getInstalador().getCedula());
-            consulta.registerOutParameter(5, java.sql.Types.VARCHAR);
