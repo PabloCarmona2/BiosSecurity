@@ -12,7 +12,6 @@ package DataTypes;
 public class LineaRecibo {
     
     private double importe;
-    private Recibo recibo;
     private Servicio servicio;
 
     public double getImporte() {
@@ -23,14 +22,6 @@ public class LineaRecibo {
         this.importe = importe;
     }
 
-    public Recibo getRecibo() {
-        return recibo;
-    }
-
-    public void setRecibo(Recibo recibo) {
-        this.recibo = recibo;
-    }
-
     public Servicio getServicio() {
         return servicio;
     }
@@ -39,10 +30,9 @@ public class LineaRecibo {
         this.servicio = servicio;
     }
     
-    public LineaRecibo(double importe, Recibo recibo, Servicio servicio){
+    public LineaRecibo(double importe, Servicio servicio){
         
         setImporte(importe);
-        setRecibo(recibo);
         setServicio(servicio);
         
     }

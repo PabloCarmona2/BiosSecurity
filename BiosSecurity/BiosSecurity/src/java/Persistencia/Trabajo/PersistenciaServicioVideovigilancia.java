@@ -20,4 +20,6 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
             _instancia = new PersistenciaServicioVideovigilancia();
         return _instancia;
     }
+    
+    
 }
