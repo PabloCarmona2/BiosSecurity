@@ -6,6 +6,7 @@
 package DataTypes;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -17,6 +18,15 @@ public abstract class Servicio {
     private Date fecha;
     private boolean monitoreo;
     private Propiedad propiedadCliente;
+    private List<Dispositivo> dispositivos;
+
+    public List<Dispositivo> getDispositivos() {
+        return dispositivos;
+    }
+
+    public void setDispositivos(List<Dispositivo> dispositivos) {
+        this.dispositivos = dispositivos;
+    }
 
     public int getNumServicio() {
         return numServicio;
@@ -50,12 +60,13 @@ public abstract class Servicio {
         this.propiedadCliente = propiedadCliente;
     }
     
-    public Servicio(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente){
+    public Servicio(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Dispositivo> dispositivos){
         
         setNumServicio(numServicio);
         setFecha(fecha);
         setMonitoreo(monitoreo);
         setPropiedadCliente(propiedadCliente);
+        setDispositivos(dispositivos);
     }
     
 }

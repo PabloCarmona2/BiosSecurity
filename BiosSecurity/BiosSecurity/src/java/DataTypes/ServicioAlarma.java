@@ -6,6 +6,7 @@
 package DataTypes;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -23,8 +24,8 @@ public class ServicioAlarma extends Servicio{
         this.codAnulacion = codAnulacion;
     }
     
-    public ServicioAlarma(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, int codAnulacion) {
-        super(numServicio, fecha, monitoreo, propiedadCliente);
+    public ServicioAlarma(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Dispositivo> dispositivos,  int codAnulacion) {
+        super(numServicio, fecha, monitoreo, propiedadCliente, dispositivos);
         
         setCodAnulacion(codAnulacion);
         
