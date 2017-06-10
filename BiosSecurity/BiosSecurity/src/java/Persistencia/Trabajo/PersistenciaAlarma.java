@@ -96,7 +96,7 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
         }
     }
     
-    public void Instalar(Alarma alarma) throws Exception{
+    public void Instalar(Alarma alarma, int numServicio) throws Exception{
         
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -109,7 +109,7 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
            
             consulta.setInt(1, alarma.getNumInventario());
             consulta.setString(2, alarma.getDescripcionUbicacion());
-            consulta.setInt(3, alarma.getServicio().getNumServicio());
+            consulta.setInt(3, numServicio);
             consulta.setInt(4, alarma.getInstalador().getCedula());
             consulta.registerOutParameter(5, java.sql.Types.VARCHAR);
             

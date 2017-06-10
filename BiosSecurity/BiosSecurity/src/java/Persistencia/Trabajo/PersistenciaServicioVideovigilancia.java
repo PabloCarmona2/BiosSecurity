@@ -5,6 +5,10 @@
  */
 package Persistencia.Trabajo;
 
+import DataTypes.Alarma;
+import DataTypes.Camara;
+import DataTypes.ServicioAlarma;
+import DataTypes.ServicioVideoVigilancia;
 import Persistencia.Interfaces.IPersistenciaServicioVideoVigilancia;
 
 /**
@@ -21,5 +25,21 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
         return _instancia;
     }
     
-    
+    public void InstalarDispositivo(ServicioVideoVigilancia servicio) throws Exception{
+        try
+            {
+                if (!servicio.getDispositivos().isEmpty())
+                {
+                    PersistenciaCamara.GetInstancia().Instalar((Camara)servicio.getDispositivos().get((servicio.getDispositivos().size() - 1)), servicio.getNumServicio());
+                }
+                else
+                {
+                    throw new Exception("No hay dispositivos para instalar.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.getMessage());
+            }
+    }
 }

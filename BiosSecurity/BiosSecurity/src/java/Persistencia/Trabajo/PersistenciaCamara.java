@@ -97,7 +97,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
     }
     
-    public void Instalar(Camara camara) throws Exception{
+    public void Instalar(Camara camara, int numServicio) throws Exception{
         
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -111,7 +111,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             consulta.setInt(1, camara.getNumInventario());
             consulta.setString(2, camara.getDescripcionUbicacion());
             consulta.setBoolean(3, camara.isExterior());
-            consulta.setInt(4, camara.getServicio().getNumServicio());
+            consulta.setInt(4, numServicio);
             consulta.setInt(5, camara.getInstalador().getCedula());
             consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
             
