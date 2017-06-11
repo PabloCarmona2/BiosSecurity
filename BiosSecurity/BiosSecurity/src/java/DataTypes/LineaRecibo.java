@@ -30,6 +30,10 @@ public class LineaRecibo {
         this.servicio = servicio;
     }
     
+    public LineaRecibo(){
+        this(0, null);
+    }
+    
     public LineaRecibo(double importe, Servicio servicio){
         
         setImporte(importe);

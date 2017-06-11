@@ -18,4 +18,5 @@ public interface IPersistenciaTecnico {
     void Modificar(Tecnico tecnico) throws Exception;
     void Eliminar(Tecnico tecnico) throws Exception;
     List<Tecnico> ListarTecnicos() throws Exception;
+    Tecnico LoginTenico(int cedula, String clave)throws Exception;
 }

@@ -5,18 +5,29 @@
  */
 package Persistencia.Trabajo;
 
+<<<<<<< HEAD
 import DataTypes.Cliente;
 import DataTypes.Cobrador;
 import DataTypes.LineaRecibo;
 import DataTypes.Recibo;
+=======
+import DataTypes.Cobrador;
+import DataTypes.Tecnico;
+>>>>>>> 7a98a246124cda750f9f6dcf42e6a3fb80c0874d
 import Persistencia.Interfaces.IPersistenciaCobrador;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+=======
+import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+>>>>>>> 7a98a246124cda750f9f6dcf42e6a3fb80c0874d
 
 /**
  *
@@ -32,6 +43,7 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
         return _instancia;
     }
     
+<<<<<<< HEAD
     public List<Recibo> RecibosaCobrar(String zona) throws Exception{
         
         try{
@@ -82,12 +94,17 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
      public Cobrador Buscar(int cedula)throws Exception{
         
           Cobrador cobrador=null;
+=======
+    public Cobrador LoginCobrador(int cedula, String clave){
+        Cobrador cobrador = null;
+>>>>>>> 7a98a246124cda750f9f6dcf42e6a3fb80c0874d
         
          try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
+<<<<<<< HEAD
       
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
         PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Cobradores WHERE cedula = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
@@ -113,4 +130,37 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
             throw new Exception(ex.getMessage());
         }
      }
+=======
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+        PreparedStatement consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.cobradores c where c.Cedula = ? and e.Clave = ?;"); ResultSet resultado = consulta.executeQuery()) {
+        
+        consulta.setInt(1, cedula);
+        consulta.setString(2, clave);
+        String nombre;
+        String claveAdmin;
+        Date fIngreso;
+        double sueldo;
+        String transporte;
+            
+        if(resultado.next()){
+           nombre = resultado.getString("Nombre");
+           claveAdmin = resultado.getString("Clave");
+           fIngreso = resultado.getDate("FIngreso");
+           sueldo = resultado.getDouble("Sueldo");
+           transporte = resultado.getString("Transporte");
+                    
+           cobrador = new Cobrador(cedula, nombre, claveAdmin, fIngreso, sueldo, transporte);
+        }
+        }catch(Exception ex){
+            try {
+                throw new Exception(ex.getMessage());
+            } catch (Exception ex1) {
+                Logger.getLogger(PersistenciaAdministrador.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+         return cobrador;
+    }
+    
+>>>>>>> 7a98a246124cda750f9f6dcf42e6a3fb80c0874d
 }

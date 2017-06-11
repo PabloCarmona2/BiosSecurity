@@ -9,14 +9,20 @@ import Persistencia.Interfaces.IPersistenciaAdministrador;
 import Persistencia.Trabajo.PersistenciaAdministrador;
 import Persistencia.Interfaces.IPersistenciaAlarma;
 import Persistencia.Interfaces.IPersistenciaCamara;
+<<<<<<< HEAD
 import Persistencia.Interfaces.IPersistenciaCliente;
+=======
+>>>>>>> 7a98a246124cda750f9f6dcf42e6a3fb80c0874d
 import Persistencia.Interfaces.IPersistenciaCobrador;
 import Persistencia.Interfaces.IPersistenciaRecibo;
 import Persistencia.Interfaces.IPersistenciaServicioAlarma;
 import Persistencia.Interfaces.IPersistenciaTecnico;
 import Persistencia.Trabajo.PersistenciaAlarma;
 import Persistencia.Trabajo.PersistenciaCamara;
+<<<<<<< HEAD
 import Persistencia.Trabajo.PersistenciaCliente;
+=======
+>>>>>>> 7a98a246124cda750f9f6dcf42e6a3fb80c0874d
 import Persistencia.Trabajo.PersistenciaCobrador;
 import Persistencia.Trabajo.PersistenciaRecibo;
 import Persistencia.Trabajo.PersistenciaServicioAlarma;
@@ -31,7 +37,12 @@ public class FabricaPersistencia {
     {
         return (PersistenciaTecnico.GetInstancia());
     }
-
+    
+    public static IPersistenciaCobrador GetPersistenciaCobrador()
+    {
+        return (PersistenciaCobrador.GetInstancia());
+    }
+    
      public static IPersistenciaAdministrador GetPersistenciaAdministrador()
     {
         return (PersistenciaAdministrador.GetInstancia());

@@ -16,5 +16,6 @@ public interface ILogicaEmpleado {
     void Agregar(Empleado emp) throws Exception;
     void Modificar(Empleado emp) throws Exception;
     void Eliminar(Empleado emp) throws Exception;
+    Empleado LoginEmpleado(int cedula, String clave)throws Exception;
     
 }
