@@ -9,10 +9,12 @@ import Persistencia.Interfaces.IPersistenciaAdministrador;
 import Persistencia.Trabajo.PersistenciaAdministrador;
 import Persistencia.Interfaces.IPersistenciaAlarma;
 import Persistencia.Interfaces.IPersistenciaCamara;
+import Persistencia.Interfaces.IPersistenciaCobrador;
 import Persistencia.Interfaces.IPersistenciaRecibo;
 import Persistencia.Interfaces.IPersistenciaTecnico;
 import Persistencia.Trabajo.PersistenciaAlarma;
 import Persistencia.Trabajo.PersistenciaCamara;
+import Persistencia.Trabajo.PersistenciaCobrador;
 import Persistencia.Trabajo.PersistenciaRecibo;
 import Persistencia.Trabajo.PersistenciaTecnico;
 
@@ -25,7 +27,12 @@ public class FabricaPersistencia {
     {
         return (PersistenciaTecnico.GetInstancia());
     }
-
+    
+    public static IPersistenciaCobrador GetPersistenciaCobrador()
+    {
+        return (PersistenciaCobrador.GetInstancia());
+    }
+    
      public static IPersistenciaAdministrador GetPersistenciaAdministrador()
     {
         return (PersistenciaAdministrador.GetInstancia());
