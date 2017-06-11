@@ -5,10 +5,15 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Alarma;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaAlarma {
-    
+    Alarma Buscar(int numInventario) throws Exception;
+    void Agregar(Alarma camara) throws Exception;
+    void Instalar(Alarma camara, int numServicio) throws Exception;
+    void Eliminar(Alarma camara) throws Exception;
 }

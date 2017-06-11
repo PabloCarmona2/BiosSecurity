@@ -114,9 +114,9 @@ create table CabezalRecibo (
 
 create table LineaRecibo(
 	Importe double not null,
-    Recibo bigint not null,
+    NumRecibo bigint not null,
     Servicio bigint not null,
-	foreign key (Recibo) references CabezalRecibo(NumRecibo),
+	foreign key (NumRecibo) references CabezalRecibo(NumRecibo),
     foreign key (Servicio) references Servicios(NumServicio),
-    primary key (Recibo, Servicio)
+    primary key (NumRecibo, Servicio)
 );

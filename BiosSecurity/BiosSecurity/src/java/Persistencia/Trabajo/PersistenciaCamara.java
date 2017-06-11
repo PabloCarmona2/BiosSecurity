@@ -38,7 +38,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.Dispositivo = Dispositivo.NumInventario WHERE Dispositivo = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
+                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivo.NumInventario WHERE Dispositivo = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
            
             consulta.setInt(1, numInventario);
             
@@ -76,7 +76,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AgregarCamara(?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaCamara(?, ?, ?, ?, ?) }")) {
            
             consulta.setNull(1, java.sql.Types.VARCHAR);
             consulta.setNull(2, java.sql.Types.BOOLEAN);
@@ -86,7 +86,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(7);
+            String error = consulta.getString(4);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);
@@ -97,7 +97,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
     }
     
-    public void Instalar(Camara camara) throws Exception{
+    public void Instalar(Camara camara, int numServicio) throws Exception{
         
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -106,17 +106,18 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL InstalarCamara(?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL InstalarCamara(?, ?, ?, ?, ?, ?) }")) {
            
-            consulta.setString(1, camara.getDescripcionUbicacion());
-            consulta.setBoolean(2, camara.isExterior());
-            consulta.setInt(3, camara.getServicio().getNumServicio());
-            consulta.setInt(4, camara.getInstalador().getCedula());
-            consulta.registerOutParameter(5, java.sql.Types.VARCHAR);
+            consulta.setInt(1, camara.getNumInventario());
+            consulta.setString(2, camara.getDescripcionUbicacion());
+            consulta.setBoolean(3, camara.isExterior());
+            consulta.setInt(4, numServicio);
+            consulta.setInt(5, camara.getInstalador().getCedula());
+            consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(7);
+            String error = consulta.getString(6);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);
@@ -136,14 +137,14 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL EliminarCamara(?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL BajaCamara(?, ?) }")) {
            
             consulta.setInt(1, camara.getNumInventario());
             consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(7);
+            String error = consulta.getString(2);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);

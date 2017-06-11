@@ -6,6 +6,7 @@
 package DataTypes;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -23,8 +24,8 @@ public class ServicioVideoVigilancia extends Servicio{
         this.terminal = terminal;
     }
     
-    public ServicioVideoVigilancia(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, boolean terminal) {
-        super(numServicio, fecha, monitoreo, propiedadCliente);
+    public ServicioVideoVigilancia(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Dispositivo> dispositivos, boolean terminal) {
+        super(numServicio, fecha, monitoreo, propiedadCliente, dispositivos);
         
         setTerminal(terminal);
     }

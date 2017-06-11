@@ -5,10 +5,12 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Cobrador;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaRecibo {
-    
+    void Cobrar(int numero, Cobrador cobrador) throws Exception;
 }

@@ -6,6 +6,7 @@
 package DataTypes;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -19,6 +20,15 @@ public class Recibo {
     private Cliente cliente;
     private Cobrador cobrador;
     private boolean cobrado;
+    private List<LineaRecibo> lineas;
+
+    public List<LineaRecibo> getLineas() {
+        return lineas;
+    }
+
+    public void setLineas(List<LineaRecibo> lineas) {
+        this.lineas = lineas;
+    }
 
     public int getNumRecibo() {
         return numRecibo;
@@ -68,7 +78,7 @@ public class Recibo {
         this.cobrado = cobrado;
     }
     
-    public Recibo(int numRecibo, Date fecha, double total, Cliente cliente, Cobrador cobrador, boolean cobrado){
+    public Recibo(int numRecibo, Date fecha, double total, Cliente cliente, Cobrador cobrador, boolean cobrado, List<LineaRecibo> lineas){
         
         setNumRecibo(numRecibo);
         setFecha(fecha);
@@ -76,7 +86,7 @@ public class Recibo {
         setCliente(cliente);
         setCobrador(cobrador);
         setCobrado(cobrado);
-        
+        setLineas(lineas);
     }
     
 }

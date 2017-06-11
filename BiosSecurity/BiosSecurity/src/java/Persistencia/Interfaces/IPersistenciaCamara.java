@@ -14,6 +14,6 @@ import DataTypes.Camara;
 public interface IPersistenciaCamara {
     Camara Buscar(int numInventario) throws Exception;
     void Agregar(Camara camara) throws Exception;
-    void Instalar(Camara camara) throws Exception;
+    void Instalar(Camara camara, int numServicio) throws Exception;
     void Eliminar(Camara camara) throws Exception;
 }
