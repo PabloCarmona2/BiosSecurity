@@ -5,7 +5,18 @@
  */
 package Persistencia.Trabajo;
 
+import DataTypes.Cliente;
+import DataTypes.Cobrador;
+import DataTypes.LineaRecibo;
+import DataTypes.Recibo;
 import Persistencia.Interfaces.IPersistenciaCobrador;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -20,4 +31,86 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
             _instancia = new PersistenciaCobrador();
         return _instancia;
     }
+    
+    public List<Recibo> RecibosaCobrar(String zona) throws Exception{
+        
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+        }catch(Exception ex){
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        try(Connection conexion= DriverManager.getConnection("jdbc:mysql//localhost:3306/BiosSecurity,root,root");
+            PreparedStatement consulta=conexion.prepareCall
+            ("SELECT * FROM CabezaldeRecibo INNERJOIN Clientes ON CabezaldeRecibo.Cliente = Clientes.Cedula Where Cliente.DirCobro=?;");
+            ResultSet resultado= consulta.executeQuery()){
+
+            consulta.setString(1, zona);
+            
+            List<Recibo> listaRecibo = new ArrayList<Recibo>();
+            Recibo unRecibo=null;
+            
+            int numRecibo;
+            Date fecha;
+            double total;
+            Cliente cliente;
+            Cobrador cobrador;
+            boolean cobrado;
+            List<LineaRecibo> lineas;
+            
+            while(resultado.next()){
+                numRecibo = resultado.getInt("NumRecibo");
+                fecha = resultado.getDate("Fecha");
+                total = resultado.getDouble("Total");
+                cliente =Persistencia.FabricaPersistencia.getPersistenciaCliente().Buscar(resultado.getInt("Cliente"));
+                cobrador =Persistencia.FabricaPersistencia.getPersistenciaCobrador().Buscar(resultado.getInt("Cobrador"));
+                cobrado = resultado.getBoolean("Cobrado");
+                lineas= Persistencia.Trabajo.PersistenciaLineaRecibo.GetInstancia().ListarLineas(resultado.getInt("NumRecibo"));
+                unRecibo = new Recibo(numRecibo,fecha,total,cliente,cobrador,cobrado,lineas);
+                
+                listaRecibo.add(unRecibo);
+            }
+            
+            
+             return listaRecibo;
+        } catch (Exception ex) {
+            
+          throw new Exception(ex.getMessage());
+ 
+        }
+       
+    }
+     public Cobrador Buscar(int cedula)throws Exception{
+        
+          Cobrador cobrador=null;
+        
+         try  {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+      
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+        PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Cobradores WHERE cedula = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
+        
+            consulta.setInt(1, cedula);
+            String nombre;
+            String clave;
+            Date fIngreso;
+            double sueldo;
+            
+             if(resultadoConsulta.next()){
+                nombre = resultadoConsulta.getString("Nombre");
+                clave = resultadoConsulta.getString("Clave");
+                fIngreso = resultadoConsulta.getDate("FIngreso");
+                sueldo = resultadoConsulta.getDouble("Sueldo");
+                String transporte= resultadoConsulta.getString("Transporte");
+               
+                
+                cobrador = new Cobrador(cedula, nombre, clave, fIngreso, sueldo,transporte);
+            }
+             return cobrador;
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+     }
 }

@@ -5,10 +5,12 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Cliente;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaCliente {
-    
+      Cliente Buscar(int cedula) throws Exception;
 }
