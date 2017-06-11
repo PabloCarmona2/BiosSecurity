@@ -13,6 +13,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -149,5 +151,42 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
         }
+    }
+    
+    public Administrador LoginAdministrador(int cedula, String clave){
+        Administrador admin = null;
+        
+         try  {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+        PreparedStatement consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.administradores a where a.Cedula = ? and e.Clave = ?;"); ResultSet resultado = consulta.executeQuery()) {
+        
+        consulta.setInt(1, cedula);
+        consulta.setString(2, clave);
+        String nombre;
+        String claveAdmin;
+        Date fIngreso;
+        double sueldo;
+            
+        if(resultado.next()){
+           nombre = resultado.getString("Nombre");
+           claveAdmin = resultado.getString("Clave");
+           fIngreso = resultado.getDate("FIngreso");
+           sueldo = resultado.getDouble("Sueldo");
+                    
+           admin = new Administrador(cedula, nombre, claveAdmin, fIngreso, sueldo);
+        }
+        }catch(Exception ex){
+            try {
+                throw new Exception(ex.getMessage());
+            } catch (Exception ex1) {
+                Logger.getLogger(PersistenciaAdministrador.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+         return admin;
     }
 }

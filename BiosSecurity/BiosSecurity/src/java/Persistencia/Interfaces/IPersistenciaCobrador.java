@@ -5,10 +5,14 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Cobrador;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaCobrador {
+    
+    Cobrador LoginCobrador(int cedula, String clave)throws Exception;
     
 }

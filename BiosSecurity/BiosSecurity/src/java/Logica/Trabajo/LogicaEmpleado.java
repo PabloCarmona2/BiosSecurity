@@ -75,4 +75,24 @@ public class LogicaEmpleado implements ILogicaEmpleado{
             //falta cobrador
         }
     }
+    
+    public Empleado LoginEmpleado(int cedula, String clave) throws Exception{
+        
+       Empleado empleado = null;
+        
+       empleado = (Empleado)Persistencia.FabricaPersistencia.GetPersistenciaAdministrador().LoginAdministrador(cedula, clave);
+       if(empleado!=null){
+           return empleado;
+       }else{
+           empleado =(Empleado)Persistencia.FabricaPersistencia.GetPersistenciaTecnico().LoginTenico(cedula, clave);
+       }
+       if(empleado!=null){
+           return empleado;
+       }else{
+           empleado = (Empleado)Persistencia.FabricaPersistencia.GetPersistenciaCobrador().LoginCobrador(cedula, clave);
+       }
+        
+        return empleado;
+    }
+    
 }
