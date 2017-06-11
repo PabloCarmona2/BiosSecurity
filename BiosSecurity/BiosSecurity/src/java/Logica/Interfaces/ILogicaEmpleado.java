@@ -5,10 +5,16 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Empleado;
+
 /**
  *
  * @author Geronimo
  */
 public interface ILogicaEmpleado {
+    Empleado Buscar(int cedula) throws Exception;
+    void Agregar(Empleado emp) throws Exception;
+    void Modificar(Empleado emp) throws Exception;
+    void Eliminar(Empleado emp) throws Exception;
     
 }

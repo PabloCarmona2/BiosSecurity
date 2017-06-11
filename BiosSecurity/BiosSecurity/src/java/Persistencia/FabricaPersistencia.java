@@ -5,7 +5,9 @@
  */
 package Persistencia;
 
+import Persistencia.Interfaces.IPersistenciaAdministrador;
 import Persistencia.Interfaces.IPersistenciaTecnico;
+import Persistencia.Trabajo.PersistenciaAdministrador;
 import Persistencia.Trabajo.PersistenciaTecnico;
 
 /**
@@ -16,5 +18,9 @@ public class FabricaPersistencia {
     public static IPersistenciaTecnico GetPersistenciaTecnico()
     {
         return (PersistenciaTecnico.GetInstancia());
+    }
+     public static IPersistenciaAdministrador GetPersistenciaAdministrador()
+    {
+        return (PersistenciaAdministrador.GetInstancia());
     }
 }

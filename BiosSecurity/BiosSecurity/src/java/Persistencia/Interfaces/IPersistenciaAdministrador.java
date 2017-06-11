@@ -5,10 +5,17 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Administrador;
+import java.util.List;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaAdministrador {
-    
+    Administrador Buscar(int cedula) throws Exception;
+    void Agregar(Administrador admin) throws Exception;
+    void Modificar(Administrador admin) throws Exception;
+    void Eliminar(Administrador admin) throws Exception;
+   
 }
