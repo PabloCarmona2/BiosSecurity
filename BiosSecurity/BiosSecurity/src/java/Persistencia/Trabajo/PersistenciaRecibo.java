@@ -5,12 +5,18 @@
  */
 package Persistencia.Trabajo;
 
+import DataTypes.Alarma;
 import DataTypes.Cliente;
 import DataTypes.Cobrador;
+import DataTypes.Dispositivo;
 import DataTypes.LineaRecibo;
+import DataTypes.Recibo;
 import DataTypes.Servicio;
+import DataTypes.ServicioAlarma;
 import DataTypes.Tecnico;
 import Persistencia.Interfaces.IPersistenciaRecibo;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -66,40 +72,168 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
     }
     
         public void GenerarRecibos(HashMap lista) throws Exception{
+            Connection conexion = null;
+            CallableStatement consulta = null;
+        
             try {
-                Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
-            } catch (Exception ex) {
-                System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
-            }
-
-            try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                    CallableStatement consulta = conexion.prepareCall("{ CALL GenerarRecibo(?, ?, ?, ?, ?, ?) }")) {
-                 
+                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/EjemploJDBC", "root", "root");
+            
+                consulta = conexion.prepareCall("{ CALL GenerarRecibo(?, ?, ?, ?, ?, ?, ?) }");
+            
+                conexion.setAutoCommit(false);
                 
                 Iterator<Map.Entry<Cliente, List<Servicio>>> iterador = lista.entrySet().iterator();
+                
+                String texto;
+                FileReader fr = new FileReader("\\Precios.txt");
+                BufferedReader br = new BufferedReader(fr);
+                Recibo recibo;
+                
+                int renglon = 1;
+                String error = null;
+                
+                double precioAlarmas = 0;
+                double precioCamaras = 0;
+                double precioXAlarma = 0;
+                double precioXCamara = 0;
+                double porcentajeMonitoreoCamara = 0;
+                double porcentajeMonitoreoAlarma = 0;
+                
+                while((texto = br.readLine()) != null){
 
-                while(iterador.hasNext()){
+                    int posicionDePeso;
+                    posicionDePeso = texto.indexOf("$");
+
+                    int posicionDePorcentaje;
+                    posicionDePorcentaje = texto.indexOf(")");
                     
-                    
-                    Map.Entry<Cliente, List<Servicio>> item = iterador.next();
+                    switch(renglon){
+                        case 1:
 
-                    for(Servicio s : item.getValue()){
+                            precioAlarmas = Double.parseDouble(texto.substring(posicionDePeso - 1));
 
+                            renglon++;
+
+                            break;
+                        case 2:
+
+                            precioCamaras = Double.parseDouble(texto.substring(posicionDePeso - 1));
+
+                            renglon++;
+
+                            break;
+                        case 3:
+
+                            precioXAlarma = Double.parseDouble(texto.substring(posicionDePeso - 1));
+
+                            renglon++;
+
+                            break;
+                        case 4:
+
+                            precioXCamara = Double.parseDouble(texto.substring(posicionDePeso - 1));
+
+                            renglon++;
+
+                            break;
+                        case 5:
+
+                            porcentajeMonitoreoCamara = Double.parseDouble(texto.substring(posicionDePorcentaje - 1));
+
+                            renglon++;
+
+                            break;
+                        case 6:
+
+                            porcentajeMonitoreoAlarma = Double.parseDouble(texto.substring(posicionDePorcentaje - 1));
+
+                            renglon++;
+
+                            break;    
                     }
+                    
+                    
                 }
 
-                consulta.registerOutParameter(7, java.sql.Types.VARCHAR);
-
+            while(iterador.hasNext()){
+                
+                int numeroRecibo;
+                
+                Map.Entry<Cliente, List<Servicio>> item = iterador.next();
+                
+                recibo = new Recibo();
+                
+                Date fechaJava = new Date();
+                java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
+                
+                Cliente cliente = item.getKey();
+                
+                consulta.setDate(1, fecha);
+                consulta.setDouble(2, 0);
+                consulta.setInt(3, cliente.getCedula());
+                consulta.setNull(4, java.sql.Types.INTEGER);
+                consulta.setBoolean(5, false);
+                consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+                consulta.registerOutParameter(7, java.sql.Types.INTEGER);
+                
+                error = consulta.getString(6);
+                numeroRecibo = consulta.getInt(7);
+                
                 consulta.executeUpdate();
 
-                String error = consulta.getString(7);
-
-                if(error != null){
-                    throw new Exception("ERROR: " + error);
+                for(Servicio s : item.getValue()){
+                    
+                    LineaRecibo linea = new LineaRecibo();
+                    
+                    double importe = 0;
+                    
+                    if(s instanceof ServicioAlarma){
+                        importe += precioAlarmas;
+                    }
+                    else{
+                        importe += precioCamaras;
+                    }
+                    
+                    for(Dispositivo d : s.getDispositivos()){
+                        if(d instanceof Alarma){
+                            importe += precioXAlarma;
+                        }else{
+                            importe += precioXCamara;
+                        }
+                    }
+                    
+                    linea.setImporte(importe);
+                    linea.setServicio(s);
+                    
+                    PersistenciaLineaRecibo.GetInstancia().RegitrarEnRecibo(linea, numeroRecibo);
                 }
+            }
+            
+            conexion.commit();
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
 
             }catch(Exception ex){
+
+                conexion.rollback();
                 throw new Exception(ex.getMessage());
+
+            }finally {
+
+                try {
+                    if (consulta != null) {
+                        consulta.close();
+                    }
+
+                    if (conexion != null) {
+                        conexion.close();
+                        conexion.setAutoCommit(true);
+                    }
+                } catch (Exception ex) {
+                    throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+                }
             }
         }
 
