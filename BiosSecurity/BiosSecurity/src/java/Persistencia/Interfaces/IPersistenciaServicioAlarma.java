@@ -5,10 +5,14 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.ServicioAlarma;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaServicioAlarma {
+    void InstalarDispositivo(ServicioAlarma servicio) throws Exception;
+    ServicioAlarma Buscar(int numeroServicio)throws Exception;
     
 }
