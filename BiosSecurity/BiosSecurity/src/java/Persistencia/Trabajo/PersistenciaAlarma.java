@@ -47,7 +47,7 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Alarmas INNER JOIN Dispositivos ON Alarmas.NumInventario = Dispositivo.NumInventario WHERE Dispositivo = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM Alarmas INNER JOIN Dispositivos ON Alarmas.NumInventario = Dispositivo.NumInventario WHERE NumInventario = ? AND BajaLogica = 0;");
             
             consulta.setInt(1, numInventario);
             
@@ -129,7 +129,7 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL InstalarAlarma(?, ?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL InstalarAlarma(?, ?, ?, ?, ?) }")) {
            
             consulta.setInt(1, alarma.getNumInventario());
             consulta.setString(2, alarma.getDescripcionUbicacion());

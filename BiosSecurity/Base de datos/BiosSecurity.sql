@@ -56,28 +56,6 @@ create table Dispositivos (
     BajaLogica boolean not null
 );
 
-
-create table Alarmas (
-    Servicio bigint,
-    NumInventario bigint not null,
-    Tecnico bigint,
-	foreign key (Servicio) references ServicioAlarmas(NumServicio),
-    foreign key (NumInventario) references Dispositivos(NumInventario),
-    foreign key (Tecnico) references Tecnicos(Cedula),
-    primary key (NumInventario)
-);
-
-create table Camaras (
-    Exterior boolean,
-    Servicio bigint,
-    NumInventario bigint not null,
-    Tecnico bigint,
-	foreign key (Servicio) references ServicioVideoVigilancia(NumServicio),
-    foreign key (NumInventario) references Dispositivos(NumInventario),
-    foreign key (Tecnico) references Tecnicos(Cedula),
-    primary key (NumInventario)
-);
-
 create table Servicios (
 	NumServicio bigint auto_increment not null,
     Fecha datetime not null,
@@ -101,7 +79,28 @@ create table ServicioAlarmas (
     primary key (NumServicio)
 );
 
+create table Alarmas (
+    Servicio bigint,
+    NumInventario bigint not null,
+    Tecnico bigint,
+    BajaLogica boolean not null,
+	foreign key (Servicio) references ServicioAlarmas(NumServicio),
+    foreign key (NumInventario) references Dispositivos(NumInventario),
+    foreign key (Tecnico) references Tecnicos(Cedula),
+    primary key (NumInventario)
+);
 
+create table Camaras (
+    Exterior boolean,
+    Servicio bigint,
+    NumInventario bigint not null,
+    Tecnico bigint,
+    BajaLogica boolean not null,
+	foreign key (Servicio) references ServicioVideoVigilancia(NumServicio),
+    foreign key (NumInventario) references Dispositivos(NumInventario),
+    foreign key (Tecnico) references Tecnicos(Cedula),
+    primary key (NumInventario)
+);
 
 create table CabezalRecibo (
 	NumRecibo bigint auto_increment not null,
@@ -125,6 +124,374 @@ create table LineaRecibo(
 );
 
 
+
+# -------------------------------SP Camara--------------------------------------------------------------------------------------
+
 DELIMITER //
 
-CREATE PROCEDURE AltaCamara()
+CREATE procedure AltaCamara(descripcion VARCHAR(100), exterior boolean, servicio bigint, tecnico bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+    DECLARE idDispositivo bigint;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo agregar el dispositivo correctamente!';
+	
+    
+	INSERT INTO Dispositivos
+    VALUES(descripcion);
+    
+    SELECT idDispositivo = NumInventario
+    FROM Dispositivos
+    ORDER BY NumInventario asc limit 1;
+    
+	SET mensajeError = 'No se pudo agregar la camara correctamente!.';
+	
+	INSERT INTO Camaras
+	VALUES(exterior, servicio, idDispositivo, tecnico);
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure InstalarCamara(numeroInventario int, descripcion VARCHAR(100), exterior boolean, servicio bigint, tecnico bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    IF NOT EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario) 
+    THEN
+			SET pError = 'No existe la camara que desea instalar!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    IF NOT EXISTS(SELECT * FROM ServicioVideoVigilancia WHERE NumServicio = servicio) 
+    THEN
+			SET pError = 'No existe el servicio en el que desea instalar el dispositivo!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = tecnico) 
+    THEN
+			SET pError = 'No existe el tecnico asignado a la instalacion!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo instalar el dispositivo correctamente!';
+	
+    
+	UPDATE Dispositivos
+    SET DescripcionUbicacion = descripcion
+    WHERE NumInventario = numeroInventario;
+    
+	SET mensajeError = 'No se pudo instalar la camara correctamente!.';
+	
+	UPDATE Camaras
+    SET Exterior = exterior, Servicio = servicio, Tecnico = tecnico
+    WHERE NumInventario = numeroInventario;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure BajaCamara(numeroInventario int, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    IF NOT EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario) 
+    THEN
+			SET pError = 'No existe la camara que desea eliminar!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    IF EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario AND BajaLogica = 1) 
+    THEN
+			SET pError = 'La camara que desea eliminar ya esta dada de baja!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+    
+    IF EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario AND Servicio != null)
+    THEN
+			SET mensajeError = 'No se pudo dar de baja el dispositivo indicado!';
+            
+            UPDATE Dispositivos
+            SET BajaLogica = 1
+            WHERE NumInventario = numeroInventario;
+            
+            SET mensajeError = 'No se pudo dar de baja la camara indicada!';
+            
+			UPDATE Camaras
+            SET BajaLogica = 1
+            WHERE NumInventario = numeroInventario;
+            
+	ELSE 
+         
+            SET mensajeError = 'No se pudo eliminar la camara indicada!';
+            
+			DELETE FROM Camaras
+            WHERE NumInventario = numeroInventario;
+            
+			SET mensajeError = 'No se pudo dar eliminar el dispositivo indicado!';
+            
+            DELETE FROM Dispositivos
+            WHERE NumInventario = numeroInventario;
+           
+        
+	END IF;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+
+#------------------------------------SP ALARMAS--------------------------------------------------------
+
+DELIMITER //
+
+CREATE procedure AltaAlarma(descripcion VARCHAR(100), servicio bigint, tecnico bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+    DECLARE idDispositivo bigint;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo agregar el dispositivo correctamente!';
+	
+    
+	INSERT INTO Dispositivos
+    VALUES(descripcion);
+    
+    SELECT idDispositivo = NumInventario
+    FROM Dispositivos
+    ORDER BY NumInventario asc limit 1;
+    
+	SET mensajeError = 'No se pudo agregar la alarma correctamente!.';
+	
+	INSERT INTO Alarmas
+	VALUES(servicio, idDispositivo, tecnico);
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure InstalarAlarma(numeroInventario int, descripcion VARCHAR(100), servicio bigint, tecnico bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    IF NOT EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario) 
+    THEN
+			SET pError = 'No existe la alarma que desea instalar!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    IF NOT EXISTS(SELECT * FROM ServicioAlarmas WHERE NumServicio = servicio) 
+    THEN
+			SET pError = 'No existe el servicio en el que desea instalar el dispositivo!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = tecnico) 
+    THEN
+			SET pError = 'No existe el tecnico asignado a la instalacion!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo instalar el dispositivo correctamente!';
+	
+    
+	UPDATE Dispositivos
+    SET DescripcionUbicacion = descripcion
+    WHERE NumInventario = numeroInventario;
+    
+	SET mensajeError = 'No se pudo instalar la alarma correctamente!.';
+	
+	UPDATE Alarmas
+    SET Servicio = servicio, Tecnico = tecnico
+    WHERE NumInventario = numeroInventario;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure BajaAlarma(numeroInventario int, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    IF NOT EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario) 
+    THEN
+			SET pError = 'No existe la alarma que desea eliminar!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    IF EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario AND BajaLogica = 1) 
+    THEN
+			SET pError = 'La alarma que desea eliminar ya esta dada de baja!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+    
+    IF EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario AND Servicio != null)
+    THEN
+			SET mensajeError = 'No se pudo dar de baja el dispositivo indicado!';
+            
+            UPDATE Dispositivos
+            SET BajaLogica = 1
+            WHERE NumInventario = numeroInventario;
+            
+            SET mensajeError = 'No se pudo dar de baja la camara indicada!';
+            
+			UPDATE Camaras
+            SET BajaLogica = 1
+            WHERE NumInventario = numeroInventario;
+            
+	ELSE 
+         
+            SET mensajeError = 'No se pudo eliminar la camara indicada!';
+            
+			DELETE FROM Camaras
+            WHERE NumInventario = numeroInventario;
+            
+			SET mensajeError = 'No se pudo dar eliminar el dispositivo indicado!';
+            
+            DELETE FROM Dispositivos
+            WHERE NumInventario = numeroInventario;
+           
+        
+	END IF;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
