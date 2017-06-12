@@ -78,6 +78,10 @@ public class Recibo {
         this.cobrado = cobrado;
     }
     
+    public Recibo(){
+        this(0, null, 0, null, null, false, null);
+    }
+    
     public Recibo(int numRecibo, Date fecha, double total, Cliente cliente, Cobrador cobrador, boolean cobrado, List<LineaRecibo> lineas){
         
         setNumRecibo(numRecibo);

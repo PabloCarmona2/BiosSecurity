@@ -6,13 +6,15 @@
 package Persistencia.Interfaces;
 
 import DataTypes.Cobrador;
-
+import DataTypes.Recibo;
+import java.util.List;
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaCobrador {
+    List<Recibo> RecibosaCobrar(String zona) throws Exception;
+    Cobrador Buscar(int cedula) throws Exception;
     
     Cobrador LoginCobrador(int cedula, String clave)throws Exception;
-    
 }

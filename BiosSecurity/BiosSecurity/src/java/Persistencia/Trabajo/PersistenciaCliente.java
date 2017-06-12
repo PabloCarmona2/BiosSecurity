@@ -5,7 +5,13 @@
  */
 package Persistencia.Trabajo;
 
+import DataTypes.Cliente;
 import Persistencia.Interfaces.IPersistenciaCliente;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.Date;
 
 /**
  *
@@ -19,5 +25,40 @@ public class PersistenciaCliente implements IPersistenciaCliente{
         if (_instancia == null)
             _instancia = new PersistenciaCliente();
         return _instancia;
+    }
+    
+    public Cliente Buscar(int cedula)throws Exception{
+        
+          Cliente cli=null;
+        
+         try  {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+      
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+        PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Clientes WHERE cedula = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
+        
+            consulta.setInt(1, cedula);
+             
+             String nombre;
+             String barrio;
+             String dirCobro;
+             String telefono;
+            
+             if(resultadoConsulta.next()){
+                nombre = resultadoConsulta.getString("Nombre");
+                barrio = resultadoConsulta.getString("Barrio");
+                dirCobro = resultadoConsulta.getString("DirCobro");
+                telefono = resultadoConsulta.getString("Telefono");
+               
+                
+                cli = new Cliente(cedula, nombre, barrio, dirCobro, telefono);
+            }
+             return cli;
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
     }
 }
