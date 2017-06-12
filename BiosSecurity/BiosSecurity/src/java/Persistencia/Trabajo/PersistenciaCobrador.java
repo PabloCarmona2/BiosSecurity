@@ -37,53 +37,7 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
         return _instancia;
     }
     
-    public List<Recibo> RecibosaCobrar(String zona) throws Exception{
-        
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-        }catch(Exception ex){
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
-        }
-        try(Connection conexion= DriverManager.getConnection("jdbc:mysql//localhost:3306/BiosSecurity,root,root");
-            PreparedStatement consulta=conexion.prepareCall
-            ("SELECT * FROM CabezaldeRecibo INNERJOIN Clientes ON CabezaldeRecibo.Cliente = Clientes.Cedula Where Cliente.Barrio=?;");
-            ResultSet resultado= consulta.executeQuery()){
-
-            consulta.setString(1, zona);
-            
-            List<Recibo> listaRecibo = new ArrayList<Recibo>();
-            Recibo unRecibo=null;
-            
-            int numRecibo;
-            Date fecha;
-            double total;
-            Cliente cliente;
-            Cobrador cobrador;
-            boolean cobrado;
-            List<LineaRecibo> lineas;
-            
-            while(resultado.next()){
-                numRecibo = resultado.getInt("NumRecibo");
-                fecha = resultado.getDate("Fecha");
-                total = resultado.getDouble("Total");
-                cliente =Persistencia.FabricaPersistencia.getPersistenciaCliente().Buscar(resultado.getInt("Cliente"));
-                cobrador =Persistencia.FabricaPersistencia.getPersistenciaCobrador().Buscar(resultado.getInt("Cobrador"));
-                cobrado = resultado.getBoolean("Cobrado");
-                lineas= Persistencia.Trabajo.PersistenciaLineaRecibo.GetInstancia().ListarLineas(resultado.getInt("NumRecibo"));
-                unRecibo = new Recibo(numRecibo,fecha,total,cliente,cobrador,cobrado,lineas);
-                
-                listaRecibo.add(unRecibo);
-            }
-            
-            
-             return listaRecibo;
-        } catch (Exception ex) {
-            
-          throw new Exception(ex.getMessage());
- 
-        }
-       
-    }
+    
      public Cobrador Buscar(int cedula)throws Exception{
         
           Cobrador cobrador=null;
