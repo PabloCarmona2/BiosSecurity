@@ -41,10 +41,19 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Empleado = Empleados.Cedula WHERE Empleado = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
-           
+        Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
+        
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Cedula = Empleados.Cedula WHERE Cedula = ?;");
+            
             consulta.setInt(1, cedula);
+            
+            resultadoConsulta = consulta.executeQuery();
             
             Tecnico tecnico = null;
             
@@ -67,7 +76,22 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             
             return tecnico;
         }catch(Exception ex){
+
             throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
     }
     
