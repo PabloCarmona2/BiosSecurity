@@ -56,6 +56,28 @@ create table Dispositivos (
     BajaLogica boolean not null
 );
 
+
+create table Alarmas (
+    Servicio bigint,
+    NumInventario bigint not null,
+    Tecnico bigint,
+	foreign key (Servicio) references ServicioAlarmas(NumServicio),
+    foreign key (NumInventario) references Dispositivos(NumInventario),
+    foreign key (Tecnico) references Tecnicos(Cedula),
+    primary key (NumInventario)
+);
+
+create table Camaras (
+    Exterior boolean,
+    Servicio bigint,
+    NumInventario bigint not null,
+    Tecnico bigint,
+	foreign key (Servicio) references ServicioVideoVigilancia(NumServicio),
+    foreign key (NumInventario) references Dispositivos(NumInventario),
+    foreign key (Tecnico) references Tecnicos(Cedula),
+    primary key (NumInventario)
+);
+
 create table Servicios (
 	NumServicio bigint auto_increment not null,
     Fecha datetime not null,
@@ -79,26 +101,7 @@ create table ServicioAlarmas (
     primary key (NumServicio)
 );
 
-create table Alarmas (
-    Servicio bigint,
-    NumInventario bigint not null,
-    Tecnico bigint,
-	foreign key (Servicio) references ServicioAlarmas(NumServicio),
-    foreign key (NumInventario) references Dispositivos(NumInventario),
-    foreign key (Tecnico) references Tecnicos(Cedula),
-    primary key (NumInventario)
-);
 
-create table Camaras (
-    Exterior boolean,
-    Servicio bigint,
-    NumInventario bigint not null,
-    Tecnico bigint,
-	foreign key (Servicio) references ServicioVideoVigilancia(NumServicio),
-    foreign key (NumInventario) references Dispositivos(NumInventario),
-    foreign key (Tecnico) references Tecnicos(Cedula),
-    primary key (NumInventario)
-);
 
 create table CabezalRecibo (
 	NumRecibo bigint auto_increment not null,
@@ -120,3 +123,8 @@ create table LineaRecibo(
     foreign key (Servicio) references Servicios(NumServicio),
     primary key (NumRecibo, Servicio)
 );
+
+
+DELIMITER //
+
+CREATE PROCEDURE AltaCamara()

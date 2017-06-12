@@ -37,10 +37,19 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivo.NumInventario WHERE Dispositivo = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
-           
+        Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
+        
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivo.NumInventario WHERE Dispositivo = ?;");
+            
             consulta.setInt(1, numInventario);
+            
+            resultadoConsulta = consulta.executeQuery();
             
             Camara camara = null;
             
@@ -63,7 +72,22 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             return camara;
             
         }catch(Exception ex){
-            throw new Exception(ex.getMessage());
+
+                throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
     }
     
