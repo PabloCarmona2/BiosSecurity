@@ -124,7 +124,23 @@ create table LineaRecibo(
 );
 
 
+#INGRESO DE DATOS DE PRUEBA-----------------------------------------------------------------------------------------------------
+#-------------------------------------------------------------------------------------------------------------------------------
+#
+#
+#
+#
+#
+#
+#
+#
+#-------------------------------------------------------------------------------------------------------------------------------
 
+
+#--------------------------------SP de Dispositivos.............................................................................
+
+
+#-------------------------------------------------------------------------------------------------------------------------------
 # -------------------------------SP Camara--------------------------------------------------------------------------------------
 
 DELIMITER //
@@ -486,6 +502,168 @@ cuerpo:BEGIN
            
         
 	END IF;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+#-----------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------
+
+
+#---------------------------------SP Tecnicos---------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------
+
+
+DELIMITER //
+
+CREATE procedure AltaTecnico(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, especializacion VARCHAR(7), OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF EXISTS(SELECT * FROM Tecnicos WHERE Cedula = cedula)
+    THEN
+		SET pError = 'Ya existe el tecnico que desea ingresar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo agregar el empleado correctamente!';
+	
+    
+	INSERT INTO Empleados
+    VALUES(cedula, nombre, clave, fIngreso, sueldo);
+    
+	SET mensajeError = 'No se pudo agregar el tecnico correctamente!.';
+	
+	INSERT INTO Tecnicos
+	VALUES(especializacion, cedula);
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE procedure ModificarTecnico(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, especializacion VARCHAR(7), OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = cedula)
+    THEN
+		SET pError = 'No existe el tecnico que desea modificar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
+	
+    
+	UPDATE Empleados
+    SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
+    WHERE Cedula = cedula;
+    
+	SET mensajeError = 'No se pudo modificar el tecnico correctamente!.';
+	
+	UPDATE Tecnicos
+	SET Especializacion = especializacion
+    WHERE Cedula = cedula;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE procedure BajaTecnico(cedula bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = cedula)
+    THEN
+		SET pError = 'El tecnico que desea eliminar no existe en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
+	
+    DELETE FROM Tecnicos
+    WHERE Cedula = cedula;
+	 
+    
+	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
+	
+	DELETE FROM Empleados
+    WHERE Cedula = cedula;
 	
 	COMMIT;
     
