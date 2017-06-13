@@ -673,3 +673,144 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
+#----------------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
+
+
+#-----------------------------------SP Recibo--------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------------
+
+DELIMITER //
+
+CREATE procedure GenerarCabezalRecibo(fecha datetime, total double, cliente bigint, cobrador bigint, cobrado boolean, OUT pError VARCHAR(500), OUT pNumRecibo bigint)
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE sinErrores BIT;
+    
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF sinErrores THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    SET sinErrores = 1;
+	
+	SET mensajeError = 'No se pudo agregar el recibo correctamente!';
+	
+    
+	INSERT INTO CabezalRecibo
+    VALUES(fecha, total, cliente, cobrador, cobrado);
+    
+    SET sinErrores = 0;
+    
+    SELECT pNumRecibo = NumRecibo FROM CabezalRecibo ORDER BY NumRecibo asc limit 1;
+	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure Cobrar(numRecibo bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE sinErrores BIT;
+    
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF sinErrores THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    IF NOT EXISTS(SELECT * FROM CabezalRecibo WHERE NumRecibo = numRecibo)
+    THEN
+		SET pError = 'El recibo que desea marcar como cobrado no este en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    SET sinErrores = 1;
+    
+	SET mensajeError = 'No se pudo cobrar el recibo correctamente!';
+	
+    
+	UPDATE CabezalRecibo
+    SET Cobrado = true;
+    
+    SET sinErrores = 0;
+	
+END//
+
+DELIMITER ;
+
+#-----------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------
+
+
+#-------------------------------SP LineaRecibo--------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------------
+
+DELIMITER //
+
+CREATE procedure RegistrarLineaEnRecibo(importe double, numRecibo bigint, servicio bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM CabezalRecibo WHERE NumRecibo = numRecibo)
+    THEN
+		SET pError = 'No existe el recibo en el que quiere agregar la linea!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo agregar la linea al recibo correctamente!';
+	
+    
+	INSERT INTO LineaRecibo
+    VALUES(importe, numRecibo, servicio);
+    
+	SET mensajeError = 'No se pudo sumar el importe de la linea al total del recibo correctamente!.';
+	
+    DECLARE totalActual;
+    
+    SELECT totalActual = Total FROM CabezalRecibo WHERE NumRecibo = numRecibo;
+    
+	UPDATE CabezalRecibo
+	SET Total = (totalActual + importe)
+    WHERE NumRecibo = numRecibo;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+	
+END//
+
+DELIMITER ;

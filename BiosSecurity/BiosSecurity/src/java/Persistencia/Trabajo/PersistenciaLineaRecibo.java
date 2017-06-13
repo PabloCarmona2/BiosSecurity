@@ -37,7 +37,7 @@ public class PersistenciaLineaRecibo {
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL RegistrarEnRecibo(?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL RegistrarLineaEnRecibo(?, ?, ?, ?) }")) {
            
             consulta.setDouble(1, linea.getImporte());
             consulta.setInt(2, numRecibo);

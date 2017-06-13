@@ -125,7 +125,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             try {
                 conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/EjemploJDBC", "root", "root");
             
-                consulta = conexion.prepareCall("{ CALL GenerarRecibo(?, ?, ?, ?, ?, ?, ?) }");
+                consulta = conexion.prepareCall("{ CALL GenerarCabezalRecibo(?, ?, ?, ?, ?, ?, ?) }");
             
                 conexion.setAutoCommit(false);
                 
@@ -198,8 +198,6 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
 
                             break;    
                     }
-                    
-                    
                 }
 
             while(iterador.hasNext()){
@@ -224,6 +222,11 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                 consulta.registerOutParameter(7, java.sql.Types.INTEGER);
                 
                 error = consulta.getString(6);
+                
+                if(error != null){
+                    throw new Exception("ERROR: " + error);
+                }
+                
                 numeroRecibo = consulta.getInt(7);
                 
                 consulta.executeUpdate();
