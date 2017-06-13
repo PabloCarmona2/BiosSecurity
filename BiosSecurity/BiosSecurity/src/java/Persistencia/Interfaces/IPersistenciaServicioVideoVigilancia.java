@@ -5,10 +5,12 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.ServicioVideoVigilancia;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaServicioVideoVigilancia {
-    
+    void InstalarDispositivo(ServicioVideoVigilancia servicio) throws Exception;
 }
