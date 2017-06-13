@@ -5,10 +5,14 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Dispositivo;
+
 /**
  *
  * @author Geronimo
  */
 public interface ILogicaDispositivo {
-    
+    Dispositivo Buscar(int numInventario) throws Exception;
+    void Agregar(Dispositivo dispositivo) throws Exception;
+    void Eliminar(Dispositivo dispositivo) throws Exception;
 }
