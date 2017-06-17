@@ -118,7 +118,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
         }
     }
     
-        public void GenerarRecibos(HashMap lista) throws Exception{
+        public void GenerarRecibos(ArrayList<Recibo> lista) throws Exception{
             Connection conexion = null;
             CallableStatement consulta = null;
         
@@ -129,134 +129,36 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             
                 conexion.setAutoCommit(false);
                 
-                Iterator<Map.Entry<Cliente, List<Servicio>>> iterador = lista.entrySet().iterator();
-                
-                String texto;
-                FileReader fr = new FileReader("\\Precios.txt");
-                BufferedReader br = new BufferedReader(fr);
-                Recibo recibo;
-                
-                int renglon = 1;
                 String error = null;
                 
-                double precioAlarmas = 0;
-                double precioCamaras = 0;
-                double precioXAlarma = 0;
-                double precioXCamara = 0;
-                double porcentajeMonitoreoCamara = 0;
-                double porcentajeMonitoreoAlarma = 0;
+                for(Recibo r : lista){
                 
-                while((texto = br.readLine()) != null){
+                    int numeroRecibo;
+                    Date fechaJava = r.getFecha();
+                    java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
 
-                    int posicionDePeso;
-                    posicionDePeso = texto.indexOf("$");
+                    consulta.setDate(1, fecha);
+                    consulta.setDouble(2, r.getTotal());
+                    consulta.setInt(3, r.getCliente().getCedula());
+                    consulta.setInt(4, r.getCobrador().getCedula());
+                    consulta.setBoolean(5, false);
+                    consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+                    consulta.registerOutParameter(7, java.sql.Types.INTEGER);
 
-                    int posicionDePorcentaje;
-                    posicionDePorcentaje = texto.indexOf(")");
-                    
-                    switch(renglon){
-                        case 1:
+                    error = consulta.getString(6);
 
-                            precioAlarmas = Double.parseDouble(texto.substring(posicionDePeso - 1));
-
-                            renglon++;
-
-                            break;
-                        case 2:
-
-                            precioCamaras = Double.parseDouble(texto.substring(posicionDePeso - 1));
-
-                            renglon++;
-
-                            break;
-                        case 3:
-
-                            precioXAlarma = Double.parseDouble(texto.substring(posicionDePeso - 1));
-
-                            renglon++;
-
-                            break;
-                        case 4:
-
-                            precioXCamara = Double.parseDouble(texto.substring(posicionDePeso - 1));
-
-                            renglon++;
-
-                            break;
-                        case 5:
-
-                            porcentajeMonitoreoCamara = Double.parseDouble(texto.substring(posicionDePorcentaje - 1));
-
-                            renglon++;
-
-                            break;
-                        case 6:
-
-                            porcentajeMonitoreoAlarma = Double.parseDouble(texto.substring(posicionDePorcentaje - 1));
-
-                            renglon++;
-
-                            break;    
+                    if(error != null){
+                        throw new Exception("ERROR: " + error);
                     }
-                }
 
-            while(iterador.hasNext()){
-                
-                int numeroRecibo;
-                
-                Map.Entry<Cliente, List<Servicio>> item = iterador.next();
-                
-                recibo = new Recibo();
-                
-                Date fechaJava = new Date();
-                java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
-                
-                Cliente cliente = item.getKey();
-                
-                consulta.setDate(1, fecha);
-                consulta.setDouble(2, 0);
-                consulta.setInt(3, cliente.getCedula());
-                consulta.setNull(4, java.sql.Types.INTEGER);
-                consulta.setBoolean(5, false);
-                consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
-                consulta.registerOutParameter(7, java.sql.Types.INTEGER);
-                
-                error = consulta.getString(6);
-                
-                if(error != null){
-                    throw new Exception("ERROR: " + error);
-                }
-                
-                numeroRecibo = consulta.getInt(7);
-                
-                consulta.executeUpdate();
+                    numeroRecibo = consulta.getInt(7);
 
-                for(Servicio s : item.getValue()){
-                    
-                    LineaRecibo linea = new LineaRecibo();
-                    
-                    double importe = 0;
-                    
-                    if(s instanceof ServicioAlarma){
-                        importe += precioAlarmas;
+                    consulta.executeUpdate();
+
+                    for(LineaRecibo l : r.getLineas()){
+
+                        PersistenciaLineaRecibo.GetInstancia().RegitrarEnRecibo(l, numeroRecibo);
                     }
-                    else{
-                        importe += precioCamaras;
-                    }
-                    
-                    for(Dispositivo d : s.getDispositivos()){
-                        if(d instanceof Alarma){
-                            importe += precioXAlarma;
-                        }else{
-                            importe += precioXCamara;
-                        }
-                    }
-                    
-                    linea.setImporte(importe);
-                    linea.setServicio(s);
-                    
-                    PersistenciaLineaRecibo.GetInstancia().RegitrarEnRecibo(linea, numeroRecibo);
-                }
             }
             
             conexion.commit();

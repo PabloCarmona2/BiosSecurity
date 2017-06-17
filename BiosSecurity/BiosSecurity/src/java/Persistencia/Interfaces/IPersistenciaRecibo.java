@@ -7,6 +7,7 @@ package Persistencia.Interfaces;
 
 import DataTypes.Cobrador;
 import DataTypes.Recibo;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,4 +17,5 @@ import java.util.List;
 public interface IPersistenciaRecibo {
     void Cobrar(int numero, Cobrador cobrador) throws Exception;
     List<Recibo> RecibosaCobrar(String zona) throws Exception;
+    void GenerarRecibos(ArrayList<Recibo> lista) throws Exception;
 }
