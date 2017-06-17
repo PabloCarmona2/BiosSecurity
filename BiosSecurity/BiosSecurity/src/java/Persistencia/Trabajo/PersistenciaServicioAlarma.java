@@ -6,15 +6,20 @@
 package Persistencia.Trabajo;
 
 import DataTypes.Alarma;
+import DataTypes.Cliente;
 import DataTypes.Dispositivo;
 import DataTypes.Propiedad;
 import DataTypes.Servicio;
 import DataTypes.ServicioAlarma;
+import DataTypes.ServicioVideoVigilancia;
+import DataTypes.Tecnico;
 import Persistencia.Interfaces.IPersistenciaServicioAlarma;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -35,9 +40,9 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
     public void InstalarDispositivo(ServicioAlarma servicio) throws Exception{
         try
             {
-                if (!servicio.getDispositivos().isEmpty())
+                if (!servicio.getAlarmas().isEmpty())
                 {
-                    PersistenciaAlarma.GetInstancia().Instalar((Alarma)servicio.getDispositivos().get((servicio.getDispositivos().size() - 1)), servicio.getNumServicio());
+                    PersistenciaAlarma.GetInstancia().Instalar(servicio.getAlarmas().get((servicio.getAlarmas().size() - 1)), servicio.getNumServicio());
                 }
                 else
                 {
@@ -57,7 +62,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
           Date fecha;
           boolean monitoreo;
           Propiedad propiedadCliente;
-          List<Dispositivo> dispositivos;
+          List<Alarma> dispositivos;
           int codAnulacion;
          try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -86,5 +91,75 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
             throw new Exception(ex.getMessage());
         }
      }
+    
+    public List<ServicioAlarma> ListaXCliente(Cliente cliente) throws Exception{
+        
+        try  {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+      
+        
+        Connection conexion = null;
+        CallableStatement consulta = null;
+        ResultSet resultadoConsulta;
+        
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            consulta = conexion.prepareCall("{ CALL ServicioAlarmaXCliente(?)  }");
+            
+            consulta.setInt(1, cliente.getCedula());
+            
+            resultadoConsulta = consulta.executeQuery();
+            
+            List<ServicioAlarma> servicios = new ArrayList<ServicioAlarma>();
+            
+            ServicioAlarma servicio = null;
+            
+            int numServicio;
+            Date fecha;
+            Boolean monitoreo;
+            Propiedad propiedad;
+            int codigoAnulacion;
+            
+            List<Alarma> dispositivos = new ArrayList<Alarma>();
+            
+            while(resultadoConsulta.next()){
+                
+                numServicio = resultadoConsulta.getInt("NumServicio");
+                fecha = resultadoConsulta.getDate("Fecha");
+                monitoreo = resultadoConsulta.getBoolean("Monitoreo");
+                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"));
+                codigoAnulacion = resultadoConsulta.getInt("CodAnulacion");
+                
+                dispositivos = PersistenciaAlarma.GetInstancia().ListarXServicio(numServicio);
+                
+                servicio = new ServicioAlarma(numServicio, fecha, monitoreo, propiedad, dispositivos, codigoAnulacion);
+            }
+            
+            return servicios;
+            
+        }catch(Exception ex){
+
+                throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
+        }
+    }
     
 }

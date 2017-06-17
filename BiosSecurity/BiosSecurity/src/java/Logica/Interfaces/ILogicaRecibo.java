@@ -5,8 +5,12 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Cliente;
 import DataTypes.Recibo;
+import DataTypes.Servicio;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -15,4 +19,5 @@ import java.util.ArrayList;
 public interface ILogicaRecibo {
     void GenerarRecibos(ArrayList<Recibo> recibos) throws Exception;
     void Cobrar(Recibo recibo) throws Exception;
+    HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception;
 }

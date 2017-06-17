@@ -15,6 +15,15 @@ import java.util.List;
 public class ServicioVideoVigilancia extends Servicio{
     
     private boolean terminal;
+    private List<Camara> camaras;
+
+    public List<Camara> getCamaras() {
+        return camaras;
+    }
+
+    public void setCamaras(List<Camara> camaras) {
+        this.camaras = camaras;
+    }
 
     public boolean isTerminal() {
         return terminal;
@@ -24,10 +33,11 @@ public class ServicioVideoVigilancia extends Servicio{
         this.terminal = terminal;
     }
     
-    public ServicioVideoVigilancia(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Dispositivo> dispositivos, boolean terminal) {
-        super(numServicio, fecha, monitoreo, propiedadCliente, dispositivos);
+    public ServicioVideoVigilancia(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Camara> dispositivos, boolean terminal) {
+        super(numServicio, fecha, monitoreo, propiedadCliente);
         
         setTerminal(terminal);
+        setCamaras(dispositivos);
     }
     
 }

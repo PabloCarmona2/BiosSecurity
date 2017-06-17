@@ -768,6 +768,7 @@ cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
     DECLARE transaccionActiva BIT;
+    DECLARE totalActual double;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
 	BEGIN
@@ -799,7 +800,7 @@ cuerpo:BEGIN
     
 	SET mensajeError = 'No se pudo sumar el importe de la linea al total del recibo correctamente!.';
 	
-    DECLARE totalActual;
+    
     
     SELECT totalActual = Total FROM CabezalRecibo WHERE NumRecibo = numRecibo;
     
@@ -814,3 +815,45 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
+
+
+#-------------------------------------SP SERVICIOS------------------------------------
+
+
+#-------------------------------------SP SERVICIOS ALARMA-----------------------------
+
+DELIMITER //
+
+CREATE PROCEDURE ServicioAlarmaXCliente(cliente bigint)
+BEGIN
+
+SELECT *
+FROM ServicioAlarmas INNER JOIN Servicios
+WHERE Servicios.Propiedad.Cliente = cliente;
+
+END//
+
+DELIMITER ;
+
+#-------------------------------------------------------------------------------------
+
+
+#-------------------------------------SP SERVICIOS CAMARA-----------------------------
+
+DELIMITER //
+
+CREATE PROCEDURE ServicioCamaraXCliente(cliente bigint)
+BEGIN
+
+SELECT *
+FROM ServicioVideoVigilancia INNER JOIN Servicios
+WHERE Servicios.Propiedad.Cliente = cliente;
+
+END//
+
+DELIMITER ;
+
+#-------------------------------------------------------------------------------------
+
+

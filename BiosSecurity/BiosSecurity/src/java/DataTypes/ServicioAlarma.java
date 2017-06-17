@@ -15,6 +15,7 @@ import java.util.List;
 public class ServicioAlarma extends Servicio{
     
     private int codAnulacion;
+    private List<Alarma> alarmas;
 
     public int getCodAnulacion() {
         return codAnulacion;
@@ -23,12 +24,25 @@ public class ServicioAlarma extends Servicio{
     public void setCodAnulacion(int codAnulacion) {
         this.codAnulacion = codAnulacion;
     }
-    
-    public ServicioAlarma(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Dispositivo> dispositivos,  int codAnulacion) {
-        super(numServicio, fecha, monitoreo, propiedadCliente, dispositivos);
-        
-        setCodAnulacion(codAnulacion);
-        
+
+    public List<Alarma> getAlarmas() {
+        return alarmas;
+    }
+
+    public void setAlarmas(List<Alarma> alarmas) {
+        this.alarmas = alarmas;
     }
     
+    
+    
+    
+    public ServicioAlarma(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Alarma> dispositivos,  int codAnulacion) {
+        super(numServicio, fecha, monitoreo, propiedadCliente);
+        
+        setCodAnulacion(codAnulacion);
+        setAlarmas(dispositivos);
+        
+    }
+
+   
 }
