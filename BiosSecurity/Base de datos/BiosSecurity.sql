@@ -107,7 +107,7 @@ create table CabezalRecibo (
     Fecha datetime not null,
     Total double not null,
     Cliente bigint not null,
-    Cobrador bigint not null,
+    Cobrador bigint,
     Cobrado boolean not null,
     foreign key (Cliente) references Clientes(Cedula),
     foreign key (Cobrador) references Cobradores(Cedula),
@@ -717,7 +717,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure Cobrar(numRecibo bigint, OUT pError VARCHAR(500))
+CREATE procedure Cobrar(numRecibo bigint, cobrador bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -746,7 +746,7 @@ cuerpo:BEGIN
 	
     
 	UPDATE CabezalRecibo
-    SET Cobrado = true;
+    SET Cobrado = true, Cobrador = cobrador;
     
     SET sinErrores = 0;
 	

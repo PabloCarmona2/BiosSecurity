@@ -5,10 +5,14 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Recibo;
+import java.util.ArrayList;
+
 /**
  *
  * @author Geronimo
  */
 public interface ILogicaRecibo {
-    
+    void GenerarRecibos(ArrayList<Recibo> recibos) throws Exception;
+    void Cobrar(Recibo recibo) throws Exception;
 }

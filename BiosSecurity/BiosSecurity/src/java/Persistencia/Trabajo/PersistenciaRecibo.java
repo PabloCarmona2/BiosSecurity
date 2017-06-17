@@ -91,7 +91,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
        
     }
     
-    public void Cobrar(int numero, Cobrador cobrador) throws Exception{
+    public void Cobrar(Recibo recibo) throws Exception{
         
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -100,10 +100,11 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL CobrarRecibo(?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL CobrarRecibo(?, ?, ?) }")) {
            
-            consulta.setInt(1, numero);
-            consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
+            consulta.setInt(1, recibo.getNumRecibo());
+            consulta.setInt(2, recibo.getCobrador().getCedula());
+            consulta.registerOutParameter(3, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
@@ -140,7 +141,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     consulta.setDate(1, fecha);
                     consulta.setDouble(2, r.getTotal());
                     consulta.setInt(3, r.getCliente().getCedula());
-                    consulta.setInt(4, r.getCobrador().getCedula());
+                    consulta.setNull(4, java.sql.Types.INTEGER);
                     consulta.setBoolean(5, false);
                     consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
                     consulta.registerOutParameter(7, java.sql.Types.INTEGER);

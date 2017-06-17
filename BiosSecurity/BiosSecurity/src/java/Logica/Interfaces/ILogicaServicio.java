@@ -5,10 +5,12 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Servicio;
+
 /**
  *
  * @author Geronimo
  */
 public interface ILogicaServicio {
-    
+    void InstalarDispositivo(Servicio servicio) throws Exception;
 }
