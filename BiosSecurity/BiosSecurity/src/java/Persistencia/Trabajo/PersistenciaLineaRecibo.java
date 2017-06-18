@@ -57,19 +57,23 @@ public class PersistenciaLineaRecibo {
         }      
     }
     public List<LineaRecibo> ListarLineas(int numeroRecibo) throws Exception{
-        
+        ResultSet resultadoConsulta=null;
+        Connection conexion=null;
+        PreparedStatement consulta=null;
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM LineaRecibo where NumRecibo=?;"); 
-                ResultSet resultadoConsulta = consulta.executeQuery()) {
-           
+        try{
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+            
+            consulta = conexion.prepareStatement("SELECT * FROM LineaRecibo where NumRecibo=?;"); 
+            
             consulta.setInt(1, numeroRecibo);
             
+            resultadoConsulta = consulta.executeQuery();
             List<LineaRecibo> listaLineas = new ArrayList<LineaRecibo>();
             LineaRecibo linea;
             
@@ -93,6 +97,19 @@ public class PersistenciaLineaRecibo {
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
     }
 }

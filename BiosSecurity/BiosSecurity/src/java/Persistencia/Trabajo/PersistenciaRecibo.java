@@ -44,16 +44,18 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
     }
     
     public List<Recibo> RecibosaCobrar(String zona) throws Exception{
-        
+        ResultSet resultado=null;
+        PreparedStatement consulta=null;
+        Connection conexion=null;
         try{
             Class.forName("com.mysql.jdbc.Driver");
         }catch(Exception ex){
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
-        try(Connection conexion= DriverManager.getConnection("jdbc:mysql//localhost:3306/BiosSecurity,root,root");
-            PreparedStatement consulta=conexion.prepareCall
-            ("SELECT * FROM CabezaldeRecibo INNERJOIN Clientes ON CabezaldeRecibo.Cliente = Clientes.Cedula Where Cliente.Barrio=?;");
-            ResultSet resultado= consulta.executeQuery()){
+        try{
+            conexion= DriverManager.getConnection("jdbc:mysql//localhost:3306/BiosSecurity,root,root");
+            consulta=conexion.prepareCall("SELECT * FROM CabezaldeRecibo INNERJOIN Clientes ON CabezaldeRecibo.Cliente = Clientes.Cedula Where Cliente.Barrio=?;");
+            resultado= consulta.executeQuery();
 
             consulta.setString(1, zona);
             
@@ -87,6 +89,18 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             
           throw new Exception(ex.getMessage());
  
+        }finally{
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
        
     }

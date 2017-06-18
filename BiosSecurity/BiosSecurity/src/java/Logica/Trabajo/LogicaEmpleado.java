@@ -58,6 +58,7 @@ public class LogicaEmpleado implements ILogicaEmpleado{
                 //codigo para cobrador (comprobarias el tema del transporte)
             }
             
+            
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
         }

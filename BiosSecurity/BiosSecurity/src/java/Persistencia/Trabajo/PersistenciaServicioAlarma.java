@@ -59,16 +59,22 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
           Propiedad propiedadCliente;
           List<Dispositivo> dispositivos;
           int codAnulacion;
+          Connection conexion = null;
+          PreparedStatement consulta = null;
+          ResultSet resultadoConsulta;
          try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
-      
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-        PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM ServicioAlarmas WHERE NumServicio = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
-        
+         try{
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            consulta = conexion.prepareStatement("SELECT * FROM ServicioAlarmas WHERE NumServicio = ?;");
+            
             consulta.setInt(1, numeroServicio);
+            
+            resultadoConsulta = consulta.executeQuery();
             
            if(resultadoConsulta.next()){
            numServicio=resultadoConsulta.getInt("NumServicio");
@@ -84,6 +90,19 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
              return srvAlarma;
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
      }
     
