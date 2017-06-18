@@ -107,7 +107,7 @@ create table CabezalRecibo (
     Fecha datetime not null,
     Total double not null,
     Cliente bigint not null,
-    Cobrador bigint not null,
+    Cobrador bigint,
     Cobrado boolean not null,
     foreign key (Cliente) references Clientes(Cedula),
     foreign key (Cobrador) references Cobradores(Cedula),
@@ -717,7 +717,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure Cobrar(numRecibo bigint, OUT pError VARCHAR(500))
+CREATE procedure Cobrar(numRecibo bigint, cobrador bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -746,7 +746,7 @@ cuerpo:BEGIN
 	
     
 	UPDATE CabezalRecibo
-    SET Cobrado = true;
+    SET Cobrado = true, Cobrador = cobrador;
     
     SET sinErrores = 0;
 	
@@ -768,6 +768,7 @@ cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
     DECLARE transaccionActiva BIT;
+    DECLARE totalActual double;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
 	BEGIN
@@ -799,7 +800,7 @@ cuerpo:BEGIN
     
 	SET mensajeError = 'No se pudo sumar el importe de la linea al total del recibo correctamente!.';
 	
-    DECLARE totalActual;
+    
     
     SELECT totalActual = Total FROM CabezalRecibo WHERE NumRecibo = numRecibo;
     
@@ -814,3 +815,45 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
+
+
+#-------------------------------------SP SERVICIOS------------------------------------
+
+
+#-------------------------------------SP SERVICIOS ALARMA-----------------------------
+
+DELIMITER //
+
+CREATE PROCEDURE ServicioAlarmaXCliente(cliente bigint)
+BEGIN
+
+SELECT *
+FROM ServicioAlarmas INNER JOIN Servicios
+WHERE Servicios.Propiedad.Cliente = cliente;
+
+END//
+
+DELIMITER ;
+
+#-------------------------------------------------------------------------------------
+
+
+#-------------------------------------SP SERVICIOS CAMARA-----------------------------
+
+DELIMITER //
+
+CREATE PROCEDURE ServicioCamaraXCliente(cliente bigint)
+BEGIN
+
+SELECT *
+FROM ServicioVideoVigilancia INNER JOIN Servicios
+WHERE Servicios.Propiedad.Cliente = cliente;
+
+END//
+
+DELIMITER ;
+
+#-------------------------------------------------------------------------------------
+
+

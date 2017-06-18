@@ -5,7 +5,12 @@
  */
 package Logica.Trabajo;
 
+import DataTypes.Cliente;
+import DataTypes.Servicio;
 import Logica.Interfaces.ILogicaCliente;
+import Persistencia.FabricaPersistencia;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -19,5 +24,9 @@ public class LogicaCliente implements ILogicaCliente{
         if (_instancia == null)
             _instancia = new LogicaCliente();
         return _instancia;
+    }
+    
+    public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
+        return FabricaPersistencia.getPersistenciaCliente().ClientesYServiciosOrdenados();
     }
 }
