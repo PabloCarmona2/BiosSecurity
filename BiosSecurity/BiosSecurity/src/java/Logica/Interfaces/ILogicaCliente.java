@@ -5,10 +5,17 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Cliente;
+import DataTypes.Servicio;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  *
  * @author Geronimo
  */
 public interface ILogicaCliente {
+
+    void Modificar(Cliente cliente) throws Exception;
     
 }

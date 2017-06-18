@@ -15,6 +15,7 @@ import Persistencia.Interfaces.IPersistenciaCliente;
 import Persistencia.Interfaces.IPersistenciaCobrador;
 import Persistencia.Interfaces.IPersistenciaRecibo;
 import Persistencia.Interfaces.IPersistenciaServicioAlarma;
+import Persistencia.Interfaces.IPersistenciaServicioVideoVigilancia;
 import Persistencia.Interfaces.IPersistenciaTecnico;
 import Persistencia.Trabajo.PersistenciaAlarma;
 import Persistencia.Trabajo.PersistenciaCamara;
@@ -22,6 +23,7 @@ import Persistencia.Trabajo.PersistenciaCliente;
 import Persistencia.Trabajo.PersistenciaCobrador;
 import Persistencia.Trabajo.PersistenciaRecibo;
 import Persistencia.Trabajo.PersistenciaServicioAlarma;
+import Persistencia.Trabajo.PersistenciaServicioVideovigilancia;
 import Persistencia.Trabajo.PersistenciaTecnico;
 
 /**
@@ -68,5 +70,9 @@ public class FabricaPersistencia {
      public static IPersistenciaServicioAlarma getPersistenciaServicioAlarma()
     {
         return (PersistenciaServicioAlarma.GetInstancia());
+    }
+     public static IPersistenciaServicioVideoVigilancia getPersistenciaVideoVigilancia()
+    {
+        return (PersistenciaServicioVideovigilancia.GetInstancia());
     }
 }

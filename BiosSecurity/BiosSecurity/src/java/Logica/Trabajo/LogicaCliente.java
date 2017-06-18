@@ -5,7 +5,12 @@
  */
 package Logica.Trabajo;
 
+import DataTypes.Cliente;
+import DataTypes.Servicio;
 import Logica.Interfaces.ILogicaCliente;
+import Persistencia.FabricaPersistencia;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -19,5 +24,45 @@ public class LogicaCliente implements ILogicaCliente{
         if (_instancia == null)
             _instancia = new LogicaCliente();
         return _instancia;
+    }
+    private static boolean comprobarTel(String cadena){
+	try {
+		Integer.parseInt(cadena);
+		return true;
+	} catch (NumberFormatException ex){
+		return false;
+        }
+    }
+    public static void Validar(Cliente cliente) throws Exception
+    {
+        try{
+         
+            if(cliente == null){
+                throw new Exception("El cliente no puede ser nulo!");
+            }
+            if(cliente.getNombre().length() > 25 || cliente.getNombre().length() == 0){
+                throw new Exception("El nombre del cliente no puede tener mas de 25 caracteres o estar vacío!");
+            }
+            if(cliente.getBarrio().length() > 25 || cliente.getNombre().length() == 0){
+                throw new Exception("El campo barrio del cliente no puede tener mas de 25 caracteres o estar vacío!");
+            }
+            if(cliente.getDirCobro().length() > 30 || cliente.getNombre().length() == 0){
+                throw new Exception("El campo direccion de cobro del cliente no puede tener mas de 30 caracteres o estar vacío!");
+            }
+            if(Logica.Trabajo.LogicaCliente.comprobarTel(cliente.getTelefono())){
+                throw new Exception("El nombre del cliente no puede tener mas de 25 caracteres!");
+            }           
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }   
+    }
+    public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
+        return FabricaPersistencia.getPersistenciaCliente().ClientesYServiciosOrdenados();
+    }
+    public void Modificar(Cliente cliente) throws Exception{
+        Validar(cliente);
+        
+        Persistencia.FabricaPersistencia.getPersistenciaCliente().Modificar(cliente);
+    
     }
 }

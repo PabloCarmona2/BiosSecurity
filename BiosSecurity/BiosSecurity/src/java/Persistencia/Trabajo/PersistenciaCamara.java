@@ -5,6 +5,7 @@
  */
 package Persistencia.Trabajo;
 
+import DataTypes.Alarma;
 import DataTypes.Camara;
 import DataTypes.ServicioVideoVigilancia;
 import DataTypes.Tecnico;
@@ -14,6 +15,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -45,7 +48,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivo.NumInventario WHERE Dispositivo = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivo.NumInventario WHERE NumInventario = ? AND BajaLogica = 0;");
             
             consulta.setInt(1, numInventario);
             
@@ -176,6 +179,68 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public List<Camara> ListarXServicio(int numServicio) throws Exception{
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
+        
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos WHERE Servicio = ?;");
+            
+            consulta.setInt(1, numServicio);
+            
+            resultadoConsulta = consulta.executeQuery();
+            
+            List<Camara> camaras = new ArrayList<Camara>();
+            Camara camara = null;
+            
+            int numInventario;
+            String descripcionUbicacion;
+            Tecnico tecnico;
+            Boolean exterior;
+            
+            while(resultadoConsulta.next()){
+                numInventario = resultadoConsulta.getInt("NumInventario");
+                descripcionUbicacion = resultadoConsulta.getString("DescripcionUbicacion");
+                tecnico = PersistenciaTecnico.GetInstancia().Buscar(resultadoConsulta.getInt("Tecnico"));
+                exterior = resultadoConsulta.getBoolean("Exterior");
+                
+                camara = new Camara(numInventario, descripcionUbicacion, exterior, tecnico);
+                
+                camaras.add(camara);
+            }
+            
+            return camaras;
+            
+        }catch(Exception ex){
+
+                throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
     }
     

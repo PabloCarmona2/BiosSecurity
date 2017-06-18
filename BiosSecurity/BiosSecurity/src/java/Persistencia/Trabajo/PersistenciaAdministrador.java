@@ -35,16 +35,21 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
         
           Administrador admin=null;
         
-         try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
-        } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
-        }
-      
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-        PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Administradores WHERE cedula = ?;"); ResultSet resultadoConsulta = consulta.executeQuery()) {
+           Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
         
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            consulta = conexion.prepareStatement("SELECT * FROM Administrador INNER JOIN Empleados ON Administrador.Cedula = Empleados.Cedula WHERE Cedula = ?;");
+            
             consulta.setInt(1, cedula);
+            
+            resultadoConsulta = consulta.executeQuery();
+            
+       
             String nombre;
             String clave;
             Date fIngreso;
@@ -62,6 +67,19 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
              return admin;
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
     }
     

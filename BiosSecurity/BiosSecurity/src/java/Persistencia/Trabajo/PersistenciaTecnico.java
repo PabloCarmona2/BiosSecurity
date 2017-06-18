@@ -104,7 +104,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AgregarTecnico(?, ?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaTecnico(?, ?, ?, ?, ?, ?) }")) {
            
             consulta.setInt(1, tecnico.getCedula());
             consulta.setString(2, tecnico.getNombre());
@@ -136,7 +136,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL ModificarTecnico(?, ?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL ModificarTecnico(?, ?, ?, ?, ?, ?, ?) }")) {
            
             consulta.setInt(1, tecnico.getCedula());
             consulta.setString(2, tecnico.getNombre());
@@ -168,7 +168,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL EliminarTecnico(?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL BajaTecnico(?, ?) }")) {
            
             consulta.setInt(1, tecnico.getCedula());
             consulta.registerOutParameter(2, java.sql.Types.VARCHAR);

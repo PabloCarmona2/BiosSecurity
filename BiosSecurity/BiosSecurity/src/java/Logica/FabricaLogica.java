@@ -5,10 +5,18 @@
  */
 package Logica;
 
+import Logica.Interfaces.ILogicaDispositivo;
+import Logica.Trabajo.LogicaDispositivo;
+
+
+
 /**
  *
  * @author Geronimo
  */
 public class FabricaLogica {
-    
+    public static ILogicaDispositivo GetLogicaDispositivo()
+    {
+        return (LogicaDispositivo.GetInstancia());
+    }
 }
