@@ -19,5 +19,5 @@ import java.util.List;
 public interface ILogicaRecibo {
     void GenerarRecibos(ArrayList<Recibo> recibos) throws Exception;
     void Cobrar(Recibo recibo) throws Exception;
-    HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception;
+    
 }

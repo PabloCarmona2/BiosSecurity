@@ -5,10 +5,15 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Cliente;
+import DataTypes.Servicio;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  *
  * @author Geronimo
  */
 public interface ILogicaCliente {
-    
+    HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception;
 }
