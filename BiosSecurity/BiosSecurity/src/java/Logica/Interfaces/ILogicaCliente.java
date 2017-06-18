@@ -15,6 +15,7 @@ import java.util.List;
  * @author Geronimo
  */
 public interface ILogicaCliente {
+
     void Modificar(Cliente cliente) throws Exception;
     
 }
