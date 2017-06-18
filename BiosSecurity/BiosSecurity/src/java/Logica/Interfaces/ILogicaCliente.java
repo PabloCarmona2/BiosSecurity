@@ -15,5 +15,7 @@ import java.util.List;
  * @author Geronimo
  */
 public interface ILogicaCliente {
-    HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception;
+
+    void Modificar(Cliente cliente) throws Exception;
+    
 }
