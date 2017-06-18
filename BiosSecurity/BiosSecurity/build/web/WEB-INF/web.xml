@@ -14,10 +14,7 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-<<<<<<< HEAD
         <welcome-file>inicio</welcome-file>
-=======
         <welcome-file>Login</welcome-file>
->>>>>>> 4e02bb28bef182a6d343dce8dab10dad30938f60
     </welcome-file-list>
 </web-app>
