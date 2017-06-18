@@ -52,7 +52,7 @@ public class ControladorLogin extends Controlador{
             if (empleado != null) {
                 request.setAttribute("empleado", empleado);
                 cargarMensaje("¡Login exitoso!", request);
-                mostrarVista("principal", request, response);
+                mostrarVista("MenuPrincipal", request, response);
             } else {
                 cargarMensaje("¡ERROR! usuario o contraseña erroneos ", request);
             }
