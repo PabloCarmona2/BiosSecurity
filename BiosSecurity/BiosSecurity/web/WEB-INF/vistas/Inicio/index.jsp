@@ -8,7 +8,7 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:masterpage titulo="Menú Principal">
+<t:PaginaMaestra titulo="Menú Principal">
     <jsp:body>
         <ul>
             <li><a href="logout">Logout</a></li>
@@ -21,4 +21,4 @@
             <li><a href="recibos">Recibos</a></li>
         </ul>
     </jsp:body>
-</t:masterpage>
+</t:PaginaMaestra>
