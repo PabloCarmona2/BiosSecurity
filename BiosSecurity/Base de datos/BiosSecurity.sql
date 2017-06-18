@@ -856,4 +856,56 @@ DELIMITER ;
 
 #-------------------------------------------------------------------------------------
 
+#---------------------------------SP Administrativos---------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------
 
+
+DELIMITER //
+
+CREATE procedure AgregarAdministrador(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF EXISTS(SELECT * FROM Administradores WHERE Cedula = cedula)
+    THEN
+		SET pError = 'Ya existe el administrador que desea ingresar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo agregar el administrativo correctamente!';
+	
+    
+	INSERT INTO Empleados
+    VALUES(cedula, nombre, clave, fIngreso, sueldo);
+    
+	SET mensajeError = 'No se pudo agregar el administrador correctamente!.';
+	
+	INSERT INTO administrador
+	 VALUES(nombre, clave, fIngreso, sueldo);
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;

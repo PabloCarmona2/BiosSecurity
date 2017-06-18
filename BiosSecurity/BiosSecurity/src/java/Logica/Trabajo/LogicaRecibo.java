@@ -5,18 +5,25 @@
  */
 package Logica.Trabajo;
 
+import DataTypes.Cliente;
 import DataTypes.Recibo;
+import DataTypes.Servicio;
 import Logica.Interfaces.ILogicaRecibo;
 import Persistencia.FabricaPersistencia;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  *
  * @author Geronimo
  */
 public class LogicaRecibo implements ILogicaRecibo{
+    
     private static LogicaRecibo _instancia = null;
+    
     private LogicaRecibo() { }
+    
     public static LogicaRecibo GetInstancia()
     {
         if (_instancia == null)
@@ -64,5 +71,8 @@ public class LogicaRecibo implements ILogicaRecibo{
         }catch(Exception ex){
             
         }
+    }
+    public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
+        return null;
     }
 }
