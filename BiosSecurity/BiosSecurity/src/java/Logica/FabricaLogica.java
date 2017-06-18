@@ -6,7 +6,9 @@
 package Logica;
 
 import Logica.Interfaces.ILogicaDispositivo;
+import Logica.Interfaces.ILogicaEmpleado;
 import Logica.Trabajo.LogicaDispositivo;
+import Logica.Trabajo.LogicaEmpleado;
 
 
 
@@ -19,4 +21,10 @@ public class FabricaLogica {
     {
         return (LogicaDispositivo.GetInstancia());
     }
+    
+    public static ILogicaEmpleado GetLogicaEmpleado()
+    {
+        return (LogicaEmpleado.GetInstancia());
+    }
+    
 }
