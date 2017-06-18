@@ -10,7 +10,6 @@
 <%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
-<%@attribute name="message"%>
 
 <%-- any content can be specified here e.g.: --%>
 <c:if test="${!empty mensaje}">

@@ -6,6 +6,8 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <t:PaginaMaestra titulo="Menú Principal">
@@ -15,7 +17,7 @@
         </jsp:useBean>
         
         <h1>Ingrese cedula y contraseña:</h1>
-        <form action="CambiarProducto.jsp" method="post" accept-charset="ISO-8859-1">
+        <form action="login" method="post" accept-charset="ISO-8859-1">
             <table>
                 <tr>
                     <td>Cedula: </td><td><input type="text" name="cedula" /></td>
