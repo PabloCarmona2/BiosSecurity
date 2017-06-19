@@ -37,6 +37,12 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
         return _instancia;
     }
     
+    public void altaServicio(ServicioAlarma servicio) throws Exception{
+        
+        
+        
+    }
+    
     public void InstalarDispositivo(ServicioAlarma servicio) throws Exception{
         try
             {

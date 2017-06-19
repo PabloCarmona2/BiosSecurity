@@ -15,4 +15,5 @@ public interface IPersistenciaServicioAlarma {
     void InstalarDispositivo(ServicioAlarma servicio) throws Exception;
     ServicioAlarma Buscar(int numeroServicio)throws Exception;
     
+    
 }
