@@ -122,4 +122,48 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
         }
          return cobrador;
     }
+    
+    public List<Tecnico> ListarTecnicos() throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Empleado = Empleados.Cedula;"); 
+                ResultSet resultadoConsulta = consulta.executeQuery()) {
+           
+            
+            List<Tecnico> tecnicos = new ArrayList<Tecnico>();
+            Tecnico tecnico;
+            
+            int _cedula;
+            String nombre;
+            String clave;
+            Date fIngreso;
+            double sueldo;
+            String especializacion;
+            
+            while(resultadoConsulta.next()){
+                _cedula = resultadoConsulta.getInt("Cedula");
+                nombre = resultadoConsulta.getString("Nombre");
+                clave = resultadoConsulta.getString("Clave");
+                fIngreso = resultadoConsulta.getDate("FIngreso");
+                sueldo = resultadoConsulta.getDouble("Sueldo");
+                especializacion = resultadoConsulta.getString("Especializacion");
+                
+                tecnico = new Tecnico(_cedula, nombre, clave, fIngreso, sueldo, especializacion);
+                
+                tecnicos.add(tecnico);
+            }
+            
+            return tecnicos;
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+        
+    }
 }

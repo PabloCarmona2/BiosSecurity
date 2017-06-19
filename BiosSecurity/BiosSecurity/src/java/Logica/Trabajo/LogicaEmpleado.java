@@ -11,7 +11,9 @@ import DataTypes.Empleado;
 import DataTypes.Tecnico;
 import Logica.Interfaces.ILogicaEmpleado;
 import Persistencia.FabricaPersistencia;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 /**
  *
  * @author Geronimo
@@ -156,6 +158,29 @@ public class LogicaEmpleado implements ILogicaEmpleado{
        }
         
         return empleado;
+    }
+    
+    public List<Empleado> Listar() throws Exception {
+        try{
+            
+            List<Empleado> empleados = new ArrayList<Empleado>();
+            List<Tecnico> tecnicos = new ArrayList<Tecnico>();
+            List<Cobrador> cobradores = new ArrayList<Cobrador>();
+            List<Administrador> administradores = new ArrayList<Administrador>();
+
+            tecnicos = FabricaPersistencia.GetPersistenciaTecnico().ListarTecnicos();
+            //cobradores = FabricaPersistencia.getPersistenciaCobrador().ListarCobradores();
+            //administradores = FabricaPersistencia.getPersistenciaAdministrador.ListarAdministradores();
+
+            empleados.addAll(tecnicos);
+            empleados.addAll(cobradores);
+            empleados.addAll(administradores);
+            
+            return empleados;
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
     }
     
 }
