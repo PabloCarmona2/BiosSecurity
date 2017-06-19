@@ -31,6 +31,6 @@
             </table>
         </form>
         
-        <t:mensaje />
+        <t:Mensaje/>
     </jsp:body>
 </t:PaginaMaestra>
