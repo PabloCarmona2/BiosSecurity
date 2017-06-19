@@ -13,6 +13,7 @@ import Logica.FabricaLogica;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -83,5 +84,67 @@ public class ControladorTecnico extends Controlador {
         
     }
     
-   
+    public void agregar_post(HttpServletRequest request, HttpServletResponse response) {
+        
+        int cedula = 0;
+        
+        try {
+            
+            cedula = Integer.parseInt(request.getParameter("cedula"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! La cédula no es válida.", request);
+            
+            mostrarVista("agregar", request, response);
+            
+            return;
+            
+        }
+        
+        String nombre = request.getParameter("nombre");
+        
+        double sueldo = 0;
+        
+        try {
+            
+            sueldo = Double.parseDouble(request.getParameter("sueldo"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! El sueldo no es válido.", request);
+            
+            mostrarVista("agregar", request, response);
+            
+            return;
+            
+            
+        }
+        
+        String clave = request.getParameter("clave");
+        
+        Date fIngreso = new Date();
+        
+        String especializacion = request.getParameter("especializacion");
+        
+        Tecnico tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, especializacion);
+        
+        try {
+            
+            FabricaLogica.GetLogicaEmpleado().Agregar(tecnico);
+            
+            cargarMensaje("¡Tecnico agregado con éxito!", request.getSession());
+            
+            response.sendRedirect("tecnicos");
+            
+        } catch (Exception ex) {
+            
+            cargarMensaje("¡ERROR! Se produjo un error al agregar el tecnico.", request);
+            
+            mostrarVista("agregar", request, response);
+            
+        }
+    }
+    
+    
 }

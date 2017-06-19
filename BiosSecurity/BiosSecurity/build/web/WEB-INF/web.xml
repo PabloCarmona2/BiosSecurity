@@ -14,7 +14,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControladorTecnico</servlet-name>
-        <url-pattern>/ControladorTecnico</url-pattern>
+        <url-pattern>/tecnicos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
