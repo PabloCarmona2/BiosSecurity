@@ -10,7 +10,7 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:PaginaMaestra titulo="Empleados">
+<t:PaginaMaestra titulo="Tecnicos">
     <jsp:body>
         <fmt:setLocale value="en-US" />
         

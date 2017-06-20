@@ -51,7 +51,12 @@ public class ControladorTecnico extends Controlador {
                     }
                 }
             }else{
-                cargarMensaje("Seleccione un tipo de empleado para ver la lista", request);
+                
+                cargarMensaje("No ha seleccionado este tipo de empleado", request);
+                
+                mostrarVista("index", request, response);
+            
+                return;
             }
             
             request.setAttribute("empleados", empleadosImprimir);
