@@ -1,6 +1,6 @@
 <%-- 
-    Document   : index
-    Created on : 19-jun-2017, 15:55:28
+    Document   : listaAdministradores
+    Created on : 20-jun-2017, 15:39:08
     Author     : Geronimo
 --%>
 
@@ -14,26 +14,11 @@
     <jsp:body>
         <fmt:setLocale value="en-US" />
         
-        
-        <form method="post">
-            
-            <select name="tipo" size="1">
-                <option value="nulo">Seleccionar...</option>
-                <option value="tecnico">Tecnicos</option>
-                <option value="cobrador">Cobradores</option>
-                <option value="administrador">Administradores</option>
-            </select>
-            
-            <input type="submit" name="accion" value="Seleccionar" />
-            
-        </form>
-         
-        
         <form>
             <p><input type="text" name="buscar" value="${param.buscar}" id="buscar" /> <input type="submit" value="Buscar" /></p>
         </form>
         
-        <p><a href="empleados?accion=agregar"><img src="imagenes/glyphicons-191-plus-sign.png" alt="Agregar" title="Agregar..." ></a></p>
+        <p><a href="tecnicos?accion=agregar"><img src="imagenes/glyphicons-191-plus-sign.png" alt="Agregar" title="Agregar..." ></a></p>
         
         <table class="listado">
             <tr>
@@ -49,9 +34,9 @@
                     </td>
                     <td class="texto-derecha">${empleado.fIngreso}</td>
                     <td>
-                        <a href="empleados?accion=ver&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
-                        <a href="empleados?accion=modificar&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-31-pencil.png" alt="Modificar" title="Modificar..." ></a>&nbsp;&nbsp;
-                        <a href="empleados?accion=eliminar&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-192-minus-sign.png" alt="Eliminar" title="Eliminar..." ></a>
+                        <a href="admiistradores?accion=ver&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
+                        <a href="administradores?accion=modificar&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-31-pencil.png" alt="Modificar" title="Modificar..." ></a>&nbsp;&nbsp;
+                        <a href="administradores?accion=eliminar&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-192-minus-sign.png" alt="Eliminar" title="Eliminar..." ></a>
                     </td>
                 </tr>
             </c:forEach>
@@ -67,4 +52,3 @@
         </script>
     </jsp:body>
 </t:PaginaMaestra>
-

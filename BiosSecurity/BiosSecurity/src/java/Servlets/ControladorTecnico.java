@@ -42,24 +42,12 @@ public class ControladorTecnico extends Controlador {
             
             }
             
-            List<Empleado> empleadosImprimir = new ArrayList<Empleado>();
+            List<Tecnico> empleadosImprimir = new ArrayList<Tecnico>();
             
             if(request.getParameter("tipo") == "tecnico"){
-                for(Empleado e : empleados){
-                    if(e instanceof Tecnico){
-                        empleadosImprimir.add(e);
-                    }
-                }
-            }else if(request.getParameter("tipo") == "cobrador"){
-                for(Empleado e : empleados){
-                    if(e instanceof Cobrador){
-                        empleadosImprimir.add(e);
-                    }
-                }
-            }else if(request.getParameter("tipo") == "administrador"){
-                for(Empleado e : empleados){
-                    if(e instanceof Administrador){
-                        empleadosImprimir.add(e);
+                for(Empleado t : empleados){
+                    if(t instanceof Tecnico){
+                        empleadosImprimir.add((Tecnico)t);
                     }
                 }
             }else{
@@ -70,7 +58,7 @@ public class ControladorTecnico extends Controlador {
             cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
             
         } catch (Exception ex) {
-            cargarMensaje("¡ERROR! Se produjo un error al mostrar los empleados.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al mostrar los tecnicos.", request);
         }
         
         mostrarVista("index", request, response);
@@ -143,6 +131,223 @@ public class ControladorTecnico extends Controlador {
             
             mostrarVista("agregar", request, response);
             
+        }
+    }
+    
+    public void ver_get(HttpServletRequest request, HttpServletResponse response) {
+        int cedula;
+        
+        try {
+            
+            cedula = Integer.parseInt(request.getParameter("cedula"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! La cédula no es válida.", request);
+            
+            mostrarVista("ver", request, response);
+            
+            return;
+            
+        }
+        
+        try {
+            
+            Tecnico tecnico = (Tecnico)FabricaLogica.GetLogicaEmpleado().Buscar(cedula);
+            
+            if (tecnico != null) {
+                
+                request.setAttribute("empleado", tecnico);
+                
+                cargarMensaje("¡Empleado encontrado!", request);
+                
+            } else {
+                
+                cargarMensaje("¡ERROR! No se encontró ningún tecnico con la cédula " + cedula + ".", request);
+                
+            }
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al buscar el tecnico.", request);
+        }
+        
+        mostrarVista("ver", request, response);
+    }
+    
+    public void modificar_get(HttpServletRequest request, HttpServletResponse response) {
+        int cedula;
+        
+        try {
+            
+            cedula = Integer.parseInt(request.getParameter("cedula"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! La cédula no es válida.", request);
+            
+            mostrarVista("modificar", request, response);
+            
+            return;
+            
+        }
+        
+        try {
+            
+            Tecnico tecnico = (Tecnico)FabricaLogica.GetLogicaEmpleado().Buscar(cedula);
+            
+            if (tecnico != null) {
+                
+                request.setAttribute("empleado", tecnico);
+                cargarMensaje("¡Empleado encontrado!", request);
+                
+            } else {
+                
+                request.setAttribute("ocultarFormulario", true);
+                
+                cargarMensaje("¡ERROR! No se encontró ningún tecnico con la cédula " + cedula + ".", request);
+                
+            }
+            
+        } catch (Exception ex) {
+            
+            cargarMensaje("¡ERROR! Se produjo un error al buscar el tecnico.", request);
+            
+        }
+        
+        mostrarVista("modificar", request, response);
+    }
+    
+    public void modificar_post(HttpServletRequest request, HttpServletResponse response) {
+        int cedula;
+        
+        try {
+            
+            cedula = Integer.parseInt(request.getParameter("cedula"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! La cédula no es válida.", request);
+            
+            mostrarVista("modificar", request, response);
+            
+            return;
+            
+        }
+        
+        String nombre = request.getParameter("nombre");
+        
+        double sueldo = 0;
+        
+        try {
+            
+            sueldo = Double.parseDouble(request.getParameter("sueldo"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! El sueldo no es válido.", request);
+            
+            mostrarVista("modificar", request, response);
+            
+            return;
+            
+            
+        }
+        
+        String clave = request.getParameter("clave");
+        
+        Date fIngreso = new Date();
+        
+        String especializacion = request.getParameter("especializacion");
+        
+        Tecnico tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, especializacion);
+        
+        try {
+            
+            FabricaLogica.GetLogicaEmpleado().Modificar(tecnico);
+            
+            cargarMensaje("¡Tecnico modificado con éxito!", request.getSession());
+            
+            response.sendRedirect("empleados");
+            
+        } catch (Exception ex) {
+            
+            cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado.", request);
+            
+            mostrarVista("modificar", request, response);
+            
+        }
+    }
+    
+    public void eliminar_get(HttpServletRequest request, HttpServletResponse response) {
+        int cedula;
+        
+        try {
+            
+            cedula = Integer.parseInt(request.getParameter("cedula"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! La cédula no es válida.", request);
+            
+            mostrarVista("eliminar", request, response);
+            
+            return;
+            
+        }
+        
+        try {
+            
+            Tecnico tecnico = (Tecnico)FabricaLogica.GetLogicaEmpleado().Buscar(cedula);
+            
+            if (tecnico != null) {
+                
+                request.setAttribute("empleado", tecnico);
+                cargarMensaje("¡Empleado encontrado!", request);
+                
+            } else {
+                
+                cargarMensaje("¡ERROR! No se encontró ningún tecnico con la cédula " + cedula + ".", request);
+                
+            }
+            
+        } catch (Exception ex) {
+            
+            cargarMensaje("¡ERROR! Se produjo un error al buscar el tecnico.", request);
+            
+        }
+        
+        mostrarVista("eliminar", request, response);
+    }
+    
+    public void eliminar_post(HttpServletRequest request, HttpServletResponse response) {
+        int cedula;
+        
+        try {
+            
+            cedula = Integer.parseInt(request.getParameter("cedula"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! La cédula no es válida.", request);
+            
+            mostrarVista("eliminar", request, response);
+            
+            return;
+            
+        }
+        
+        try {
+            
+            FabricaLogica.GetLogicaEmpleado().Eliminar((Tecnico)request.getAttribute("empleado"));
+            
+            cargarMensaje("¡Empleado eliminado con éxito!", request.getSession());
+            
+            response.sendRedirect("tecnicos");
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado.", request);
+            
+            mostrarVista("eliminar", request, response);
         }
     }
     

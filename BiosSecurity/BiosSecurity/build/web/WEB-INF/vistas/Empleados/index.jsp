@@ -15,13 +15,17 @@
         <fmt:setLocale value="en-US" />
         
         
-        <form action="ControladorTecnico">
+        <form method="post">
+            
             <select name="tipo" size="1">
                 <option value="nulo">Seleccionar...</option>
                 <option value="tecnico">Tecnicos</option>
                 <option value="cobrador">Cobradores</option>
                 <option value="administrador">Administradores</option>
             </select>
+            
+            <input type="submit" name="accion" value="Seleccionar" />
+            
         </form>
          
         
