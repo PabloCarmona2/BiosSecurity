@@ -23,7 +23,7 @@ abstract class Controlador extends HttpServlet {
     
     protected void despacharMetodoAccion(HttpServletRequest request, HttpServletResponse response)
             throws NoSuchMethodException, IllegalAccessException, InvocationTargetException {
-        String accion = request.getParameter("accion") != null ? request.getParameter("accion").toLowerCase() : "index";
+        String accion = request.getParameter("accion") != null ? request.getParameter("accion").toLowerCase() : "Login";
         String metodoRequest = request.getMethod().toLowerCase();
         String nombreMetodoAccion = accion + "_" + metodoRequest;
         

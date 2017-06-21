@@ -5,10 +5,14 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Propiedad;
+
 /**
  *
  * @author Geronimo
  */
 public interface IPersistenciaPropiedad {
     
+    public Propiedad Buscar(int id) throws Exception;
+    public void Modificar(Propiedad casa) throws Exception;
 }

@@ -5,13 +5,29 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<t:PaginaMaestra titulo="Ver Empleado">
+    <jsp:body>
+        <c:if test="${!empty empleado}">
+            <jsp:useBean id="empleado" type="DataTypes.Administrador" scope="request" />
+            
+            <h3><jsp:getProperty name="empleado" property="nombre" /></h3>
+            
+            <ul>
+                <li><strong>Cédula:</strong> <jsp:getProperty name="empleado" property="cedula" /></li>
+                <li><strong>Nombre:</strong> <jsp:getProperty name="empleado" property="nombre" /></li>
+                <li><strong>Clave:</strong> <jsp:getProperty name="empleado" property="clave" /></li>
+                <li><strong>Fecha de ingreso:</strong> <jsp:getProperty name="empleado" property="fIngreso" /></li>
+                <li><strong>Sueldo:</strong> <jsp:getProperty name="empleado" property="sueldo" /></li>
+            </ul>
+        </c:if>
+        
+        <p><a href="empleados">Volver...</a></p>
+        
+        <t:Mensaje />
+    </jsp:body>
+</t:PaginaMaestra>

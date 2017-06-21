@@ -5,10 +5,14 @@
  */
 package Logica;
 
+import Logica.Interfaces.ILogicaCliente;
 import Logica.Interfaces.ILogicaDispositivo;
 import Logica.Interfaces.ILogicaEmpleado;
+import Logica.Interfaces.ILogicaPropiedad;
+import Logica.Trabajo.LogicaCliente;
 import Logica.Trabajo.LogicaDispositivo;
 import Logica.Trabajo.LogicaEmpleado;
+import Logica.Trabajo.LogicaPropiedad;
 
 
 
@@ -25,6 +29,14 @@ public class FabricaLogica {
     public static ILogicaEmpleado GetLogicaEmpleado()
     {
         return (LogicaEmpleado.GetInstancia());
+    }
+    public static ILogicaPropiedad GetLogicaPropiedad(){
+        
+        return (LogicaPropiedad.GetInstancia());
+    }
+    public static ILogicaCliente GetLogicaCliente(){
+    
+            return (LogicaCliente.GetInstancia());
     }
     
 }

@@ -8,6 +8,7 @@ package Persistencia.Trabajo;
 import DataTypes.Cliente;
 import DataTypes.Propiedad;
 import Persistencia.Interfaces.IPersistenciaPropiedad;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -82,6 +83,38 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
             } catch (Exception ex) {
                 throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
             }
+        }
+    }
+    public void Modificar(Propiedad casa) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+//        private int idProp;
+//    private String tipo;
+//    private String direccion;
+//    private Cliente dueño;
+
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL ModificarPropiedad(?, ?, ?, ?) }")) {
+           
+            consulta.setInt(1, casa.getIdProp());
+            consulta.setString(2, casa.getTipo());
+            consulta.setString(3, casa.getDireccion());
+            consulta.registerOutParameter(4, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(4);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
         }
     }
 }

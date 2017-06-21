@@ -909,3 +909,133 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure ModificarAdministrador(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM Administradores WHERE Cedula = cedula)
+    THEN
+		SET pError = 'No existe el administrador que desea modificar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
+	
+    
+	UPDATE Empleados
+    SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
+    WHERE Cedula = cedula;
+    
+	SET mensajeError = 'No se pudo modificar el administrador correctamente!.';
+	
+	UPDATE administradores
+    SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
+    WHERE Cedula = cedula;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+DELIMITER //
+
+CREATE procedure EliminarAdministrador(cedula bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM administradores WHERE Cedula = cedula)
+    THEN
+		SET pError = 'El administrador que desea eliminar no existe en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo eliminar el admiistrador correctamente!';
+	
+    DELETE FROM administradores
+    WHERE Cedula = cedula;
+	 
+    
+	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
+	
+	DELETE FROM Empleados
+    WHERE Cedula = cedula;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+#---------------------------------SP Clientes---------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------
+DELIMITER //
+
+CREATE procedure ModificarCliente(cedula bigint, nombre VARCHAR(25), barrio VARCHAR(20),  dirCobro VARCHAR(25),  telefono VARCHAR(20), OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+	
+	
+    IF NOT EXISTS(SELECT * FROM clientes WHERE Cedula = cedula)
+    THEN
+		SET pError = 'No existe el cliente que desea modificar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+
+	SET mensajeError = 'No se pudo modificar el cliente correctamente!';
+	
+    
+	UPDATE clientes
+    SET Nombre = nombre, Barrio = barrio, DirCobro = dircobro, Telefono = telefono
+    WHERE Cedula = cedula;
+    
+	
+END//
+
+DELIMITER ;

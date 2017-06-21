@@ -59,7 +59,6 @@ public class ControladorLogin extends Controlador{
         }catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al intentar login.", request);
         }
-        mostrarVista("login", request, response);
-    }
-    
+        mostrarVista("Login", request, response);
+}
 }

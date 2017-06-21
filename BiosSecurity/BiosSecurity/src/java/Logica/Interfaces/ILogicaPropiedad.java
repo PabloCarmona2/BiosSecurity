@@ -5,10 +5,12 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Propiedad;
+
 /**
  *
  * @author Geronimo
  */
 public interface ILogicaPropiedad {
-    
+     void Modificar(Propiedad propiedad) throws Exception;
 }
