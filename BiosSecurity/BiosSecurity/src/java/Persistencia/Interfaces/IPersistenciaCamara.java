@@ -6,6 +6,7 @@
 package Persistencia.Interfaces;
 
 import DataTypes.Camara;
+import java.util.List;
 
 /**
  *
@@ -16,4 +17,5 @@ public interface IPersistenciaCamara {
     void Agregar(Camara camara) throws Exception;
     void Instalar(Camara camara, int numServicio) throws Exception;
     void Eliminar(Camara camara) throws Exception;
+    List<Camara> Listar() throws Exception;
 }

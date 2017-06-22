@@ -15,6 +15,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -241,6 +242,36 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             } catch (Exception ex) {
                 throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
             }
+        }
+    }
+    
+    public List<Camara> Listar() throws Exception{
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                Statement consulta = conexion.createStatement(); ResultSet resultadoConsulta = consulta.executeQuery("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventasrio = Dispositivos.NumInventario;")) {
+           
+            List<Camara> camaras = new ArrayList<Camara>();
+            Camara camara = null;
+            
+            while(resultadoConsulta.next()){
+                camara.setNumInventario(resultadoConsulta.getInt("NumInventario"));
+                camara.setDescripcionUbicacion(resultadoConsulta.getString("DescripcionUbicacion"));
+                camara.setExterior(resultadoConsulta.getBoolean("Exterior"));
+                Tecnico tecnico = PersistenciaTecnico.GetInstancia().Buscar(resultadoConsulta.getInt("Tecnico"));
+                camara.setInstalador(tecnico);
+                
+                camaras.add(camara);
+            }
+            
+            return camaras;
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
         }
     }
     

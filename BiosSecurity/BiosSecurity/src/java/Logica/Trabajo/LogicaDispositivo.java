@@ -10,6 +10,8 @@ import DataTypes.Camara;
 import DataTypes.Dispositivo;
 import Logica.Interfaces.ILogicaDispositivo;
 import Persistencia.FabricaPersistencia;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -88,6 +90,26 @@ public class LogicaDispositivo implements ILogicaDispositivo{
             }else{
                 throw new Exception("No existe el tipo de dispositivo que quiere ingresar");
             }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public List<Dispositivo> Listar() throws Exception {
+        try{
+            
+            List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
+            List<Alarma> alarmas = new ArrayList<Alarma>();
+            List<Camara> camaras = new ArrayList<Camara>();
+
+            alarmas = FabricaPersistencia.GetPersistenciaAlarma().Listar();
+            camaras = FabricaPersistencia.GetPersistenciaCamara().Listar();
+
+            dispositivos.addAll(alarmas);
+            dispositivos.addAll(camaras);
+            
+            return dispositivos;
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());

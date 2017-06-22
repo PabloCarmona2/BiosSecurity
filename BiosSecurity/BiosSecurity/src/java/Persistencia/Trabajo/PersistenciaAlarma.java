@@ -18,6 +18,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -241,6 +242,35 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
             } catch (Exception ex) {
                 throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
             }
+        }
+    }
+    
+    public List<Alarma> Listar() throws Exception{
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                Statement consulta = conexion.createStatement(); ResultSet resultadoConsulta = consulta.executeQuery("SELECT * FROM Alarmas INNER JOIN Dispositivos ON Alarmas.NumInventasrio = Dispositivos.NumInventario;")) {
+           
+            List<Alarma> alarmas = new ArrayList<Alarma>();
+            Alarma alarma = null;
+            
+            while(resultadoConsulta.next()){
+                alarma.setNumInventario(resultadoConsulta.getInt("NumInventario"));
+                alarma.setDescripcionUbicacion(resultadoConsulta.getString("DescripcionUbicacion"));
+                Tecnico tecnico = PersistenciaTecnico.GetInstancia().Buscar(resultadoConsulta.getInt("Tecnico"));
+                alarma.setInstalador(tecnico);
+                
+                alarmas.add(alarma);
+            }
+            
+            return alarmas;
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
         }
     }
 }

@@ -6,6 +6,7 @@
 package Persistencia.Interfaces;
 
 import DataTypes.Alarma;
+import java.util.List;
 
 /**
  *
@@ -16,4 +17,5 @@ public interface IPersistenciaAlarma {
     void Agregar(Alarma camara) throws Exception;
     void Instalar(Alarma camara, int numServicio) throws Exception;
     void Eliminar(Alarma camara) throws Exception;
+    List<Alarma> Listar() throws Exception;
 }

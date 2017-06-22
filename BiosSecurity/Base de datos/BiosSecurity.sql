@@ -61,8 +61,10 @@ create table Servicios (
     Fecha datetime not null,
     Monitoreo boolean not null,
     Propiedad bigint not null,
+    Cliente bigint not null,
     primary key (NumServicio),
-    foreign key (Propiedad) references Propiedades(IdProp)
+    foreign key (Propiedad) references Propiedades(IdProp),
+    foreign key (Cliente) references Propiedades(Cliente)
 );
 
 create table ServicioVideoVigilancia (
@@ -512,6 +514,7 @@ END//
 
 DELIMITER ;
 
+
 #-----------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------
 
@@ -830,7 +833,8 @@ BEGIN
 
 SELECT *
 FROM ServicioAlarmas INNER JOIN Servicios
-WHERE Servicios.Propiedad.Cliente = cliente;
+	
+WHERE Servicios.Cliente = cliente;
 
 END//
 
@@ -848,7 +852,7 @@ BEGIN
 
 SELECT *
 FROM ServicioVideoVigilancia INNER JOIN Servicios
-WHERE Servicios.Propiedad.Cliente = cliente;
+WHERE Servicios.Cliente = cliente;
 
 END//
 

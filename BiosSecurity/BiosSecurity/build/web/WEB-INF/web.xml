@@ -12,6 +12,10 @@
         <servlet-name>ControladorAdministrador</servlet-name>
         <servlet-class>Servlets.ControladorAdministrador</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControladorDispositivo</servlet-name>
+        <servlet-class>Servlets.ControladorDispositivo</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorLogin</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>ControladorAdministrador</servlet-name>
         <url-pattern>/administrador</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorDispositivo</servlet-name>
+        <url-pattern>/dispositivos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
