@@ -89,7 +89,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("agregar", request, response);
+            mostrarVista("agregarTecnico", request, response);
             
             return;
             
@@ -107,7 +107,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! El sueldo no es válido.", request);
             
-            mostrarVista("agregar", request, response);
+            mostrarVista("agregarTecnico", request, response);
             
             return;
             
@@ -134,7 +134,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! Se produjo un error al agregar el tecnico.", request);
             
-            mostrarVista("agregar", request, response);
+            mostrarVista("agregarTecnico", request, response);
             
         }
     }
@@ -150,7 +150,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("ver", request, response);
+            mostrarVista("verTecnico", request, response);
             
             return;
             
@@ -176,7 +176,7 @@ public class ControladorTecnico extends Controlador {
             cargarMensaje("¡ERROR! Se produjo un error al buscar el tecnico.", request);
         }
         
-        mostrarVista("ver", request, response);
+        mostrarVista("verTecnico", request, response);
     }
     
     public void modificar_get(HttpServletRequest request, HttpServletResponse response) {
@@ -190,7 +190,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("modificar", request, response);
+            mostrarVista("modificarTecnico", request, response);
             
             return;
             
@@ -219,7 +219,7 @@ public class ControladorTecnico extends Controlador {
             
         }
         
-        mostrarVista("modificar", request, response);
+        mostrarVista("modificarTecnico", request, response);
     }
     
     public void modificar_post(HttpServletRequest request, HttpServletResponse response) {
@@ -233,7 +233,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("modificar", request, response);
+            mostrarVista("modificarTecnico", request, response);
             
             return;
             
@@ -251,7 +251,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! El sueldo no es válido.", request);
             
-            mostrarVista("modificar", request, response);
+            mostrarVista("modificarTecnico", request, response);
             
             return;
             
@@ -272,13 +272,13 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡Tecnico modificado con éxito!", request.getSession());
             
-            response.sendRedirect("empleados");
+            response.sendRedirect("tecnicos");
             
         } catch (Exception ex) {
             
             cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado.", request);
             
-            mostrarVista("modificar", request, response);
+            mostrarVista("modificarTecnico", request, response);
             
         }
     }
@@ -294,7 +294,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("eliminar", request, response);
+            mostrarVista("eliminarTecnico", request, response);
             
             return;
             
@@ -321,7 +321,7 @@ public class ControladorTecnico extends Controlador {
             
         }
         
-        mostrarVista("eliminar", request, response);
+        mostrarVista("eliminarTecnico", request, response);
     }
     
     public void eliminar_post(HttpServletRequest request, HttpServletResponse response) {
@@ -335,7 +335,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("eliminar", request, response);
+            mostrarVista("eliminarTecnico", request, response);
             
             return;
             
@@ -352,7 +352,7 @@ public class ControladorTecnico extends Controlador {
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado.", request);
             
-            mostrarVista("eliminar", request, response);
+            mostrarVista("eliminarTecnico", request, response);
         }
     }
     

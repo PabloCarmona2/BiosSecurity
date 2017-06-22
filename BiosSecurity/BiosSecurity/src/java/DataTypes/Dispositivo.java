@@ -11,7 +11,7 @@ package DataTypes;
  */
 public abstract class Dispositivo {
     
-    private int numInventario;
+    private Integer numInventario;
     private String descripcionUbicacion;
 
     public int getNumInventario() {
@@ -30,7 +30,7 @@ public abstract class Dispositivo {
         this.descripcionUbicacion = descripcionUbicacion;
     }
     
-    public Dispositivo(int numInventario, String descripcionUbicacion){
+    public Dispositivo(Integer numInventario, String descripcionUbicacion){
         
         setNumInventario(numInventario);
         setDescripcionUbicacion(descripcionUbicacion);

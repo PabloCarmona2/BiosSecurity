@@ -21,7 +21,7 @@ public class Alarma extends Dispositivo{
         this.instalador = instalador;
     }
     
-    public Alarma(int numInventario, String descripcionUbicacion, Tecnico instalador) {
+    public Alarma(Integer numInventario, String descripcionUbicacion, Tecnico instalador) {
         super(numInventario, descripcionUbicacion);
         
         setInstalador(instalador);

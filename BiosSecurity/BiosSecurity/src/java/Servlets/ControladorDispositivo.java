@@ -5,6 +5,8 @@
  */
 package Servlets;
 
+import DataTypes.Alarma;
+import DataTypes.Camara;
 import DataTypes.Dispositivo;
 import DataTypes.Empleado;
 import DataTypes.Tecnico;
@@ -12,6 +14,7 @@ import Logica.FabricaLogica;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -49,5 +52,101 @@ public class ControladorDispositivo extends Controlador {
         mostrarVista("index", request, response);
     }
     
+    public void agregar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        mostrarVista("agregar", request, response);
+        
+    }
     
+    public void agregar_post(HttpServletRequest request, HttpServletResponse response) {
+        
+        
+        Boolean camara = false;
+        
+        
+        try{
+            if(request.getParameter("tipoDispositivo") != null){
+                camara = true;
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! Se produjo un error al determinar el tipo de dispositivo!.", request);
+        }
+        
+        Dispositivo dispositivo = null;
+        
+        if(camara){
+            dispositivo = new Camara(null, null, null, null);
+        }
+        else{
+            dispositivo = new Alarma(null, null, null);
+        }
+        
+        try {
+            
+            FabricaLogica.GetLogicaDispositivo().Agregar(dispositivo);
+            
+            cargarMensaje("¡Dispositivo agregado con éxito!", request.getSession());
+            
+            response.sendRedirect("dispositivos");
+            
+        } catch (Exception ex) {
+            
+            cargarMensaje("¡ERROR! Se produjo un error al agregar el dispositivo.", request);
+            
+            mostrarVista("agregar", request, response);
+            
+        }
+    }
+    
+    public void eliminar_get(HttpServletRequest request, HttpServletResponse response) {
+        Integer numInventario;
+        
+        try {
+            
+            numInventario = Integer.parseInt(request.getParameter("numInventario"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! El numero de inventario no es válido.", request);
+            
+            mostrarVista("eliminar", request, response);
+            
+            return;
+            
+        }
+        
+        mostrarVista("eliminar", request, response);
+    }
+    
+    public void eliminar_post(HttpServletRequest request, HttpServletResponse response) {
+        Integer numInventario;
+        
+        try {
+            
+            numInventario = Integer.parseInt(request.getParameter("numInventario"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! El numero de inventario no es válido.", request);
+            
+            mostrarVista("eliminar", request, response);
+            
+            return;
+            
+        }
+        
+        try {
+            
+            FabricaLogica.GetLogicaDispositivo().Eliminar((Dispositivo)request.getAttribute("dispositivo"));
+            
+            cargarMensaje("¡Dispositivo eliminado con éxito!", request.getSession());
+            
+            response.sendRedirect("tecnicos");
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al eliminar el dispositivo.", request);
+            
+            mostrarVista("eliminar", request, response);
+        }
+    }
 }
