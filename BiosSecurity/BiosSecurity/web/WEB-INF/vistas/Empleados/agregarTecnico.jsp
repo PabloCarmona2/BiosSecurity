@@ -65,7 +65,3 @@
     </table>
 </form>
 
-<script>
-    document.getElementById('${idFoco}').focus();
-    document.getElementById('${idFoco}').select();
-</script>

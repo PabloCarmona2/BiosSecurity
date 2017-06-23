@@ -12,21 +12,12 @@
 
 <t:PaginaMaestra titulo="Empleados">
     <jsp:body>
-        <fmt:setLocale value="en-US" />
         
-        
-        <form method="post">
-            
-            <select name="tipo" size="1">
-                <option value="nulo">Seleccionar...</option>
-                <option value="tecnico">Tecnicos</option>
-                <option value="cobrador">Cobradores</option>
-                <option value="administrador">Administradores</option>
-            </select>
-            
-            <input type="submit" name="accion" value="Seleccionar" />
-            
-        </form>
+        <ul>
+            <li><a href="tecnicos?accion=index">Tecnicos...</a></li>
+            <li><a href="administradores?accion=index">Administradores...</a></li>
+            <li><a href="cobradores?accion=index">Cobradores...</a></li>
+        </ul>
         
     </jsp:body>
 </t:PaginaMaestra>

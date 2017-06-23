@@ -42,7 +42,7 @@ public class ControladorAdministrador extends Controlador {
             
             List<Administrador> empleadosImprimir = new ArrayList<Administrador>();
             
-            if(request.getParameter("tipo") == "tecnico"){
+            if(request.getParameter("tipo") == "administrador"){
                 for(Empleado admin : empleados){
                     if(admin instanceof Administrador){
                         empleadosImprimir.add((Administrador)admin);
@@ -68,7 +68,7 @@ public class ControladorAdministrador extends Controlador {
     }
     public void agregar_get(HttpServletRequest request, HttpServletResponse response) {
         
-        mostrarVista("agregar", request, response);
+        mostrarVista("agregarAdministrador", request, response);
         
     }
     
@@ -84,7 +84,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("agregar", request, response);
+            mostrarVista("agregarAdministrador", request, response);
             
             return;
             
@@ -102,7 +102,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! El sueldo no es válido.", request);
             
-            mostrarVista("agregar", request, response);
+            mostrarVista("agregarAdministrador", request, response);
             
             return;
             
@@ -128,7 +128,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! Se produjo un error al agregar el administrador.", request);
             
-            mostrarVista("agregar", request, response);
+            mostrarVista("agregarAdministrador", request, response);
             
         }
     }
@@ -143,7 +143,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("ver", request, response);
+            mostrarVista("verAdministrador", request, response);
             
             return;
             
@@ -169,7 +169,7 @@ public class ControladorAdministrador extends Controlador {
             cargarMensaje("¡ERROR! Se produjo un error al buscar el administrador.", request);
         }
         
-        mostrarVista("ver", request, response);
+        mostrarVista("verAdministrador", request, response);
     }
     public void modificar_get(HttpServletRequest request, HttpServletResponse response) {
         int cedula;
@@ -182,7 +182,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("modificar", request, response);
+            mostrarVista("modificarAdministrador", request, response);
             
             return;
             
@@ -211,7 +211,7 @@ public class ControladorAdministrador extends Controlador {
             
         }
         
-        mostrarVista("modificar", request, response);
+        mostrarVista("modificarAdministrador", request, response);
     }
     
     public void modificar_post(HttpServletRequest request, HttpServletResponse response) {
@@ -225,7 +225,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("modificar", request, response);
+            mostrarVista("modificarAdministrador", request, response);
             
             return;
             
@@ -243,7 +243,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! El sueldo no es válido.", request);
             
-            mostrarVista("modificar", request, response);
+            mostrarVista("modificarAdministrador", request, response);
             
             return;
             
@@ -269,7 +269,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado.", request);
             
-            mostrarVista("modificar", request, response);
+            mostrarVista("modificarAdministrador", request, response);
             
         }
     }
@@ -284,7 +284,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("eliminar", request, response);
+            mostrarVista("eliminarAdministrador", request, response);
             
             return;
             
@@ -311,7 +311,7 @@ public class ControladorAdministrador extends Controlador {
             
         }
         
-        mostrarVista("eliminar", request, response);
+        mostrarVista("eliminarAdministrador", request, response);
     }
     
     public void eliminar_post(HttpServletRequest request, HttpServletResponse response) {
@@ -325,7 +325,7 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);
             
-            mostrarVista("eliminar", request, response);
+            mostrarVista("eliminarAdministrador", request, response);
             
             return;
             
@@ -342,7 +342,7 @@ public class ControladorAdministrador extends Controlador {
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado.", request);
             
-            mostrarVista("eliminar", request, response);
+            mostrarVista("eliminarAdministrador", request, response);
         }
     }
 }

@@ -16,6 +16,14 @@
         <servlet-name>ControladorDispositivo</servlet-name>
         <servlet-class>Servlets.ControladorDispositivo</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControladorInstalaciones</servlet-name>
+        <servlet-class>Servlets.ControladorInstalaciones</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ControladorRecibos</servlet-name>
+        <servlet-class>Servlets.ControladorRecibos</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorLogin</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -31,6 +39,14 @@
     <servlet-mapping>
         <servlet-name>ControladorDispositivo</servlet-name>
         <url-pattern>/dispositivos</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorInstalaciones</servlet-name>
+        <url-pattern>/instalaciones</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorRecibos</servlet-name>
+        <url-pattern>/recibos</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -75,6 +75,11 @@ abstract class Controlador extends HttpServlet {
         mostrarVista("index", request, response);
     }
     
+    public void seleccionar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        mostrarVista("index", request, response);
+    }
+    
     protected void procesarPedido(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
