@@ -11,7 +11,7 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:PaginaMaestra titulo="Dispositivos">
+<t:PaginaMaestra titulo="Instalaciones">
     <jsp:body>
         <fmt:setLocale value="en-US" />
         
@@ -39,7 +39,7 @@
                     
                     <td>
                         <a href="dispositivo?accion=ver&servicio=${servicio.numServicio}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
-                        <a href="dispositivo?accion=instalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Instalar" title="Instalar..." ></a>
+                        <a href="dispositivo?accion=instalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Instalar" title="Instalar..." ></a>&nbsp;&nbsp;
                         <a href="dispositivo?accion=desinstalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
                     </td>
                 </tr>

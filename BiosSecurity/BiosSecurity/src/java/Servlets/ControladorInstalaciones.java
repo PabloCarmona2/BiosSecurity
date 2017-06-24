@@ -5,82 +5,180 @@
  */
 package Servlets;
 
+import DataTypes.Alarma;
+import DataTypes.Camara;
+import DataTypes.Dispositivo;
+import Logica.FabricaLogica;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import DataTypes.Servicio;
+import DataTypes.ServicioAlarma;
+import DataTypes.ServicioVideoVigilancia;
+import DataTypes.Tecnico;
 
 /**
  *
  * @author Geronimo
  */
-public class ControladorInstalaciones extends HttpServlet {
-
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ControladorInstalaciones</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ControladorInstalaciones at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+public class ControladorInstalaciones extends Controlador {
+    @Override
+    public void index_get(HttpServletRequest request, HttpServletResponse response) {
+        try {
+            
+            List<Servicio> servicios = new ArrayList<Servicio>();
+            
+            if(request.getSession().getAttribute("servicios") == null){
+                
+                servicios = FabricaLogica.GetLogicaServicio().Listar();
+                request.getSession().setAttribute("servicios", request);
+                
+            }else{
+                
+                servicios = (List<Servicio>)request.getSession().getAttribute("servicios");
+            
+            }
+            
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al mostrar los servicios.", request);
+        }
+        
+        mostrarVista("index", request, response);
+    }
+    
+    public void ver_get(HttpServletRequest request, HttpServletResponse response) {
+        int numServicio;
+        
+        try {
+            
+            numServicio = Integer.parseInt(request.getParameter("numServicio"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! El numero de servicio no es válido.", request);
+            
+            mostrarVista("ver", request, response);
+            
+            return;
+            
+        }
+        
+        try {
+            
+            Servicio servicio = (Servicio)FabricaLogica.GetLogicaServicio().Buscar(numServicio);
+            
+            if (servicio != null) {
+                
+                request.setAttribute("servicio", servicio);
+                
+                cargarMensaje("¡Servicio encontrado!", request);
+                
+            } else {
+                
+                cargarMensaje("¡ERROR! No se encontró ningún servicio con el numero de servicio " + numServicio + ".", request);
+                
+            }
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al buscar el servicio.", request);
+        }
+        
+        mostrarVista("ver", request, response);
+    }
+    
+    public void instalar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        mostrarVista("instalar", request, response);
+        
+    }
+    
+    public void instalar_post(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            if(request.getParameter("numServicio") != null && request.getParameter("dispositivo") != null){
+                
+               
+                
+                Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
+                
+                if(servicio instanceof ServicioAlarma){
+                    mostrarVista("rellenarAlarma", request, response);
+                }
+                else if(servicio instanceof ServicioVideoVigilancia){
+                    mostrarVista("rellenarCamara", request, response);
+                }else{
+                    cargarMensaje("¡ERROR! Tipo de servicio invalido.", request);
+                    return;
+                }
+                
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo.", request);
         }
     }
+    
+    public void rellenar_post(HttpServletRequest request, HttpServletResponse response) throws Exception {
+        
+        
+        try{
+            Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
+            Dispositivo dispositivo = FabricaLogica.GetLogicaDispositivo().Buscar(Integer.parseInt(request.getParameter("numInventario")));
+            Tecnico tecnico = (Tecnico)FabricaLogica.GetLogicaEmpleado().Buscar(Integer.parseInt(request.getParameter("empleado")));
+            
+            if(servicio instanceof ServicioAlarma){
+                
+                Alarma alarma = (Alarma)dispositivo;
+                alarma.setDescripcionUbicacion(request.getParameter("descripcion"));
+                alarma.setInstalador(tecnico);
+                
+                
+                List<Alarma> alarmasInstaladas = ((ServicioAlarma) servicio).getAlarmas();
+                alarmasInstaladas.add((Alarma)dispositivo);
+                ((ServicioAlarma) servicio).setAlarmas(alarmasInstaladas);
+                
+                FabricaLogica.GetLogicaServicio().InstalarDispositivo(servicio);
+            
+                cargarMensaje("¡Alarma instalado con éxito!", request.getSession());
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+                response.sendRedirect("instalaciones");
+                
+                
+            }
+            else if(servicio instanceof ServicioVideoVigilancia){
+                
+                Camara camara = (Camara)dispositivo;
+                camara.setDescripcionUbicacion(request.getParameter("descripcion"));
+                camara.setInstalador(tecnico);
+                
+                if(request.getParameter("exterior") != null){
+                    camara.setExterior(true);
+                }else{
+                    camara.setExterior(false);
+                }
+                
+                List<Camara> camarasInstaladas = ((ServicioVideoVigilancia) servicio).getCamaras();
+                camarasInstaladas.add((Camara)dispositivo);
+                ((ServicioVideoVigilancia) servicio).setCamaras(camarasInstaladas);
+                
+                
+                FabricaLogica.GetLogicaServicio().InstalarDispositivo(servicio);
+            
+                cargarMensaje("¡Camara instalada con éxito!", request.getSession());
+
+                response.sendRedirect("instalaciones");
+                
+            }else{
+                cargarMensaje("¡ERROR! Tipo de servicio invalido.", request);
+                return;
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! Se produjo un error al instalar el dispositivo.", request);
+        }
     }
-
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
-
 }

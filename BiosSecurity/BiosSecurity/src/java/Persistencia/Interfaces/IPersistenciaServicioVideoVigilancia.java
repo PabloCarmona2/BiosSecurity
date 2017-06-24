@@ -5,7 +5,9 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.ServicioAlarma;
 import DataTypes.ServicioVideoVigilancia;
+import java.util.List;
 
 /**
  *
@@ -13,4 +15,6 @@ import DataTypes.ServicioVideoVigilancia;
  */
 public interface IPersistenciaServicioVideoVigilancia {
     void InstalarDispositivo(ServicioVideoVigilancia servicio) throws Exception;
+    List<ServicioVideoVigilancia> Listar() throws Exception;
+    ServicioVideoVigilancia Buscar(int numServicio) throws Exception;
 }

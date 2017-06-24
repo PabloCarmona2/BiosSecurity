@@ -6,6 +6,7 @@
 package Logica.Interfaces;
 
 import DataTypes.Servicio;
+import java.util.List;
 
 /**
  *
@@ -13,4 +14,6 @@ import DataTypes.Servicio;
  */
 public interface ILogicaServicio {
     void InstalarDispositivo(Servicio servicio) throws Exception;
+    List<Servicio> Listar() throws Exception;
+    Servicio Buscar(int numServicio) throws Exception;
 }

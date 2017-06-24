@@ -5,13 +5,42 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+
+
+<fmt:setLocale value="en-US" />
+
+<form method="post" accept-charset="ISO-8859-1">
+    
+    <input type="hidden" name="dispositivo" value="${dispositivo}" />
+    <input type="hidden" name="servicio" value="${servicio}" />
+    
+    
+    <table>
+        <tr>
+            <td>Descripcion de Ubicacion:</td>
+            <td>
+                <input type="text" name="descripcion" value="${!empty dispositivo ? dispositivo.descripcionUbicacion : param.descripcionUbicacion}" id="descripcionUbicacion" />
+            </td>
+        </tr>
+        <tr>
+            <td>Exterior?:</td>
+            <td>
+                <input type="checkbox" name="exterior" value="exterior">
+            </td>
+        </tr>
+        <tr>
+            <td>Instalador:</td>
+            <td>
+                <input type="text" name="instalador" value="${empleado.nombre}" id="empleado" />
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>
+                <input type="submit" name="accion" value="Instalar"/>
+            </td>
+        </tr>
+    </table>
+</form>

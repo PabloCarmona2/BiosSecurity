@@ -19,6 +19,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -163,6 +164,8 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
                 dispositivos = PersistenciaAlarma.GetInstancia().ListarXServicio(numServicio);
                 
                 servicio = new ServicioAlarma(numServicio, fecha, monitoreo, propiedad, dispositivos, codigoAnulacion);
+                
+                servicios.add(servicio);
             }
             
             return servicios;
@@ -187,4 +190,72 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
         }
     }
     
+    public List<ServicioAlarma> Listar() throws Exception{
+        
+        try  {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+      
+        
+        Connection conexion = null;
+        Statement consulta = null;
+        ResultSet resultadoConsulta = null;
+        
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            resultadoConsulta = consulta.executeQuery("SELECT * FROM ServicioAlarmas INNER JOIN Servicio ON ServicioAlarma.numServicio = Servicio.numServicio");
+            
+            
+            List<ServicioAlarma> servicios = new ArrayList<ServicioAlarma>();
+            
+            ServicioAlarma servicio = null;
+            
+            int numServicio;
+            Date fecha;
+            Boolean monitoreo;
+            Propiedad propiedad;
+            int codigoAnulacion;
+            
+            List<Alarma> dispositivos = new ArrayList<Alarma>();
+            
+            while(resultadoConsulta.next()){
+                
+                numServicio = resultadoConsulta.getInt("NumServicio");
+                fecha = resultadoConsulta.getDate("Fecha");
+                monitoreo = resultadoConsulta.getBoolean("Monitoreo");
+                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"));
+                codigoAnulacion = resultadoConsulta.getInt("CodAnulacion");
+                
+                dispositivos = PersistenciaAlarma.GetInstancia().ListarXServicio(numServicio);
+                
+                servicio = new ServicioAlarma(numServicio, fecha, monitoreo, propiedad, dispositivos, codigoAnulacion);
+                
+                servicios.add(servicio);
+            }
+            
+            return servicios;
+            
+        }catch(Exception ex){
+
+                throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
+        }
+    }
 }

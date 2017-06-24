@@ -52,6 +52,46 @@ public class ControladorDispositivo extends Controlador {
         mostrarVista("index", request, response);
     }
     
+    public void ver_get(HttpServletRequest request, HttpServletResponse response) {
+        int numInventario;
+        
+        try {
+            
+            numInventario = Integer.parseInt(request.getParameter("numInventario"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! El numero de inventario no es válido.", request);
+            
+            mostrarVista("ver", request, response);
+            
+            return;
+            
+        }
+        
+        try {
+            
+            Dispositivo dispositivo = (Dispositivo)FabricaLogica.GetLogicaDispositivo().Buscar(numInventario);
+            
+            if (dispositivo != null) {
+                
+                request.setAttribute("dispositivo", dispositivo);
+                
+                cargarMensaje("¡Dispositivo encontrado!", request);
+                
+            } else {
+                
+                cargarMensaje("¡ERROR! No se encontró ningún dispositivo con el numero de inventario " + numInventario + ".", request);
+                
+            }
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al buscar el dispositivo.", request);
+        }
+        
+        mostrarVista("ver", request, response);
+    }
+    
     public void agregar_get(HttpServletRequest request, HttpServletResponse response) {
         
         mostrarVista("agregar", request, response);

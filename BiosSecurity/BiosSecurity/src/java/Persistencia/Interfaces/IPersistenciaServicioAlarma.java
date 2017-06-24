@@ -5,7 +5,9 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Cliente;
 import DataTypes.ServicioAlarma;
+import java.util.List;
 
 /**
  *
@@ -14,6 +16,7 @@ import DataTypes.ServicioAlarma;
 public interface IPersistenciaServicioAlarma {
     void InstalarDispositivo(ServicioAlarma servicio) throws Exception;
     ServicioAlarma Buscar(int numeroServicio)throws Exception;
-    
+    List<ServicioAlarma> ListaXCliente(Cliente cliente) throws Exception;
+    List<ServicioAlarma> Listar() throws Exception;
     
 }

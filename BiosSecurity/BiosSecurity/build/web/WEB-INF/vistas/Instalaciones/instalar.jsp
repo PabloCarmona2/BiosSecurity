@@ -16,19 +16,19 @@
         <tr>
             <td>Numero de Servicio:</td>
             <td>
-                <input type="text" name="cedula" value="${!empty servicio ? servicio.numServicio : param.numServicio}" readonly="readonly" id="numServicio" />
+                <input type="text" name="numServicio" value="${!empty servicio ? servicio.numServicio : param.numServicio}" readonly="readonly" id="numServicio" />
             </td>
         </tr>
         <tr>
             <td>Numero de Inventario del Dispositivo:</td>
             <td>
-                <input type="text" name="nombre" value="${param.numInventario}" id="nombre" />
+                <input type="text" name="numInventario" value="${param.numInventario}" id="nombre" />
             </td>
         </tr>
         <tr>
             <td></td>
             <td>
-                <input type="submit" name="accion" value="Instalar" />
+                <input type="submit" name="accion" value="Rellenar"/>
             </td>
         </tr>
     </table>

@@ -21,7 +21,7 @@
             
             <h3>Dispositivos Instalados</h3>
             
-            <p><a href="dispositivo?accion=instalar&servicio=${servicio.numServicio}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Instalar" title="Instalar..." ></a></p>
+            <p><a href="dispositivos?accion=instalar&servicio=${servicio}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Instalar" title="Instalar..." ></a></p>
             
             <table class="listado">
             <tr>
@@ -36,7 +36,7 @@
                     <td class="texto-centro">${dispositivo.class.name}</td>
                     
                     <td>
-                        <a href="dispositivo?accion=desinstalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
+                        <a href="dispositivos?accion=desinstalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
                     </td>
                 </tr>
             </c:forEach>

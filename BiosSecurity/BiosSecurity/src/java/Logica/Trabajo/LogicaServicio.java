@@ -10,6 +10,8 @@ import DataTypes.ServicioAlarma;
 import DataTypes.ServicioVideoVigilancia;
 import Logica.Interfaces.ILogicaServicio;
 import Persistencia.FabricaPersistencia;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -53,6 +55,46 @@ public class LogicaServicio implements ILogicaServicio{
                 throw new Exception("Tipo de servicio inexistente!.");
             }
         }catch (Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public List<Servicio> Listar() throws Exception{
+        
+        List<Servicio> servicios = new ArrayList<Servicio>();
+        List<ServicioAlarma> serviciosA = new ArrayList<ServicioAlarma>();
+        List<ServicioVideoVigilancia> serviciosV = new ArrayList<ServicioVideoVigilancia>();
+        
+        try{
+            
+            serviciosA = FabricaPersistencia.getPersistenciaServicioAlarma().Listar();
+            serviciosV = FabricaPersistencia.getPersistenciaVideoVigilancia().Listar();
+            
+            servicios.addAll(serviciosA);
+            servicios.addAll(serviciosV);
+            
+            
+            return servicios;
+            
+        }catch (Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+        
+    }
+    
+    public Servicio Buscar(int numServicio) throws Exception{
+        try{
+            Servicio servicio = null;
+        
+            servicio = FabricaPersistencia.getPersistenciaServicioAlarma().Buscar(numServicio);
+
+            if(servicio == null){
+                servicio = FabricaPersistencia.getPersistenciaVideoVigilancia().Buscar(numServicio);
+            }
+            
+            return servicio;
+            
+        }catch(Exception ex){
             throw new Exception(ex.getMessage());
         }
     }
