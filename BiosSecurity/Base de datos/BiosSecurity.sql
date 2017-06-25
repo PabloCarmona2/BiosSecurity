@@ -866,6 +866,56 @@ END//
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE procedure EliminarServicioAlarma(numservicio bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE servicios.NumServicio = numservicio)
+    THEN
+		SET pError = 'El servicio que desea eliminar no existe en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
+	
+    DELETE FROM biossecurity.servicioalarmas
+    WHERE servicioalarmas.NumServicio = numservicio;
+	 
+    
+	SET mensajeError = 'No se pudo eliminar el servicio de alarma correctamente!.';
+	
+	DELETE FROM biossecurity.servicios
+    WHERE servicios.NumServicio = numservicio;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
 
 DELIMITER //
 
@@ -939,6 +989,55 @@ END//
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE procedure EliminarServicioVideo(numservicio bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE servicios.NumServicio = numservicio)
+    THEN
+		SET pError = 'El servicio que desea eliminar no existe en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
+	
+    DELETE FROM biossecurity.serviciovideovigilancia
+    WHERE serviciovideovigilancia.NumServicio = numservicio;
+	 
+    
+	SET mensajeError = 'No se pudo eliminar el servicio de videovigilancia correctamente!.';
+	
+	DELETE FROM biossecurity.servicios
+    WHERE servicios.NumServicio = numservicio;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
 
 #-------------------------------------------------------------------------------------
 
