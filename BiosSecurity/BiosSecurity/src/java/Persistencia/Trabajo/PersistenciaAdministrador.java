@@ -186,11 +186,12 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
         try{
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
         
-           consulta = conexion.prepareStatement("SELECT * FROM Administradores INNER JOIN Empleados ON administradores.Cedula = Empleados.Cedula WHERE Cedula = ?;"); 
-           ResultSet resultado = consulta.executeQuery(); 
+           consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.administradores t where t.Cedula = ? and e.Clave = ?;"); 
+           
         
         consulta.setInt(1, cedula);
         consulta.setString(2, clave);
+        ResultSet resultado = consulta.executeQuery(); 
         String nombre;
         String claveAdmin;
         Date fIngreso;
