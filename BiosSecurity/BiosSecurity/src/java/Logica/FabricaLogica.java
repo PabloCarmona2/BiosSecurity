@@ -9,11 +9,13 @@ import Logica.Interfaces.ILogicaCliente;
 import Logica.Interfaces.ILogicaDispositivo;
 import Logica.Interfaces.ILogicaEmpleado;
 import Logica.Interfaces.ILogicaPropiedad;
+import Logica.Interfaces.ILogicaRecibo;
 import Logica.Interfaces.ILogicaServicio;
 import Logica.Trabajo.LogicaCliente;
 import Logica.Trabajo.LogicaDispositivo;
 import Logica.Trabajo.LogicaEmpleado;
 import Logica.Trabajo.LogicaPropiedad;
+import Logica.Trabajo.LogicaRecibo;
 import Logica.Trabajo.LogicaServicio;
 
 
@@ -43,6 +45,10 @@ public class FabricaLogica {
     public static ILogicaServicio GetLogicaServicio(){
     
             return (LogicaServicio.GetInstancia());
+    }
+    public static ILogicaRecibo GetLogicaRecibo(){
+    
+            return (LogicaRecibo.GetInstancia());
     }
     
 }

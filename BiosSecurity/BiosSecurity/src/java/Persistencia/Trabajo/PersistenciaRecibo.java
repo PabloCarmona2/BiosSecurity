@@ -43,6 +43,69 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
         return _instancia;
     }
     
+    public Recibo Buscar(int numRecibo) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
+        
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            consulta = conexion.prepareStatement("SELECT * FROM CabezalRecibo WHERE NumRecibo = ?;");
+            
+            consulta.setInt(1, numRecibo);
+            
+            resultadoConsulta = consulta.executeQuery();
+            
+            Recibo recibo = null;
+            
+            
+            Date fecha;
+            double total;
+            Cliente cliente;
+            Cobrador cobrador;
+            boolean cobrado;
+            List<LineaRecibo> lineas = new ArrayList<LineaRecibo>();
+            
+            if(resultadoConsulta.next()){
+                fecha = resultadoConsulta.getDate("Fecha");
+                total = resultadoConsulta.getDouble("Total");
+                cliente = PersistenciaCliente.GetInstancia().Buscar(resultadoConsulta.getInt("Cliente"));
+                cobrador = PersistenciaCobrador.GetInstancia().Buscar(resultadoConsulta.getInt("Cobrador"));
+                cobrado = resultadoConsulta.getBoolean("Cobrado");
+                
+                recibo = new Recibo(numRecibo, fecha, total, cliente, cobrador, cobrado, lineas);
+            }
+            
+            return recibo;
+        }catch(Exception ex){
+
+            throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
+        }
+    }
+    
     public List<Recibo> RecibosaCobrar(String zona) throws Exception{
         ResultSet resultado=null;
         PreparedStatement consulta=null;
@@ -133,7 +196,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
         }
     }
     
-        public void GenerarRecibos(ArrayList<Recibo> lista) throws Exception{
+        public void GenerarRecibos(List<Recibo> lista) throws Exception{
             Connection conexion = null;
             CallableStatement consulta = null;
         

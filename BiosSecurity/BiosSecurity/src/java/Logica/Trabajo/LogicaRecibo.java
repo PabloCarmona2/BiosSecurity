@@ -51,7 +51,17 @@ public class LogicaRecibo implements ILogicaRecibo{
         
     }
     
-    public void GenerarRecibos(ArrayList<Recibo> recibos) throws Exception{
+    public Recibo Buscar(int numRecibo) throws Exception{
+        try{
+            
+            return FabricaPersistencia.GetPersistenciaRecibo().Buscar(numRecibo);
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void GenerarRecibos(List<Recibo> recibos) throws Exception{
         try{
             
             FabricaPersistencia.GetPersistenciaRecibo().GenerarRecibos(recibos);

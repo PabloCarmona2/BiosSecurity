@@ -14,7 +14,7 @@ import java.util.List;
  */
 public class Recibo {
     
-    private int numRecibo;
+    private Integer numRecibo;
     private Date fecha;
     private double total;
     private Cliente cliente;
@@ -30,11 +30,11 @@ public class Recibo {
         this.lineas = lineas;
     }
 
-    public int getNumRecibo() {
+    public Integer getNumRecibo() {
         return numRecibo;
     }
 
-    public void setNumRecibo(int numRecibo) {
+    public void setNumRecibo(Integer numRecibo) {
         this.numRecibo = numRecibo;
     }
 
@@ -82,7 +82,7 @@ public class Recibo {
         this(0, null, 0, null, null, false, null);
     }
     
-    public Recibo(int numRecibo, Date fecha, double total, Cliente cliente, Cobrador cobrador, boolean cobrado, List<LineaRecibo> lineas){
+    public Recibo(Integer numRecibo, Date fecha, double total, Cliente cliente, Cobrador cobrador, boolean cobrado, List<LineaRecibo> lineas){
         
         setNumRecibo(numRecibo);
         setFecha(fecha);

@@ -17,5 +17,6 @@ import java.util.List;
 public interface IPersistenciaRecibo {
     void Cobrar(Recibo recibo) throws Exception;
     List<Recibo> RecibosaCobrar(String zona) throws Exception;
-    void GenerarRecibos(ArrayList<Recibo> lista) throws Exception;
+    void GenerarRecibos(List<Recibo> lista) throws Exception;
+    Recibo Buscar(int numRecibo) throws Exception;
 }
