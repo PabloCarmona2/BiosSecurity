@@ -187,6 +187,37 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
         }
     }
     
+    public void altaServicioVigilancia(ServicioVideoVigilancia servicio) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaServicioVideo(?, ?, ?, ?, ?) }")) {
+           
+            consulta.setDate(1, (java.sql.Date)servicio.getFecha());
+            consulta.setBoolean(2, servicio.isMonitoreo());
+            consulta.setInt(3, servicio.getPropiedadCliente().getIdProp());
+            consulta.setInt(4, servicio.getPropiedadCliente().getDueño().getCedula());
+            consulta.setBoolean(5, servicio.isTerminal());
+     
+            consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            consulta.executeUpdate();
+            String error = consulta.getString(7);
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+        
+    }
+    
+    
     public List<ServicioVideoVigilancia> Listar() throws Exception{
         
         try  {

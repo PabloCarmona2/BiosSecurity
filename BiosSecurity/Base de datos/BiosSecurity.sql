@@ -899,6 +899,47 @@ END//
 
 DELIMITER ;
 
+DELIMITER //
+
+CREATE procedure AltaServicioVideo(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, terminal boolean) 
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo dar de alta el servicio correctamente!';
+	
+    
+	INSERT INTO biossecurity.servicios VALUES(fecha, monitoreo, idprop, cliente);
+    
+	SET mensajeError = 'No se pudo dar de alta el servicio de alarma correctamente!.';
+	
+	INSERT INTO biossecurity.servicioalarmas VALUES(terminal, (select NumServicio from biossecurity.servicios order by NumServicio desc limit 1));
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+
 #-------------------------------------------------------------------------------------
 
 #---------------------------------SP Administrativos---------------------------------------------------------------------

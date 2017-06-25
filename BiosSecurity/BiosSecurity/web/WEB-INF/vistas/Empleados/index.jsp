@@ -14,9 +14,9 @@
     <jsp:body>
         
         <ul>
-            <li><a href="tecnicos?accion=index">Tecnicos...</a></li>
-            <li><a href="administradores?accion=index">Administradores...</a></li>
-            <li><a href="cobradores?accion=index">Cobradores...</a></li>
+            <li><a href="listaAdministradores.jsp">Tecnicos...</a></li>
+            <li><a href="listaAdministradores.jsp">Administradores...</a></li>
+            <li><a href="listaCobradores.jsp">Cobradores...</a></li>
         </ul>
         
     </jsp:body>

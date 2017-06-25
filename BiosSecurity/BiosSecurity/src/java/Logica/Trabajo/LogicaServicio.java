@@ -12,6 +12,8 @@ import Logica.Interfaces.ILogicaServicio;
 import Persistencia.FabricaPersistencia;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -81,6 +83,35 @@ public class LogicaServicio implements ILogicaServicio{
         }
         
     }
+    
+    public void altaServicioAlarma(ServicioAlarma unServicio){
+        
+        try{
+            FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma(unServicio);
+        }catch (Exception ex){
+            try {
+                throw new Exception(ex.getMessage());
+            } catch (Exception ex1) {
+                Logger.getLogger(LogicaServicio.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        
+    }
+    
+    public void altaServicioVideo(ServicioVideoVigilancia unServicio){
+        
+        try{
+            FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia(unServicio);
+        }catch (Exception ex){
+            try {
+                throw new Exception(ex.getMessage());
+            } catch (Exception ex1) {
+                Logger.getLogger(LogicaServicio.class.getName()).log(Level.SEVERE, null, ex1);
+            }
+        }
+        
+    }
+    
     
     public Servicio Buscar(int numServicio) throws Exception{
         try{
