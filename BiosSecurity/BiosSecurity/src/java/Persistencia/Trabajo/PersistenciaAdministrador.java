@@ -171,8 +171,11 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
         }
     }
     
-    public Administrador LoginAdministrador(int cedula, String clave){
+    public Administrador LoginAdministrador(int cedula, String clave)throws Exception{
         Administrador admin = null;
+          Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
         
          try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -180,8 +183,11 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-        PreparedStatement consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.administradores a where a.Cedula = ? and e.Clave = ?;"); ResultSet resultado = consulta.executeQuery()) {
+        try{
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+        
+           consulta = conexion.prepareStatement("SELECT * FROM Administradores INNER JOIN Empleados ON administradores.Cedula = Empleados.Cedula WHERE Cedula = ?;"); 
+           ResultSet resultado = consulta.executeQuery(); 
         
         consulta.setInt(1, cedula);
         consulta.setString(2, clave);

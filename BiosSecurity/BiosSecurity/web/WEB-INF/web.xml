@@ -26,7 +26,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>ControladorLogin</servlet-name>
-        <url-pattern>/Login</url-pattern>
+        <url-pattern>/login</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControladorTecnico</servlet-name>
@@ -54,6 +54,6 @@
         </session-timeout>
     </session-config>
     <welcome-file-list>
-        <welcome-file>Login</welcome-file>
+        <welcome-file>login</welcome-file>
     </welcome-file-list>
 </web-app>
