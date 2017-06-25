@@ -18,10 +18,10 @@ public class ControladorLogin extends Controlador{
     
     @Override
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
-        mostrarVista("Login", request, response);
+        mostrarVista("login", request, response);
     }
     
-    public void login(HttpServletRequest request, HttpServletResponse response){
+    public void login_post(HttpServletRequest request, HttpServletResponse response){
         
         int cedula;
         String clave;
@@ -31,7 +31,7 @@ public class ControladorLogin extends Controlador{
         } catch (NumberFormatException ex) {
             cargarMensaje("¡ERROR! La cédula no tiene formato válido.", request);
             
-            mostrarVista("Login", request, response);
+            mostrarVista("login", request, response);
             
             return;
         }
@@ -41,7 +41,7 @@ public class ControladorLogin extends Controlador{
         } catch (NumberFormatException ex) {
             cargarMensaje("¡ERROR! La clave no tiene formato válido.", request);
             
-            mostrarVista("Login", request, response);
+            mostrarVista("login", request, response);
             
             return;
         }
@@ -59,6 +59,6 @@ public class ControladorLogin extends Controlador{
         }catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al intentar login.", request);
         }
-        mostrarVista("Login", request, response);
+        mostrarVista("login", request, response);
 }
 }
