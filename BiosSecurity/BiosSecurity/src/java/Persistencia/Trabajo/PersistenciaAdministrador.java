@@ -168,7 +168,7 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
     
     public Administrador LoginAdministrador(int cedula, String clave)throws Exception{
         Administrador admin = null;
-          Connection conexion = null;
+        Connection conexion = null;
         PreparedStatement consulta = null;
         ResultSet resultadoConsulta;
         

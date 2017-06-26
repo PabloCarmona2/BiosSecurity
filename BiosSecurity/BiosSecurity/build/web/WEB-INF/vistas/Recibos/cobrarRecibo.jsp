@@ -5,13 +5,22 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<t:PaginaMaestra titulo="Cobro de Recibo">
+    <jsp:body>
+        
+        <h2>Cobrar un recibo mediante su numero de recibo.</h2>
+        
+        <p><input type="text" name="numRecibo" value="${param.buscar}"</p>
+        
+        <p><input type="submit" name="accion" value="Cobrar" /></p>
+        
+        <t:Mensaje />
+        
+    </jsp:body>
+</t:PaginaMaestra>

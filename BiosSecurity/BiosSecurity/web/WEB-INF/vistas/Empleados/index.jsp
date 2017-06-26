@@ -1,6 +1,6 @@
 <%-- 
     Document   : index
-    Created on : 23-jun-2017, 13:08:53
+    Created on : 19-jun-2017, 15:55:28
     Author     : Geronimo
 --%>
 
@@ -10,15 +10,15 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:PaginaMaestra titulo="Recibos">
+<t:PaginaMaestra titulo="Empleados">
     <jsp:body>
         
         <ul>
-            <li><a href="recibos?accion=generacionRecibos">Generar Recibos de Cobro...</a></li>
-            <li><a href="recibos?accion=cobrarRecibo">Cobrar un Recibo...</a></li>
-        
+            <li><a href="listaAdministradores.jsp">Tecnicos...</a></li>
+            <li><a href="listaAdministradores.jsp">Administradores...</a></li>
+            <li><a href="listaCobradores.jsp">Cobradores...</a></li>
         </ul>
-        <t:Mensaje />
         
     </jsp:body>
 </t:PaginaMaestra>
+

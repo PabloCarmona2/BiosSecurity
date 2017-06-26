@@ -18,5 +18,6 @@ public interface IPersistenciaServicioAlarma {
     ServicioAlarma Buscar(int numeroServicio)throws Exception;
     List<ServicioAlarma> ListaXCliente(Cliente cliente) throws Exception;
     List<ServicioAlarma> Listar() throws Exception;
+    void altaServicioAlarma(ServicioAlarma servicio)throws Exception;
     
 }
