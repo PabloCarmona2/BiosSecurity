@@ -47,7 +47,7 @@ public class ControladorLogin extends Controlador{
         }
         
         try{
-            
+            //habria que preguntar que tipo de empleado es de acuerdo esto le mostramos la vista correspondiente
             Empleado empleado = FabricaLogica.GetLogicaEmpleado().LoginEmpleado(cedula, clave);
             if (empleado != null) {
                 request.setAttribute("empleado", empleado);

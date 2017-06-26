@@ -29,26 +29,26 @@ public class ControladorTecnico extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
-            List<Empleado> empleados = new ArrayList<Empleado>();
+            List<Tecnico> tecnicos = new ArrayList<Tecnico>();
             
             if(request.getSession().getAttribute("empleadosTodos") == null){
                 
-                empleados = FabricaLogica.GetLogicaEmpleado().Listar();
+                tecnicos = FabricaLogica.GetLogicaEmpleado().ListarTecnico();
                 request.getSession().setAttribute("empleadosTodos", request);
                 
             }else{
                 
-                empleados = (List<Empleado>)request.getSession().getAttribute("empleadosTodos");
+                tecnicos = (List<Tecnico>)request.getSession().getAttribute("empleadosTodos");
             
             }
             
             List<Tecnico> empleadosImprimir = new ArrayList<Tecnico>();
             
             if(request.getParameter("tipo") == "tecnico"){
-                for(Empleado t : empleados){
-                    if(t instanceof Tecnico){
+                for(Empleado t : tecnicos){
+                    
                         empleadosImprimir.add((Tecnico)t);
-                    }
+                    
                 }
             }else{
                 
@@ -60,7 +60,7 @@ public class ControladorTecnico extends Controlador {
             }
             
             request.setAttribute("empleados", empleadosImprimir);
-            cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
+            cargarMensaje("Cantidad de empleados: " + tecnicos.size(), request);
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los tecnicos.", request);

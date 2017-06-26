@@ -8,10 +8,10 @@
 
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <fmt:setLocale value="en-US" />
-
+<t:PaginaMaestra titulo="Agregar Administrador">
 <form method="post" accept-charset="ISO-8859-1">
     <table>
         <tr>
@@ -59,7 +59,8 @@
         </tr>
     </table>
 </form>
-
+<t:Mensaje/>
+</t:PaginaMaestra>
 <script>
     document.getElementById('${idFoco}').focus();
     document.getElementById('${idFoco}').select();

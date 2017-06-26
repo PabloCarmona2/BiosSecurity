@@ -128,9 +128,25 @@ create table LineaRecibo(
 
 #INGRESO DE DATOS DE PRUEBA-----------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------------
+INSERT INTO empleados
+VALUES (2, 'ben', 1111,20101010, 1000);
+INSERT INTO administradores
+VALUES (2);
+INSERT INTO empleados
+VALUES (4, 'aaaaaben', 1111,20101010, 1000);
+INSERT INTO tecnicos
+VALUES ('algo',4);
 #
-#
-#
+set @salida :="";
+
+#call ModificarAdministrador(2,'aaaa',9090,20101010,1000);
+
+#delete from administradores where cedula = 2;
+#call EliminarAdministrador(2);
+#UPDATE Empleados SET Nombre = 'asas', Clave = 2121 , empleados.FIngreso=20101010 , empleados.Sueldo=1212 WHERE Cedula = 2;
+call BajaTecnico (4, @Salida);
+
+
 #
 #
 #
@@ -866,7 +882,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AgregarAdministrador(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, OUT pError VARCHAR(500))
+CREATE procedure AgregarAdministrador(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double,OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -880,82 +896,21 @@ cuerpo:BEGIN
 		
 		SET pError = mensajeError;
 	END;
-    
-    
-    IF EXISTS(SELECT * FROM Administradores WHERE Cedula = cedula)
-    THEN
-		SET pError = 'Ya existe el administrador que desea ingresar en el sistema!';
-            
-		LEAVE cuerpo;
-    END IF;
-    
-    
+
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
 	
-	SET mensajeError = 'No se pudo agregar el administrativo correctamente!';
+	SET mensajeError = 'No se pudo agregar el empleado correctamente!';
 	
     
-	INSERT INTO Empleados
+	INSERT INTO empleados
     VALUES(cedula, nombre, clave, fIngreso, sueldo);
     
-	SET mensajeError = 'No se pudo agregar el administrador correctamente!.';
+	SET mensajeError = 'No se pudo agregar el admin correctamente!.';
 	
-	INSERT INTO administrador
-	 VALUES(nombre, clave, fIngreso, sueldo);
-	
-	COMMIT;
-    
-    SET transaccionActiva = 0;
-    
-	
-END//
-
-DELIMITER ;
-
-DELIMITER //
-
-CREATE procedure ModificarAdministrador(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, OUT pError VARCHAR(500))
-cuerpo:BEGIN
-
-	DECLARE mensajeError VARCHAR(50);
-    DECLARE transaccionActiva BIT;
-	
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
-	BEGIN
-		IF transaccionActiva THEN
-			ROLLBACK;
-        END IF;
-		
-		SET pError = mensajeError;
-	END;
-    
-    
-    IF NOT EXISTS(SELECT * FROM Administradores WHERE Cedula = cedula)
-    THEN
-		SET pError = 'No existe el administrador que desea modificar en el sistema!';
-            
-		LEAVE cuerpo;
-    END IF;
-    
-    
-    SET transaccionActiva = 1;
-    
-	START TRANSACTION; 
-	
-	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
-	
-    
-	UPDATE Empleados
-    SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
-    WHERE Cedula = cedula;
-    
-	SET mensajeError = 'No se pudo modificar el administrador correctamente!.';
-	
-	UPDATE administradores
-    SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
-    WHERE Cedula = cedula;
+	INSERT INTO administradores
+	VALUES(cedula);
 	
 	COMMIT;
     
@@ -967,51 +922,27 @@ END//
 DELIMITER ;
 DELIMITER //
 
-CREATE procedure EliminarAdministrador(cedula bigint, OUT pError VARCHAR(500))
+CREATE procedure ModificarAdministrador(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double)
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
-    DECLARE transaccionActiva BIT;
-	
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
-	BEGIN
-		IF transaccionActiva THEN
-			ROLLBACK;
-        END IF;
-		
-		SET pError = mensajeError;
-	END;
+ 
+ UPDATE Empleados SET empleados.Nombre = nombre, empleados.Clave = clave , empleados.FIngreso= fIngreso , empleados.Sueldo= sueldo WHERE empleados.Cedula = cedula;
     
-    
-    IF NOT EXISTS(SELECT * FROM administradores WHERE Cedula = cedula)
-    THEN
-		SET pError = 'El administrador que desea eliminar no existe en el sistema!';
-            
-		LEAVE cuerpo;
-    END IF;
-    
-    
-    SET transaccionActiva = 1;
-    
-	START TRANSACTION; 
-	
-	SET mensajeError = 'No se pudo eliminar el admiistrador correctamente!';
-	
-    DELETE FROM administradores
-    WHERE Cedula = cedula;
-	 
-    
-	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
-	
-	DELETE FROM Empleados
-    WHERE Cedula = cedula;
-	
-	COMMIT;
-    
-    SET transaccionActiva = 0;
+
     
 	
 END//
+
+DELIMITER ;
+DELIMITER //
+
+CREATE procedure EliminarAdministrador(cedula bigint)
+cuerpo:BEGIN
+
+	delete from administradores where Cedula= cedula;
+	
+END//
+
 
 DELIMITER ;
 

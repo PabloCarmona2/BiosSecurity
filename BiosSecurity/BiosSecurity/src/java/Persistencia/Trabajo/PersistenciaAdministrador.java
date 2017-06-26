@@ -12,7 +12,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +45,7 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Administrador INNER JOIN Empleados ON Administrador.Cedula = Empleados.Cedula WHERE Cedula = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM empleados  WHERE Cedula = ?;");
             
             consulta.setInt(1, cedula);
             
@@ -92,21 +94,21 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AgregarAdministrador(?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL AgregarAdministrador(?, ?, ?, ?, ?,?) }")) {
            
             consulta.setInt(1, admin.getCedula());
             consulta.setString(2, admin.getNombre());
             consulta.setString(3, admin.getClave());
-            consulta.setDate(4, (java.sql.Date)admin.getfIngreso());
+            consulta.setDate(4, new java.sql.Date(admin.getfIngreso().getTime()));
             consulta.setDouble(5, admin.getSueldo());
      
-            consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+           consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(7);
+            String error = consulta.getString(6);
             
-            if(error != null){
+           if(error != null){
                 throw new Exception("ERROR: " + error);
             }
             
@@ -128,17 +130,10 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
             consulta.setInt(1, admin.getCedula());
             consulta.setString(2, admin.getNombre());
             consulta.setString(3, admin.getClave());
-            consulta.setDate(4, (java.sql.Date)admin.getfIngreso());
+           consulta.setDate(4, new java.sql.Date(admin.getfIngreso().getTime()));
             consulta.setDouble(5, admin.getSueldo());
-            consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
-            
-            String error = consulta.getString(6);
-            
-            if(error != null){
-                throw new Exception("ERROR: " + error);
-            }
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
@@ -213,5 +208,48 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
             }
         }
          return admin;
+    }
+    public List<Administrador> ListarAdministrador() throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM empleados inner join administradores on administradores.cedula = empleados.cedula;"); 
+                ResultSet resultadoConsulta = consulta.executeQuery()) {
+           
+            
+            List<Administrador> admins = new ArrayList<Administrador>();
+            Administrador admin;
+            
+            int _cedula;
+            String nombre;
+            String clave;
+            Date fIngreso;
+            double sueldo;
+      
+            
+            while(resultadoConsulta.next()){
+                _cedula = resultadoConsulta.getInt("Cedula");
+                nombre = resultadoConsulta.getString("Nombre");
+                clave = resultadoConsulta.getString("Clave");
+                fIngreso = resultadoConsulta.getDate("FIngreso");
+                sueldo = resultadoConsulta.getDouble("Sueldo");
+              
+                
+                admin = new Administrador(_cedula, nombre, clave, fIngreso, sueldo);
+                
+                admins.add(admin);
+            }
+            
+            return admins;
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+        
     }
 }

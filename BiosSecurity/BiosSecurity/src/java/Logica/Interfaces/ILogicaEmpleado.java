@@ -5,7 +5,9 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Administrador;
 import DataTypes.Empleado;
+import DataTypes.Tecnico;
 import java.util.List;
 
 /**
@@ -18,6 +20,7 @@ public interface ILogicaEmpleado {
     void Modificar(Empleado emp) throws Exception;
     void Eliminar(Empleado emp) throws Exception;
     Empleado LoginEmpleado(int cedula, String clave)throws Exception;
-    List<Empleado> Listar() throws Exception;
+    List<Tecnico> ListarTecnico() throws Exception;
+    List<Administrador> ListarAdministrador() throws Exception;
     
 }

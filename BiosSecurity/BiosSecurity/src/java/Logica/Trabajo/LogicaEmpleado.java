@@ -159,24 +159,67 @@ public class LogicaEmpleado implements ILogicaEmpleado{
         
         return empleado;
     }
-    
-    public List<Empleado> Listar() throws Exception {
+    public List<Tecnico> ListarTecnico() throws Exception {
         try{
             
-            List<Empleado> empleados = new ArrayList<Empleado>();
+            //List<Empleado> empleados = new ArrayList<Empleado>();
             List<Tecnico> tecnicos = new ArrayList<Tecnico>();
-            List<Cobrador> cobradores = new ArrayList<Cobrador>();
-            List<Administrador> administradores = new ArrayList<Administrador>();
+            //List<Cobrador> cobradores = new ArrayList<Cobrador>();
+            //List<Administrador> administradores = new ArrayList<Administrador>();
 
             tecnicos = FabricaPersistencia.GetPersistenciaTecnico().ListarTecnicos();
             //cobradores = FabricaPersistencia.getPersistenciaCobrador().ListarCobradores();
-            //administradores = FabricaPersistencia.getPersistenciaAdministrador.ListarAdministradores();
+            //administradores = FabricaPersistencia.GetPersistenciaAdministrador().ListarAdministrador();
 
-            empleados.addAll(tecnicos);
-            empleados.addAll(cobradores);
-            empleados.addAll(administradores);
+            //empleados.addAll(tecnicos);
+            //empleados.addAll(cobradores);
+            //empleados.addAll(administradores);
             
-            return empleados;
+            return tecnicos;
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+//    public List<Empleado> Listar() throws Exception {
+//        try{
+            
+            //List<Empleado> empleados = new ArrayList<Empleado>();
+            //List<Tecnico> tecnicos = new ArrayList<Tecnico>();
+            //List<Cobrador> cobradores = new ArrayList<Cobrador>();
+            //List<Administrador> administradores = new ArrayList<Administrador>();
+
+            //tecnicos = FabricaPersistencia.GetPersistenciaTecnico().ListarTecnicos();
+            //cobradores = FabricaPersistencia.getPersistenciaCobrador().ListarCobradores();
+            //administradores = FabricaPersistencia.GetPersistenciaAdministrador().ListarAdministrador();
+
+            //empleados.addAll(tecnicos);
+            //empleados.addAll(cobradores);
+            //empleados.addAll(administradores);
+            
+            //return empleados;
+            
+        //}catch(Exception ex){
+           // throw new Exception(ex.getMessage());
+        //}
+    //}
+    public List<Administrador> ListarAdministrador() throws Exception {
+        try{
+            
+            //List<Empleado> empleados = new ArrayList<Empleado>();
+            //List<Tecnico> tecnicos = new ArrayList<Tecnico>();
+            //List<Cobrador> cobradores = new ArrayList<Cobrador>();
+            List<Administrador> administradores = new ArrayList<Administrador>();
+
+            //tecnicos = FabricaPersistencia.GetPersistenciaTecnico().ListarTecnicos();
+            //cobradores = FabricaPersistencia.getPersistenciaCobrador().ListarCobradores();
+            administradores = FabricaPersistencia.GetPersistenciaAdministrador().ListarAdministrador();
+
+            //empleados.addAll(tecnicos);
+            //empleados.addAll(cobradores);
+            //empleados.addAll(administradores);
+            
+            return administradores;
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());

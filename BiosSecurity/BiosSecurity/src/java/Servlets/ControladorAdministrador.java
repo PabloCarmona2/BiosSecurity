@@ -27,44 +27,44 @@ public class ControladorAdministrador extends Controlador {
    public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
-            List<Empleado> empleados = new ArrayList<Empleado>();
+            List<Administrador> administradores = new ArrayList<Administrador>();
             
-            if(request.getSession().getAttribute("empleadosTodos") == null){
+          //  if(request.getSession().getAttribute("empleadosTodos") == null){
                 
-                empleados = FabricaLogica.GetLogicaEmpleado().Listar();
-                request.getSession().setAttribute("empleadosTodos", request);
+                administradores = FabricaLogica.GetLogicaEmpleado().ListarAdministrador();
+                //request.setAttribute("empleadosTodos", request);
                 
-            }else{
+            //}else{
                 
-                empleados = (List<Empleado>)request.getSession().getAttribute("empleadosTodos");
+               // administradores = (List<Administrador>)request.getSession().getAttribute("empleadosTodos");
             
-            }
+            //}
             
-            List<Administrador> empleadosImprimir = new ArrayList<Administrador>();
+           // List<Administrador> empleadosImprimir = new ArrayList<Administrador>();
             
-            if(request.getParameter("tipo") == "administrador"){
-                for(Empleado admin : empleados){
-                    if(admin instanceof Administrador){
-                        empleadosImprimir.add((Administrador)admin);
-                    }
-                }
-            }else{
-                
-                cargarMensaje("No ha seleccionado este tipo de empleado", request);
-                
-                mostrarVista("index", request, response);
+//            if(request.getParameter("tipo") == "administrador"){
+                //for(Administrador admin : administradores){
+                    
+                       // empleadosImprimir.add((Administrador)admin);
+       //         }
+//                }
+//            else{
+//                
+//                cargarMensaje("No ha seleccionado este tipo de empleado", request);
+//                
+//                mostrarVista("listaAdministradores", request, response);
+//            
+//                return;
+//            }
             
-                return;
-            }
-            
-            request.setAttribute("empleados", empleadosImprimir);
-            cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
+            request.setAttribute("empleados", administradores);
+            cargarMensaje("Cantidad de empleados: " + administradores.size(), request);
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los administradores.", request);
         }
         
-        mostrarVista("index", request, response);
+        mostrarVista("listaAdministradores", request, response);
     }
     public void agregar_get(HttpServletRequest request, HttpServletResponse response) {
         
@@ -261,9 +261,9 @@ public class ControladorAdministrador extends Controlador {
             
             FabricaLogica.GetLogicaEmpleado().Modificar(admin);
             
-            cargarMensaje("¡Tecnico modificado con éxito!", request.getSession());
+            cargarMensaje("¡Administrador modificado con éxito!", request.getSession());
             
-            response.sendRedirect("empleados");
+            response.sendRedirect("administrador");
             
         } catch (Exception ex) {
             
@@ -332,8 +332,8 @@ public class ControladorAdministrador extends Controlador {
         }
         
         try {
-            
-            FabricaLogica.GetLogicaEmpleado().Eliminar((Administrador)request.getAttribute("empleado"));
+            Empleado emp = FabricaLogica.GetLogicaEmpleado().Buscar(cedula);
+            FabricaLogica.GetLogicaEmpleado().Eliminar(emp);
             
             cargarMensaje("¡Empleado eliminado con éxito!", request.getSession());
             

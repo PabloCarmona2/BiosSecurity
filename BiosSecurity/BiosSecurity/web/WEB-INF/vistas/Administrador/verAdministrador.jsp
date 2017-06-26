@@ -10,7 +10,7 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:PaginaMaestra titulo="Ver Empleado">
+<t:PaginaMaestra titulo="Ver Administrador">
     <jsp:body>
         <c:if test="${!empty empleado}">
             <jsp:useBean id="empleado" type="DataTypes.Administrador" scope="request" />
@@ -26,7 +26,7 @@
             </ul>
         </c:if>
         
-        <p><a href="empleados">Volver...</a></p>
+        <p><a href="administradores">Volver...</a></p>
         
         <t:Mensaje />
     </jsp:body>

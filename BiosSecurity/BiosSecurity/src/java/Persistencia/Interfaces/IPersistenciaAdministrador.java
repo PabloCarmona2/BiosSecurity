@@ -18,5 +18,5 @@ public interface IPersistenciaAdministrador {
     void Modificar(Administrador admin) throws Exception;
     void Eliminar(Administrador admin) throws Exception;
     Administrador LoginAdministrador(int cedula, String clave) throws Exception;
-   
+     List<Administrador> ListarAdministrador() throws Exception;
 }
