@@ -49,7 +49,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Cedula = Empleados.Cedula WHERE Cedula = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Cedula = Empleados.Cedula WHERE Tecnicos.Cedula = ?;");
             
             consulta.setInt(1, cedula);
             
@@ -106,10 +106,13 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
                 CallableStatement consulta = conexion.prepareCall("{ CALL AltaTecnico(?, ?, ?, ?, ?, ?) }")) {
            
+            java.util.Date fecha = tecnico.getfIngreso();
+            java.sql.Date fechaIngreso = new java.sql.Date(fecha.getTime());
+            
             consulta.setInt(1, tecnico.getCedula());
             consulta.setString(2, tecnico.getNombre());
             consulta.setString(3, tecnico.getClave());
-            consulta.setDate(4, (java.sql.Date)tecnico.getfIngreso());
+            consulta.setDate(4, fechaIngreso);
             consulta.setDouble(5, tecnico.getSueldo());
             consulta.setString(6, tecnico.getEspecializacion());
             consulta.registerOutParameter(7, java.sql.Types.VARCHAR);
@@ -138,10 +141,13 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
                 CallableStatement consulta = conexion.prepareCall("{ CALL ModificarTecnico(?, ?, ?, ?, ?, ?, ?) }")) {
            
+            java.util.Date fecha = tecnico.getfIngreso();
+            java.sql.Date fechaIngreso = new java.sql.Date(fecha.getTime());
+            
             consulta.setInt(1, tecnico.getCedula());
             consulta.setString(2, tecnico.getNombre());
             consulta.setString(3, tecnico.getClave());
-            consulta.setDate(4, (java.sql.Date)tecnico.getfIngreso());
+            consulta.setDate(4, fechaIngreso);
             consulta.setDouble(5, tecnico.getSueldo());
             consulta.setString(6, tecnico.getEspecializacion());
             consulta.registerOutParameter(7, java.sql.Types.VARCHAR);

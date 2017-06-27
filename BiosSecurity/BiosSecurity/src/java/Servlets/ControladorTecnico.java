@@ -114,6 +114,11 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡Tecnico agregado con éxito!", request.getSession());
             
+            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico");
+                
+            request.getSession().removeAttribute("empleadosTodos");
+            request.getSession().setAttribute("empleadosTodos", empleados);
+            
             response.sendRedirect("tecnicos");
             
         } catch (Exception ex) {
@@ -188,7 +193,7 @@ public class ControladorTecnico extends Controlador {
             
             if (tecnico != null) {
                 
-                request.setAttribute("empleado", tecnico);
+                request.getSession().setAttribute("empleado", tecnico);
                 cargarMensaje("¡Empleado encontrado!", request);
                 
             } else {
@@ -258,6 +263,11 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡Tecnico modificado con éxito!", request.getSession());
             
+            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico");
+                
+            request.getSession().removeAttribute("empleadosTodos");
+            request.getSession().setAttribute("empleadosTodos", empleados);
+            
             response.sendRedirect("tecnicos");
             
         } catch (Exception ex) {
@@ -292,7 +302,7 @@ public class ControladorTecnico extends Controlador {
             
             if (tecnico != null) {
                 
-                request.setAttribute("empleado", tecnico);
+                request.getSession().setAttribute("empleado", tecnico);
                 cargarMensaje("¡Empleado encontrado!", request);
                 
             } else {
@@ -329,9 +339,16 @@ public class ControladorTecnico extends Controlador {
         
         try {
             
-            FabricaLogica.GetLogicaEmpleado().Eliminar((Tecnico)request.getAttribute("empleado"));
+            Tecnico tecnico = (Tecnico)request.getSession().getAttribute("empleado");
+            
+            FabricaLogica.GetLogicaEmpleado().Eliminar(tecnico);
             
             cargarMensaje("¡Empleado eliminado con éxito!", request.getSession());
+            
+            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico");
+                
+            request.getSession().removeAttribute("empleadosTodos");
+            request.getSession().setAttribute("empleadosTodos", empleados);
             
             response.sendRedirect("tecnicos");
             

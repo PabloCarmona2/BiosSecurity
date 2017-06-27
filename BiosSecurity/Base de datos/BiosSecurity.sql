@@ -675,14 +675,12 @@ cuerpo:BEGIN
 	
 	SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
 	
-    DELETE FROM Tecnicos
-    WHERE Cedula = cedula;
+    DELETE FROM Tecnicos WHERE Cedula = cedula;
 	 
     
 	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
 	
-	DELETE FROM Empleados
-    WHERE Cedula = cedula;
+	DELETE FROM Empleados WHERE Cedula = cedula;
 	
 	COMMIT;
     
@@ -1155,3 +1153,8 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
+
+DELETE FROM Tecnicos WHERE Cedula = 4;
+	
+DELETE FROM Empleados WHERE Cedula = 4;
