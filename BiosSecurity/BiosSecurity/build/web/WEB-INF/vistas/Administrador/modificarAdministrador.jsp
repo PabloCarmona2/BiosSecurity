@@ -9,7 +9,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-<<<<<<< HEAD:BiosSecurity/BiosSecurity/build/web/WEB-INF/vistas/Administrador/modificarAdministrador.jsp
+<<<<<<< HEAD:BiosSecurity/BiosSecurity/web/WEB-INF/vistas/Administrador/modificarAdministrador.jsp
 
 <fmt:setLocale value="en-US" />
 <t:PaginaMaestra titulo="Agregar Administrador">
@@ -131,4 +131,4 @@
     </jsp:body>
 </t:PaginaMaestra>
 
->>>>>>> 8b6fdbc76d9e71c19e47af7e83ee9c551dbccb1e:BiosSecurity/BiosSecurity/web/WEB-INF/vistas/Empleados/modificarAdmin.jsp
+>>>>>>> 8b6fdbc76d9e71c19e47af7e83ee9c551dbccb1e:BiosSecurity/BiosSecurity/build/web/WEB-INF/vistas/Empleados/modificarAdmin.jsp

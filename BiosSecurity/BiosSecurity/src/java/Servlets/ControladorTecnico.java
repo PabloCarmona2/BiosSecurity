@@ -29,44 +29,30 @@ public class ControladorTecnico extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
-            List<Tecnico> tecnicos = new ArrayList<Tecnico>();
+            List<Empleado> empleados = new ArrayList<Empleado>();
             
             if(request.getSession().getAttribute("empleadosTodos") == null){
                 
-                tecnicos = FabricaLogica.GetLogicaEmpleado().ListarTecnico();
-                request.getSession().setAttribute("empleadosTodos", request);
+                empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico");
+                
+                request.getSession().removeAttribute("empleadosTodos");
+                request.getSession().setAttribute("empleadosTodos", empleados);
                 
             }else{
                 
-                tecnicos = (List<Tecnico>)request.getSession().getAttribute("empleadosTodos");
+                empleados = (List<Empleado>)request.getSession().getAttribute("empleadosTodos");
             
             }
             
-            List<Tecnico> empleadosImprimir = new ArrayList<Tecnico>();
             
-            if(request.getParameter("tipo") == "tecnico"){
-                for(Empleado t : tecnicos){
-                    
-                        empleadosImprimir.add((Tecnico)t);
-                    
-                }
-            }else{
-                
-                cargarMensaje("No ha seleccionado este tipo de empleado", request);
-                
-                mostrarVista("index", request, response);
-            
-                return;
-            }
-            
-            request.setAttribute("empleados", empleadosImprimir);
-            cargarMensaje("Cantidad de empleados: " + tecnicos.size(), request);
+            request.setAttribute("empleados", empleados);
+            cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los tecnicos.", request);
         }
         
-        mostrarVista("index", request, response);
+        mostrarVista("listaTecnicos", request, response);
     }
     
     

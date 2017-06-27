@@ -27,38 +27,22 @@ public class ControladorAdministrador extends Controlador {
    public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
-            List<Administrador> administradores = new ArrayList<Administrador>();
+            List<Empleado> empleados = new ArrayList<Empleado>();
             
-          //  if(request.getSession().getAttribute("empleadosTodos") == null){
+            if(request.getSession().getAttribute("empleadosTodos") == null || !(((List<Empleado>)request.getSession().getAttribute("empleadosTodos")).toArray()[0] instanceof Administrador) ){
                 
-                administradores = FabricaLogica.GetLogicaEmpleado().ListarAdministrador();
-                //request.setAttribute("empleadosTodos", request);
+                empleados = FabricaLogica.GetLogicaEmpleado().Listar("admin");
+                request.getSession().removeAttribute("empleadosTodos");
+                request.getSession().setAttribute("empleadosTodos", empleados);
                 
-            //}else{
+            }else{
                 
-               // administradores = (List<Administrador>)request.getSession().getAttribute("empleadosTodos");
+                empleados = (List<Empleado>)request.getSession().getAttribute("empleadosTodos");
             
-            //}
+            }
             
-           // List<Administrador> empleadosImprimir = new ArrayList<Administrador>();
-            
-//            if(request.getParameter("tipo") == "administrador"){
-                //for(Administrador admin : administradores){
-                    
-                       // empleadosImprimir.add((Administrador)admin);
-       //         }
-//                }
-//            else{
-//                
-//                cargarMensaje("No ha seleccionado este tipo de empleado", request);
-//                
-//                mostrarVista("listaAdministradores", request, response);
-//            
-//                return;
-//            }
-            
-            request.setAttribute("empleados", administradores);
-            cargarMensaje("Cantidad de empleados: " + administradores.size(), request);
+            request.setAttribute("empleados", empleados);
+            cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los administradores.", request);

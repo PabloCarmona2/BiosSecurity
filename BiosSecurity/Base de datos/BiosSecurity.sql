@@ -144,7 +144,7 @@ set @salida :="";
 #delete from administradores where cedula = 2;
 #call EliminarAdministrador(2);
 #UPDATE Empleados SET Nombre = 'asas', Clave = 2121 , empleados.FIngreso=20101010 , empleados.Sueldo=1212 WHERE Cedula = 2;
-call BajaTecnico (4, @Salida);
+#call BajaTecnico (4, @Salida);
 
 
 #
@@ -844,7 +844,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AltaServicioAlarma(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, codanulacion bigint)
+CREATE procedure AltaServicioAlarma(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, codanulacion bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -967,7 +967,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AltaServicioVideo(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, terminal boolean) 
+CREATE procedure AltaServicioVideo(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, terminal boolean, OUT pError VARCHAR(500)) 
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);

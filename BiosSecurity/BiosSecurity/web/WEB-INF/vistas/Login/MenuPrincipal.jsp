@@ -14,11 +14,12 @@
 <t:PaginaMaestra titulo="Menú Principal">
     <jsp:body>
         <ul>
-        <li><a href="administrador">Administradores</a></li>
-        <li><a href="tecnicos">Tecnicos</a></li>
-        <li><a href="cobrador">Cobrador</a></li>
+        <li><a href="administrador">Control de Administradores</a></li>
+        <li><a href="tecnicos">Control de Tecnicos</a></li>
+        <li><a href="cobradores">Control de Cobradores</a></li>
+        <li><a href="instalaciones">Instalaciones...</a></li>
         <li><a href="servicio">Servicios</a></li>
-        <li><a href="recibos">Imprimir Recibos</a></li>
+        <li><a href="recibos">Funciones para Recibos</a></li>
         </ul>
         <t:Mensaje/>
         

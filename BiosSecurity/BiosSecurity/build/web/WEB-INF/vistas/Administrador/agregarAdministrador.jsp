@@ -7,7 +7,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<<<<<<< HEAD:BiosSecurity/BiosSecurity/build/web/WEB-INF/vistas/Administrador/agregarAdministrador.jsp
+<<<<<<< HEAD:BiosSecurity/BiosSecurity/web/WEB-INF/vistas/Administrador/agregarAdministrador.jsp
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <fmt:setLocale value="en-US" />
@@ -134,4 +134,4 @@
         
     </jsp:body>
 </t:PaginaMaestra>
->>>>>>> 8b6fdbc76d9e71c19e47af7e83ee9c551dbccb1e:BiosSecurity/BiosSecurity/web/WEB-INF/vistas/Empleados/agregarAdmin.jsp
+>>>>>>> 8b6fdbc76d9e71c19e47af7e83ee9c551dbccb1e:BiosSecurity/BiosSecurity/build/web/WEB-INF/vistas/Empleados/agregarAdmin.jsp

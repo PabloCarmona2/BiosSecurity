@@ -195,7 +195,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Empleado = Empleados.Cedula;"); 
+                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Tecnicos INNER JOIN Empleados ON Tecnicos.Cedula = Empleados.Cedula;"); 
                 ResultSet resultadoConsulta = consulta.executeQuery()) {
            
             

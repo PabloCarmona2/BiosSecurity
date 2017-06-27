@@ -14,7 +14,7 @@
     <jsp:body>
         
         <ul>
-            <li><a href="listaAdministradores.jsp">Tecnicos...</a></li>
+            <li><a href="listaTecnicos.jsp">Tecnicos...</a></li>
             <li><a href="listaAdministradores.jsp">Administradores...</a></li>
             <li><a href="listaCobradores.jsp">Cobradores...</a></li>
         </ul>
