@@ -128,14 +128,166 @@ create table LineaRecibo(
 
 #INGRESO DE DATOS DE PRUEBA-----------------------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------------------------------------
-INSERT INTO empleados
-VALUES (2, 'ben', 1111,20101010, 1000);
-INSERT INTO administradores
-VALUES (2);
-INSERT INTO empleados
-VALUES (4, 'aaaaaben', 1111,20101010, 1000);
-INSERT INTO tecnicos
-VALUES ('algo',4);
+INSERT INTO Empleados
+VALUES (1, 'ben', 1111,20101010, 1000);
+INSERT INTO Administradores
+VALUES (1);
+INSERT INTO Empleados
+VALUES (4, 'diego', 1111,20101010, 1000);
+INSERT INTO Administradores
+VALUES (4);
+INSERT INTO Empleados
+VALUES (2, 'aaaaaben', 1111,20101010, 1000);
+INSERT INTO Tecnicos
+VALUES ('camaras',2);
+INSERT INTO Empleados
+VALUES (3, 'roberto', 1111,20101010, 1000);
+INSERT INTO Tecnicos
+VALUES ('alarmas',3);
+INSERT INTO Empleados
+VALUES (5, 'jose', 1111,20101010, 1000);
+INSERT INTO Cobradores
+VALUES ('camioneta',5);
+INSERT INTO Empleados
+VALUES (6, 'roberto', 1111,20101010, 1000);
+INSERT INTO Cobradores
+VALUES ('auto',6);
+
+INSERT INTO Clientes
+VALUES(7, 'martin', 'Goes', 'calle 1234', '111111');
+INSERT INTO Clientes
+VALUES(8, 'gaston', 'Goes', 'calle 1241', '113333');
+INSERT INTO Clientes
+VALUES(9, 'gonzalo', 'Malvin', 'calle 123214', '11112431');
+INSERT INTO Clientes
+VALUES(10, 'joaquin', 'Malvin', 'curva 13', '1122221');
+
+INSERT INTO Propiedades
+VALUES(1, 'apartamento', 'calle 45467', 7);
+INSERT INTO Propiedades
+VALUES(2, 'local', 'calle 41267', 7);
+INSERT INTO Propiedades
+VALUES(1, 'galpon', 'calle 45467', 8);
+INSERT INTO Propiedades
+VALUES(2, 'edificio', 'calle 1212467', 8);
+INSERT INTO Propiedades
+VALUES(1, 'teatro', 'calle 1231267', 9);
+INSERT INTO Propiedades
+VALUES(2, 'Supermercado', 'calle 4267', 9);
+INSERT INTO Propiedades
+VALUES(1, 'tienda', 'calle 1223467', 10);
+
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#1
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#2
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#3
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#4
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#5
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#6
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#7
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#8
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#9
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#10
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#11
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#12
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#13
+INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+VALUES(NULL, false);#14
+
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
+VALUES(20161010, true, 1, 7);
+INSERT INTO ServicioVideoVigilancia(Terminal, NumServicio)
+VALUES(true, 1);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
+VALUES(20161010, false, 1, 8);
+INSERT INTO ServicioVideoVigilancia(Terminal, NumServicio)
+VALUES(true, 2);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
+VALUES(20161010, true, 2, 7);
+INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
+VALUES(123456, 3);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
+VALUES(20161010, true, 1, 9);
+INSERT INTO ServicioVideoVigilancia(Terminal, NumServicio)
+VALUES(true, 4);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
+VALUES(20161010, true, 1, 10);
+INSERT INTO ServicioVideoVigilancia(Terminal, NumServicio)
+VALUES(true, 5);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
+VALUES(20161010, true, 2, 9);
+INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
+VALUES(1267533, 6);
+
+INSERT INTO Alarmas
+VALUES(3, 1, 2, false);
+INSERT INTO Alarmas
+VALUES(3, 2, 2, false);
+INSERT INTO Alarmas
+VALUES(6, 3, 3, false);
+INSERT INTO Alarmas
+VALUES(6, 4, 3, false);
+INSERT INTO Camaras
+VALUES(false, 1, 5, 3, false);
+INSERT INTO Camaras
+VALUES(true, 2, 6, 2, false);
+INSERT INTO Camaras
+VALUES(true, 4, 7, 3, false);
+INSERT INTO Camaras
+VALUES(false, 5, 8, 2, false);
+INSERT INTO Alarmas
+VALUES(NULL, 9, NULL, false);
+INSERT INTO Alarmas
+VALUES(NULL, 10, NULL, false);
+INSERT INTO Alarmas
+VALUES(NULL, 11, NULL, false);
+INSERT INTO Camaras
+VALUES(NULL, NULL, 12, NULL, false);
+INSERT INTO Camaras
+VALUES(NULL, NULL, 13, NULL, false);
+INSERT INTO Camaras
+VALUES(NULL, NULL, 14, NULL, false);
+
+INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+VALUES(20170630, 10000, 7, 5, false);
+
+INSERT INTO LineaRecibo
+VALUES(5000, 1, 1);
+INSERT INTO LineaRecibo
+VALUES(5000, 1, 3);
+
+INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+VALUES(20170630, 10000, 8, 5, false);
+
+INSERT INTO LineaRecibo
+VALUES(10000, 2, 2);
+
+INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+VALUES(20170630, 10000, 9, 5, false);
+
+INSERT INTO LineaRecibo
+VALUES(5000, 3, 4);
+INSERT INTO LineaRecibo
+VALUES(5000, 3, 6);
+
+INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+VALUES(20170630, 10000, 10, 5, false);
+
+INSERT INTO LineaRecibo
+VALUES(10000, 4, 5);
+
 #
 set @salida :="";
 
@@ -1153,8 +1305,3 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
-
-
-DELETE FROM Tecnicos WHERE Cedula = 4;
-	
-DELETE FROM Empleados WHERE Cedula = 4;
