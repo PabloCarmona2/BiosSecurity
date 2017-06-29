@@ -15,7 +15,7 @@
     <jsp:body>
         <c:if test="${!empty servicio}">
             
-            <jsp:useBean id="servicio" type="DataTypes.Servicio" scope="request" />
+            <jsp:useBean id="servicio" type="DataTypes.Servicio" scope="session" />
             
             <h3><jsp:getProperty name="servicio" property="numServicio" /></h3>
             
@@ -27,19 +27,39 @@
             <tr>
                 <th>NUMERO DE INVENTARIO</th><th>TIPO</th><th></th>
             </tr>
-            
-            <c:forEach items="${servicio.dispositivos}" var="dispositivo">
-                <tr>
-                    
-                    <td class="texto-centro">${dispositivo.numInventario}</td>
+            <c:if test="${servicio.getClass().simpleName == 'ServicioAlarma'}">
+                        
+                <c:forEach items="${servicio.alarmas}" var="dispositivo">
+                    <tr>
 
-                    <td class="texto-centro">${dispositivo.class.name}</td>
-                    
-                    <td>
-                        <a href="dispositivos?accion=desinstalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
-                    </td>
-                </tr>
-            </c:forEach>
+                        <td class="texto-centro">${dispositivo.numInventario}</td>
+
+                        <td class="texto-centro">${dispositivo.getClass().simpleName}</td>
+
+                        <td>
+                            <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+            </c:if>
+            <c:if test="${servicio.getClass().simpleName == 'ServicioVideoVigilancia'}">
+
+                <c:forEach items="${servicio.dispositivos}" var="dispositivo">
+                    <tr>
+
+                        <td class="texto-centro">${dispositivo.numInventario}</td>
+
+                        <td class="texto-centro">${dispositivo.getClass().simpleName}</td>
+
+                        <td>
+                            <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
+                        </td>
+                    </tr>
+                </c:forEach>
+
+            </c:if>
+            
         </table>
         </c:if>
         

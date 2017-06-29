@@ -49,7 +49,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivo.NumInventario WHERE NumInventario = ? AND BajaLogica = 0;");
+            consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivo.NumInventario WHERE Camaras.NumInventario = ? AND Camaras.BajaLogica = 0;");
             
             consulta.setInt(1, numInventario);
             
@@ -59,18 +59,15 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             
             String ubicacion;
             Boolean exterior;
-            ServicioVideoVigilancia servicio;
             Tecnico tecnico;
             
             if(resultadoConsulta.next()){
                 ubicacion = resultadoConsulta.getString("DescripcionUbicacion");
                 exterior = resultadoConsulta.getBoolean("Exterior");
                 
-                //servicio = Persistencia.Trabajo.PersistenciaServicioVideovigilancia.GetInstancia().Buscar(resultadoConsulta.getInt("Servicio"));
-                
                 tecnico = Persistencia.Trabajo.PersistenciaTecnico.GetInstancia().Buscar(resultadoConsulta.getInt("Tecnico"));
                 
-                //camara = new Camara(numInventario, ubicacion, exterior, servicio, tecnico);
+                camara = new Camara(numInventario, ubicacion, exterior, tecnico);
             }
             
             return camara;
@@ -142,6 +139,33 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             consulta.setInt(4, numServicio);
             consulta.setInt(5, camara.getInstalador().getCedula());
             consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(6);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void Desinstalar(Camara camara, int numServicio) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL InstalarCamara(?, ?) }")) {
+           
+            consulta.setInt(1, camara.getNumInventario());
+            consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             

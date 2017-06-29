@@ -425,6 +425,59 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE procedure DesinstalarCamara(numeroInventario bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    IF NOT EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario) 
+    THEN
+			SET pError = 'No existe la camara que desea desinstalar!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+    
+	SET FOREIGN_KEY_CHECKS = 0;
+    
+	SET mensajeError = 'No se pudo desinstalar la camara correctamente!';
+	
+	UPDATE Camaras
+    SET Servicio = null, Tecnico = null, Exterior = null
+    WHERE Camaras.NumInventario = numeroInventario;
+    
+    SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+    
+    UPDATE Dispositivos
+    SET DescripcionUbicacion = null
+    WHERE Dispositivos.NumInventario = numeroInventario;
+    
+	SET FOREIGN_KEY_CHECKS = 1;
+    
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
 CREATE procedure BajaCamara(numeroInventario int, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
@@ -457,7 +510,7 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
-    
+    SET FOREIGN_KEY_CHECKS = 0;
     IF EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario AND Servicio != null)
     THEN
 			SET mensajeError = 'No se pudo dar de baja la camara indicada!';
@@ -489,7 +542,7 @@ cuerpo:BEGIN
            
         
 	END IF;
-	
+	SET FOREIGN_KEY_CHECKS = 1;
 	COMMIT;
     
     SET transaccionActiva = 0;
@@ -614,6 +667,60 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE procedure DesinstalarAlarma(numeroInventario int, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    IF NOT EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario) 
+    THEN
+			SET pError = 'No existe la alarma que desea desinstalar!';
+            
+			LEAVE cuerpo;
+	END IF;
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+    
+	SET FOREIGN_KEY_CHECKS = 0;
+    
+	SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+	
+    
+	UPDATE Dispositivos
+    SET DescripcionUbicacion = null
+    WHERE NumInventario = numeroInventario;
+    
+	SET mensajeError = 'No se pudo desinstalar la alarma correctamente!.';
+	
+	UPDATE Alarmas
+    SET Servicio = null, Tecnico = null
+    WHERE NumInventario = numeroInventario;
+    
+	SET FOREIGN_KEY_CHECKS = 1;
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+
 CREATE procedure BajaAlarma(numeroInventario int, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
@@ -647,6 +754,8 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
+    SET FOREIGN_KEY_CHECKS = 0;
+    
     IF EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario AND Servicio != null)
     THEN
 			SET mensajeError = 'No se pudo dar de baja el dispositivo indicado!';
@@ -676,6 +785,8 @@ cuerpo:BEGIN
         
 	END IF;
 	
+    SET FOREIGN_KEY_CHECKS = 1;
+    
 	COMMIT;
     
     SET transaccionActiva = 0;
@@ -774,6 +885,8 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
+    
+    SET FOREIGN_KEY_CHECKS = 0;
 	
 	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
 	
@@ -787,6 +900,8 @@ cuerpo:BEGIN
 	UPDATE Tecnicos
 	SET Especializacion = especializacion
     WHERE Cedula = pCedula;
+    
+    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     

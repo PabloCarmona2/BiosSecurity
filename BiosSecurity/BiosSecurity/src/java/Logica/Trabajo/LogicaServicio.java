@@ -61,6 +61,23 @@ public class LogicaServicio implements ILogicaServicio{
         }
     }
     
+    public void DesinstalarDispositivo(Servicio servicio) throws Exception{
+        
+        try{
+            if(servicio instanceof ServicioVideoVigilancia){
+                FabricaPersistencia.getPersistenciaVideoVigilancia().DesinstalarDispositivo((ServicioVideoVigilancia)servicio);
+            }
+            else if(servicio instanceof ServicioAlarma){
+                FabricaPersistencia.getPersistenciaServicioAlarma().DesinstalarDispositivo((ServicioAlarma)servicio);
+            }
+            else{
+                throw new Exception("Tipo de servicio inexistente!.");
+            }
+        }catch (Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
     public List<Servicio> Listar() throws Exception{
         
         List<Servicio> servicios = new ArrayList<Servicio>();

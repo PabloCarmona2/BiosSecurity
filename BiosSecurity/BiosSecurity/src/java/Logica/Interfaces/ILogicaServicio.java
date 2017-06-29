@@ -20,4 +20,5 @@ public interface ILogicaServicio {
     Servicio Buscar(int numServicio) throws Exception;
     void altaServicioAlarma(ServicioAlarma unServicio);
     void altaServicioVideo(ServicioVideoVigilancia unServicio);
+    void DesinstalarDispositivo(Servicio servicio) throws Exception;
 }

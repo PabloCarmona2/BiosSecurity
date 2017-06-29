@@ -10,10 +10,10 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:PaginaMaestra titulo="Eliminar Empleado">
+<t:PaginaMaestra titulo="Desinstalar Dispositivo">
     <jsp:body>
-        <c:if test="${!empty empleado}">
-            <p>Desea confirmar la desinstalacion del dispositivo : <strong>${dispositivo.numInventario}</strong> de tipo: (${dispositivo.class.name}) del servicio: <strong>${servicio.numServicio}</strong>?</p>
+        <c:if test="${!empty servicio}">
+            <p>Desea confirmar la desinstalacion del dispositivo : <strong>${dispositivo.numInventario}</strong> de tipo: (${dispositivo.getClass().simpleName}) del servicio: <strong>${servicio.numServicio}</strong>?</p>
             
             <form method="post" accept-charset="ISO-8859-1">
                 <input type="hidden" name="servicio" value="${servicio}" />

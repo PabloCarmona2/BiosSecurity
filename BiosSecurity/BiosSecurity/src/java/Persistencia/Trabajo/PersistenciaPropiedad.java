@@ -85,6 +85,66 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
             }
         }
     }
+    
+    public Propiedad BuscarXServicio(int numServicio) throws Exception{
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
+        
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+
+            consulta = conexion.prepareStatement("SELECT * FROM Clientes INNER JOIN Propiedades ON Clientes.Cedula = Propiedades.Cliente INNER JOIN Servicios ON Propiedades.IdProp = Servicios.Propiedad WHERE Servicios.NumServicio = ?;");
+            
+            consulta.setInt(1, numServicio);
+            
+            resultadoConsulta = consulta.executeQuery();
+            
+            Propiedad propiedad = null;
+            
+            int id;
+            String tipo;
+            String direccion;
+            Cliente cliente;
+            
+            if(resultadoConsulta.next()){
+                id = resultadoConsulta.getInt("IdProp");
+                tipo = resultadoConsulta.getString("Tipo");
+                direccion = resultadoConsulta.getString("Direccion");
+                
+                cliente = PersistenciaCliente.GetInstancia().Buscar(resultadoConsulta.getInt("Cedula"));
+                
+                propiedad = new Propiedad(id, tipo, direccion, cliente);
+            }
+            
+            return propiedad;
+            
+        }catch(Exception ex){
+
+                throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
+        }
+    }
     public void Modificar(Propiedad casa) throws Exception{
         
         try {

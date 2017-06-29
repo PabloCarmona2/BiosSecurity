@@ -85,6 +85,23 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
                 throw new Exception(ex.getMessage());
             }
     }
+    public void DesinstalarDispositivo(ServicioAlarma servicio) throws Exception{
+        try
+            {
+                if (!servicio.getAlarmas().isEmpty())
+                {
+                    PersistenciaAlarma.GetInstancia().Desinstalar(servicio.getAlarmas().get((servicio.getAlarmas().size() - 1)), servicio.getNumServicio());
+                }
+                else
+                {
+                    throw new Exception("No hay dispositivos para instalar.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.getMessage());
+            }
+    }
     public ServicioAlarma Buscar(int numeroServicio)throws Exception{
         
           ServicioAlarma srvAlarma=null;
@@ -106,7 +123,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
          try{
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM ServicioAlarmas WHERE NumServicio = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio WHERE ServicioAlarmas.NumServicio = ?;");
             
             consulta.setInt(1, numeroServicio);
             
@@ -116,8 +133,8 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
            numServicio=resultadoConsulta.getInt("NumServicio");
            fecha=resultadoConsulta.getDate("Fecha");
            monitoreo=resultadoConsulta.getBoolean("Monitoreo");
-           propiedadCliente=null;//buscar propiedad cliente
-           dispositivos=null;//listar dispositivos
+           propiedadCliente= PersistenciaPropiedad.GetInstancia().BuscarXServicio(numServicio);
+           dispositivos= PersistenciaAlarma.GetInstancia().ListarXServicio(numeroServicio);
            codAnulacion=resultadoConsulta.getInt("CodAnulacion");
                
                 

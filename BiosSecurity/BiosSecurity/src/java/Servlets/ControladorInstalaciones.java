@@ -77,7 +77,7 @@ public class ControladorInstalaciones extends Controlador {
             
             if (servicio != null) {
                 
-                request.setAttribute("servicio", servicio);
+                request.getSession().setAttribute("servicio", servicio);
                 
                 cargarMensaje("¡Servicio encontrado!", request);
                 
@@ -147,6 +147,9 @@ public class ControladorInstalaciones extends Controlador {
                 FabricaLogica.GetLogicaServicio().InstalarDispositivo(servicio);
             
                 cargarMensaje("¡Alarma instalado con éxito!", request.getSession());
+                
+                List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
+                request.getSession().setAttribute("servicios", servicios);
 
                 response.sendRedirect("instalaciones");
                 
@@ -172,6 +175,9 @@ public class ControladorInstalaciones extends Controlador {
                 FabricaLogica.GetLogicaServicio().InstalarDispositivo(servicio);
             
                 cargarMensaje("¡Camara instalada con éxito!", request.getSession());
+                
+                List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
+                request.getSession().setAttribute("servicios", servicios);
 
                 response.sendRedirect("instalaciones");
                 
@@ -181,6 +187,83 @@ public class ControladorInstalaciones extends Controlador {
             }
         }catch(Exception ex){
             cargarMensaje("¡ERROR! Se produjo un error al instalar el dispositivo.", request);
+        }
+    }
+    
+    public void desinstalar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        int numInventario;
+        
+        try {
+            
+            numInventario = Integer.parseInt(request.getParameter("dispositivo"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! El numero de inventario no es válido.", request);
+            
+            mostrarVista("ver", request, response);
+            
+            return;
+            
+        }
+        
+        try {
+            
+            Dispositivo dispositivo = FabricaLogica.GetLogicaDispositivo().Buscar(numInventario);
+            
+            if (dispositivo != null) {
+                
+                request.getSession().setAttribute("dispositivo", dispositivo);
+                
+            } else {
+                
+                cargarMensaje("¡ERROR! No se encontró ningún dispositivo con el numero de inventario " + numInventario + ".", request);
+                
+            }
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al buscar el dispositivo a desinstalar.", request);
+        }
+        
+        mostrarVista("desinstalar", request, response);
+        
+    }
+    
+    public void desinstalar_post(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            if(request.getParameter("numServicio") != null && request.getParameter("dispositivo") != null){
+                
+                Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
+                Dispositivo dispositivo = FabricaLogica.GetLogicaDispositivo().Buscar(Integer.parseInt(request.getParameter("dispositivo")));
+                
+                if(servicio instanceof ServicioAlarma){
+                    ((ServicioAlarma)servicio).setAlarmas(null);
+                    List<Alarma> alarmas = new ArrayList<Alarma>();
+                    alarmas.add((Alarma)dispositivo);
+                    
+                    ((ServicioAlarma)servicio).setAlarmas(alarmas);
+                }else{
+                    ((ServicioVideoVigilancia)servicio).setCamaras(null);
+                    List<Camara> camaras = new ArrayList<Camara>();
+                    camaras.add((Camara)dispositivo);
+                    
+                    ((ServicioVideoVigilancia)servicio).setCamaras(camaras);
+                }
+                
+                FabricaLogica.GetLogicaServicio().DesinstalarDispositivo(servicio);
+                
+                cargarMensaje("¡Dispositivo desinstalado con éxito!", request.getSession());
+                
+                List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
+                request.getSession().setAttribute("servicios", servicios);
+
+                response.sendRedirect("instalaciones");
+                
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo.", request);
         }
     }
 }

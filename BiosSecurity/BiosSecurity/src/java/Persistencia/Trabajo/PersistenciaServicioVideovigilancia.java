@@ -59,7 +59,7 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
          try{
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM ServicioAlarmas WHERE NumServicio = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM ServicioVideoVigilancia INNER JOIN Servicios ON ServicioVideoVigilancia.NumServicio = Servicios.NumServicio WHERE ServicioVideoVigilancia.NumServicio = ?;");
             
             consulta.setInt(1, numeroServicio);
             
@@ -70,7 +70,7 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
                numServicio=resultadoConsulta.getInt("NumServicio");
                fecha=resultadoConsulta.getDate("Fecha");
                monitoreo=resultadoConsulta.getBoolean("Monitoreo");
-               propiedadCliente=null;//buscar propiedad cliente
+               propiedadCliente=PersistenciaPropiedad.GetInstancia().BuscarXServicio(numServicio);
                dispositivos= PersistenciaCamara.GetInstancia().ListarXServicio(numServicio);
                terminal=resultadoConsulta.getBoolean("Terminal");
                
@@ -103,6 +103,23 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
                 if (!servicio.getCamaras().isEmpty())
                 {
                     PersistenciaCamara.GetInstancia().Instalar(servicio.getCamaras().get((servicio.getCamaras().size() - 1)), servicio.getNumServicio());
+                }
+                else
+                {
+                    throw new Exception("No hay dispositivos para instalar.");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.getMessage());
+            }
+    }
+    public void DesinstalarDispositivo(ServicioVideoVigilancia servicio) throws Exception{
+        try
+            {
+                if (!servicio.getCamaras().isEmpty())
+                {
+                    PersistenciaCamara.GetInstancia().Desinstalar(servicio.getCamaras().get((servicio.getCamaras().size() - 1)), servicio.getNumServicio());
                 }
                 else
                 {

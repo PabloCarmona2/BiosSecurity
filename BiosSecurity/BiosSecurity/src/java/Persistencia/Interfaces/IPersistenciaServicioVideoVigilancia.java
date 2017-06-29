@@ -18,4 +18,5 @@ public interface IPersistenciaServicioVideoVigilancia {
     List<ServicioVideoVigilancia> Listar() throws Exception;
     ServicioVideoVigilancia Buscar(int numServicio) throws Exception;
     void altaServicioVigilancia(ServicioVideoVigilancia servicio)throws Exception;
+    void DesinstalarDispositivo(ServicioVideoVigilancia servicio) throws Exception;
 }
