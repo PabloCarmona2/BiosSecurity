@@ -19,7 +19,7 @@
     </head>
     <body>
         <div class="cabezal">
-            <h1>Bios Security</h1>
+            <h1>Bios Security</h1> <p style="float:right"><a href="login">LOGOUT</a></p>
             
             <h2>${titulo}</h2>
         </div>

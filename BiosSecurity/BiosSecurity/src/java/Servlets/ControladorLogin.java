@@ -18,9 +18,9 @@ public class ControladorLogin extends Controlador{
     
     @Override
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
+        
         mostrarVista("login", request, response);
-    }
-    
+    }   
     public void login_post(HttpServletRequest request, HttpServletResponse response){
         
         int cedula;
@@ -51,6 +51,7 @@ public class ControladorLogin extends Controlador{
             Empleado empleado = FabricaLogica.GetLogicaEmpleado().LoginEmpleado(cedula, clave);
             if (empleado != null) {
                 request.setAttribute("empleado", empleado);
+                
                 cargarMensaje("¡Login exitoso!", request);
                 mostrarVista("MenuPrincipal", request, response);
             } else {
@@ -61,4 +62,14 @@ public class ControladorLogin extends Controlador{
         }
         mostrarVista("login", request, response);
 }
+    public void login_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        mostrarVista("MenuPrincipal", request, response);
+    }   
+    public void logout_get(HttpServletRequest request, HttpServletResponse response){
+        if(request.getSession().getAttribute("empleado")!= null){
+            request.getSession().removeAttribute("empleado");
+            mostrarVista("login", request, response);
+        }
+    }
 }

@@ -10,7 +10,7 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:PaginaMaestra titulo="Empleados">
+<t:PaginaMaestra titulo="Administradores">
     <jsp:body>
         <fmt:setLocale value="en-US" />
         
@@ -42,8 +42,8 @@
             </c:forEach>
         </table>
         
-        <p><a href="inicio">Volver...</a></p>
-        
+        <p><a href="login?accion=login">Volver...</a></p>
+     
         <t:Mensaje />
         
         <script>
@@ -52,3 +52,4 @@
         </script>
     </jsp:body>
 </t:PaginaMaestra>
+  

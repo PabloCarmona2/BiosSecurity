@@ -20,8 +20,7 @@
             </form>
         </c:if>
         
-        <p><a href="empleados">Volver...</a></p>
-        
+         <p><a href="administrador">Volver...</a></p>
         <t:Mensaje />
     </jsp:body>
 </t:PaginaMaestra>

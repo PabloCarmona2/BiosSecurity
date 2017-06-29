@@ -62,8 +62,8 @@ abstract class Controlador extends HttpServlet {
             String nombreCarpetaVista = this.getClass().getSimpleName().replaceFirst("Controlador", "");
             
             RequestDispatcher despachador = request.getRequestDispatcher("WEB-INF/vistas/" + nombreCarpetaVista + "/" + vista + ".jsp");
-            
-            if (despachador != null) {
+                       
+            if (despachador != null) {               
                 despachador.forward(request, response);
             }
         } catch (Exception ex) {

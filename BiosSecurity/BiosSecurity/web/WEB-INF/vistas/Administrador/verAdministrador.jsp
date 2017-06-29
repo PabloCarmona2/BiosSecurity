@@ -26,7 +26,7 @@
             </ul>
         </c:if>
         
-        <p><a href="administradores">Volver...</a></p>
+        <p><a href="administrador">Volver...</a></p>
         
         <t:Mensaje />
     </jsp:body>
