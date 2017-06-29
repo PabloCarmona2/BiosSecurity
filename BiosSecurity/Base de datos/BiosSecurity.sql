@@ -460,17 +460,20 @@ cuerpo:BEGIN
     
     IF EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario AND Servicio != null)
     THEN
+			SET mensajeError = 'No se pudo dar de baja la camara indicada!';
+            
+			UPDATE Camaras
+            SET BajaLogica = 1
+            WHERE NumInventario = numeroInventario;
+            
+            
 			SET mensajeError = 'No se pudo dar de baja el dispositivo indicado!';
             
             UPDATE Dispositivos
             SET BajaLogica = 1
             WHERE NumInventario = numeroInventario;
             
-            SET mensajeError = 'No se pudo dar de baja la camara indicada!';
             
-			UPDATE Camaras
-            SET BajaLogica = 1
-            WHERE NumInventario = numeroInventario;
             
 	ELSE 
          
@@ -744,7 +747,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure ModificarTecnico(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, especializacion VARCHAR(7), OUT pError VARCHAR(500))
+CREATE procedure ModificarTecnico(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, especializacion VARCHAR(7), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -760,7 +763,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = cedula)
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula)
     THEN
 		SET pError = 'No existe el tecnico que desea modificar en el sistema!';
             
@@ -777,13 +780,13 @@ cuerpo:BEGIN
     
 	UPDATE Empleados
     SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
-    WHERE Cedula = cedula;
+    WHERE Cedula = pCedula;
     
 	SET mensajeError = 'No se pudo modificar el tecnico correctamente!.';
 	
 	UPDATE Tecnicos
 	SET Especializacion = especializacion
-    WHERE Cedula = cedula;
+    WHERE Cedula = pCedula;
 	
 	COMMIT;
     
@@ -797,7 +800,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure BajaTecnico(cedula bigint, OUT pError VARCHAR(500))
+CREATE procedure BajaTecnico(pCedula bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -813,7 +816,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = cedula)
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula)
     THEN
 		SET pError = 'El tecnico que desea eliminar no existe en el sistema!';
             
@@ -827,12 +830,12 @@ cuerpo:BEGIN
 	
 	SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
 	
-    DELETE FROM Tecnicos WHERE Cedula = cedula;
+    DELETE FROM Tecnicos WHERE Cedula = pCedula;
 	 
     
 	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
 	
-	DELETE FROM Empleados WHERE Cedula = cedula;
+	DELETE FROM Empleados WHERE Cedula = pCedula;
 	
 	COMMIT;
     
@@ -886,7 +889,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure Cobrar(numRecibo bigint, cobrador bigint, OUT pError VARCHAR(500))
+CREATE procedure Cobrar(pNumRecibo bigint, cobrador bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -902,7 +905,7 @@ cuerpo:BEGIN
 		SET pError = mensajeError;
 	END;
     
-    IF NOT EXISTS(SELECT * FROM CabezalRecibo WHERE NumRecibo = numRecibo)
+    IF NOT EXISTS(SELECT * FROM CabezalRecibo WHERE NumRecibo = pNumRecibo)
     THEN
 		SET pError = 'El recibo que desea marcar como cobrado no este en el sistema!';
             
@@ -932,16 +935,15 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure RegistrarLineaEnRecibo(importe double, numRecibo bigint, servicio bigint, OUT pError VARCHAR(500))
+CREATE procedure RegistrarLineaEnRecibo(importe double, pNumRecibo bigint, servicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
-    DECLARE transaccionActiva BIT;
-    DECLARE totalActual double;
+    DECLARE sinErrores BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
 	BEGIN
-		IF transaccionActiva THEN
+		IF sinErrores THEN
 			ROLLBACK;
         END IF;
 		
@@ -949,7 +951,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF NOT EXISTS(SELECT * FROM CabezalRecibo WHERE NumRecibo = numRecibo)
+    IF NOT EXISTS(SELECT * FROM CabezalRecibo WHERE NumRecibo = pNumRecibo)
     THEN
 		SET pError = 'No existe el recibo en el que quiere agregar la linea!';
             
@@ -957,29 +959,14 @@ cuerpo:BEGIN
     END IF;
     
     
-    SET transaccionActiva = 1;
+    SET sinErrores = 1;
     
-	START TRANSACTION; 
-	
 	SET mensajeError = 'No se pudo agregar la linea al recibo correctamente!';
-	
     
 	INSERT INTO LineaRecibo
-    VALUES(importe, numRecibo, servicio);
+    VALUES(importe, pNumRecibo, servicio);
     
-	SET mensajeError = 'No se pudo sumar el importe de la linea al total del recibo correctamente!.';
-	
-    
-    
-    SELECT totalActual = Total FROM CabezalRecibo WHERE NumRecibo = numRecibo;
-    
-	UPDATE CabezalRecibo
-	SET Total = (totalActual + importe)
-    WHERE NumRecibo = numRecibo;
-	
-	COMMIT;
-    
-    SET transaccionActiva = 0;
+    SET sinErrores = 0;
 	
 END//
 
@@ -1034,7 +1021,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure EliminarServicioAlarma(numservicio bigint, OUT pError VARCHAR(500))
+CREATE procedure EliminarServicioAlarma(pNumservicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -1050,7 +1037,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE servicios.NumServicio = numservicio)
+    IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE servicios.NumServicio = pNumservicio)
     THEN
 		SET pError = 'El servicio que desea eliminar no existe en el sistema!';
             
@@ -1065,13 +1052,13 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
 	
     DELETE FROM biossecurity.servicioalarmas
-    WHERE servicioalarmas.NumServicio = numservicio;
+    WHERE servicioalarmas.NumServicio = pNumservicio;
 	 
     
 	SET mensajeError = 'No se pudo eliminar el servicio de alarma correctamente!.';
 	
 	DELETE FROM biossecurity.servicios
-    WHERE servicios.NumServicio = numservicio;
+    WHERE servicios.NumServicio = pNumservicio;
 	
 	COMMIT;
     
@@ -1085,13 +1072,13 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE ServicioAlarmaXCliente(cliente bigint)
+CREATE PROCEDURE ServicioAlarmaXCliente(pCliente bigint)
 BEGIN
 
 SELECT *
 FROM ServicioAlarmas INNER JOIN Servicios
 	
-WHERE Servicios.Cliente = cliente;
+WHERE Servicios.Cliente = pCliente;
 
 END//
 
@@ -1104,12 +1091,12 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE ServicioCamaraXCliente(cliente bigint)
+CREATE PROCEDURE ServicioCamaraXCliente(pCliente bigint)
 BEGIN
 
 SELECT *
 FROM ServicioVideoVigilancia INNER JOIN Servicios
-WHERE Servicios.Cliente = cliente;
+WHERE Servicios.Cliente = pCliente;
 
 END//
 
@@ -1157,7 +1144,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure EliminarServicioVideo(numservicio bigint, OUT pError VARCHAR(500))
+CREATE procedure EliminarServicioVideo(pNumservicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -1173,7 +1160,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE servicios.NumServicio = numservicio)
+    IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE servicios.NumServicio = pNumservicio)
     THEN
 		SET pError = 'El servicio que desea eliminar no existe en el sistema!';
             
@@ -1188,13 +1175,13 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
 	
     DELETE FROM biossecurity.serviciovideovigilancia
-    WHERE serviciovideovigilancia.NumServicio = numservicio;
+    WHERE serviciovideovigilancia.NumServicio = pNumservicio;
 	 
     
 	SET mensajeError = 'No se pudo eliminar el servicio de videovigilancia correctamente!.';
 	
 	DELETE FROM biossecurity.servicios
-    WHERE servicios.NumServicio = numservicio;
+    WHERE servicios.NumServicio = pNumservicio;
 	
 	COMMIT;
     
@@ -1213,7 +1200,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AgregarAdministrador(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double,OUT pError VARCHAR(500))
+CREATE procedure AgregarAdministrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double,OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -1236,12 +1223,12 @@ cuerpo:BEGIN
 	
     
 	INSERT INTO empleados
-    VALUES(cedula, nombre, clave, fIngreso, sueldo);
+    VALUES(pCedula, nombre, clave, fIngreso, sueldo);
     
 	SET mensajeError = 'No se pudo agregar el admin correctamente!.';
 	
 	INSERT INTO administradores
-	VALUES(cedula);
+	VALUES(pCedula);
 	
 	COMMIT;
     
@@ -1253,11 +1240,11 @@ END//
 DELIMITER ;
 DELIMITER //
 
-CREATE procedure ModificarAdministrador(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double)
+CREATE procedure ModificarAdministrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double)
 cuerpo:BEGIN
 
  
- UPDATE Empleados SET empleados.Nombre = nombre, empleados.Clave = clave , empleados.FIngreso= fIngreso , empleados.Sueldo= sueldo WHERE empleados.Cedula = cedula;
+ UPDATE Empleados SET empleados.Nombre = nombre, empleados.Clave = clave , empleados.FIngreso= fIngreso , empleados.Sueldo= sueldo WHERE empleados.Cedula = pCedula;
     
 
     
@@ -1270,7 +1257,7 @@ DELIMITER //
 CREATE procedure EliminarAdministrador(cedula bigint)
 cuerpo:BEGIN
 
-	delete from administradores where Cedula= cedula;
+	delete from administradores where Cedula= pCedula;
 	
 END//
 
@@ -1281,13 +1268,13 @@ DELIMITER ;
 #-----------------------------------------------------------------------------------------------------------------
 DELIMITER //
 
-CREATE procedure ModificarCliente(cedula bigint, nombre VARCHAR(25), barrio VARCHAR(20),  dirCobro VARCHAR(25),  telefono VARCHAR(20), OUT pError VARCHAR(500))
+CREATE procedure ModificarCliente(pCedula bigint, nombre VARCHAR(25), barrio VARCHAR(20),  dirCobro VARCHAR(25),  telefono VARCHAR(20), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
 	
 	
-    IF NOT EXISTS(SELECT * FROM clientes WHERE Cedula = cedula)
+    IF NOT EXISTS(SELECT * FROM clientes WHERE Cedula = pCedula)
     THEN
 		SET pError = 'No existe el cliente que desea modificar en el sistema!';
             
@@ -1299,7 +1286,7 @@ cuerpo:BEGIN
     
 	UPDATE clientes
     SET Nombre = nombre, Barrio = barrio, DirCobro = dircobro, Telefono = telefono
-    WHERE Cedula = cedula;
+    WHERE Cedula = pCedula;
     
 	
 END//

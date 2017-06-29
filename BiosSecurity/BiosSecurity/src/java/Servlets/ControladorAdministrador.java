@@ -106,6 +106,11 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡Administrador agregado con éxito!", request.getSession());
             
+            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("admin");
+                
+            request.getSession().removeAttribute("empleadosTodos");
+            request.getSession().setAttribute("empleadosTodos", empleados);
+            
             response.sendRedirect("administrador");
             
         } catch (Exception ex) {
@@ -247,6 +252,11 @@ public class ControladorAdministrador extends Controlador {
             
             cargarMensaje("¡Administrador modificado con éxito!", request.getSession());
             
+            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("admin");
+                
+            request.getSession().removeAttribute("empleadosTodos");
+            request.getSession().setAttribute("empleadosTodos", empleados);
+            
             response.sendRedirect("administrador");
             
         } catch (Exception ex) {
@@ -320,6 +330,11 @@ public class ControladorAdministrador extends Controlador {
             FabricaLogica.GetLogicaEmpleado().Eliminar(emp);
             
             cargarMensaje("¡Empleado eliminado con éxito!", request.getSession());
+            
+            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("admin");
+                
+            request.getSession().removeAttribute("empleadosTodos");
+            request.getSession().setAttribute("empleadosTodos", empleados);
             
             response.sendRedirect("administrador");
             
