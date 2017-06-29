@@ -231,8 +231,9 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            resultadoConsulta = consulta.executeQuery("SELECT * FROM ServicioAlarmas INNER JOIN Servicio ON ServicioAlarma.numServicio = Servicio.numServicio");
+            consulta = conexion.createStatement();
             
+            resultadoConsulta = consulta.executeQuery("SELECT * FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio");
             
             List<ServicioAlarma> servicios = new ArrayList<ServicioAlarma>();
             

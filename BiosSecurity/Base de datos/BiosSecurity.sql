@@ -827,15 +827,19 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
+    
+    SET FOREIGN_KEY_CHECKS = 0;
 	
 	SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
 	
-    DELETE FROM Tecnicos WHERE Cedula = pCedula;
+    DELETE FROM Tecnicos WHERE Tecnicos.Cedula = pCedula;
 	 
     
 	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
 	
-	DELETE FROM Empleados WHERE Cedula = pCedula;
+	DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
+    
+    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -1254,10 +1258,50 @@ END//
 DELIMITER ;
 DELIMITER //
 
-CREATE procedure EliminarAdministrador(cedula bigint)
+CREATE procedure EliminarAdministrador(pCedula bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	delete from administradores where Cedula= pCedula;
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM Administradores WHERE Cedula = pCedula)
+    THEN
+		SET pError = 'El tecnico que desea eliminar no existe en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+    
+    SET FOREIGN_KEY_CHECKS = 0;
+	
+	SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
+	
+    DELETE FROM Administradores WHERE Administradores.Cedula = pCedula;
+	 
+    
+	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
+	
+	DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
+    
+    SET FOREIGN_KEY_CHECKS = 1;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
 	
 END//
 

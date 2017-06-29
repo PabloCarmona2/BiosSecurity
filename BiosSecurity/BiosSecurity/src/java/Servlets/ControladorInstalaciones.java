@@ -36,11 +36,11 @@ public class ControladorInstalaciones extends Controlador {
             if(request.getSession().getAttribute("servicios") == null){
                 
                 servicios = FabricaLogica.GetLogicaServicio().Listar();
-                request.getSession().setAttribute("servicios", request);
+                request.getSession().setAttribute("servicios", servicios);
                 
             }else{
                 
-                servicios = (List<Servicio>)request.getSession().getAttribute("servicios");
+                servicios = ((List<Servicio>)request.getSession().getAttribute("servicios"));
             
             }
             

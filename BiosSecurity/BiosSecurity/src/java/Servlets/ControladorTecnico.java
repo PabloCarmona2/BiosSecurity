@@ -59,7 +59,7 @@ public class ControladorTecnico extends Controlador {
     
     public void agregar_get(HttpServletRequest request, HttpServletResponse response) {
         
-        mostrarVista("agregar", request, response);
+        mostrarVista("agregarTecnico", request, response);
         
     }
     

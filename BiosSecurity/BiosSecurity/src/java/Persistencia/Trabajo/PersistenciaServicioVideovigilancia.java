@@ -235,7 +235,9 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            resultadoConsulta = consulta.executeQuery("SELECT * FROM ServicioVideoVigilancia INNER JOIN Servicio ON ServicioVideoVigilancia.numServicio = Servicio.numServicio");
+            consulta = conexion.createStatement();
+            
+            resultadoConsulta = consulta.executeQuery("SELECT * FROM ServicioVideoVigilancia INNER JOIN Servicios ON ServicioVideoVigilancia.NumServicio = Servicios.NumServicio");
             
             
             List<ServicioVideoVigilancia> servicios = new ArrayList<ServicioVideoVigilancia>();

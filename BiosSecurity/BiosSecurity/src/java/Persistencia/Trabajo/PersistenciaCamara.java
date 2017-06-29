@@ -198,7 +198,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos WHERE Servicio = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivos.NumInventario WHERE Servicio = ?;");
             
             consulta.setInt(1, numServicio);
             
