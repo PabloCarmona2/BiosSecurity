@@ -26,21 +26,30 @@
             
             <c:forEach items="${servicios}" var="servicio">
                 <tr>
+                    <c:if test="${servicio.getClass().simpleName == 'ServicioAlarma'}">
+                        
+                            <td class="texto-centro">${servicio.numServicio}</td>
+
+                            <td class="texto-centro">${fn:length(servicio.alarmas)}</td>
+
+                            <td class="texto-centro">${servicio.getClass().simpleName}</td>
+
+                    </c:if>
+                    <c:if test="${servicio.getClass().simpleName == 'ServicioVideoVigilancia'}">
+                        
+                            <td class="texto-centro">${servicio.numServicio}</td>
+
+                            <td class="texto-centro">${fn:length(servicio.camaras)}</td>
+
+                            <td class="texto-centro">${servicio.getClass().simpleName}</td>
+
+                    </c:if>
                     
-                    <c:forEach items="${servicio.dispositivos}" var="dispositivo">
-                        
-                        <td class="texto-centro">${servicio.numServicio}</td>
-                        
-                        <td class="texto-centro">${fn:length(servicio.dispositivos)}</td>
-                        
-                        <td class="texto-centro">${dispositivo.class.name}</td>
-                        
-                    </c:forEach>
                     
                     <td>
-                        <a href="dispositivo?accion=ver&servicio=${servicio.numServicio}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
-                        <a href="dispositivo?accion=instalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Instalar" title="Instalar..." ></a>&nbsp;&nbsp;
-                        <a href="dispositivo?accion=desinstalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
+                        <a href="dispositivos?accion=ver&servicio=${servicio.numServicio}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
+                        <a href="dispositivos?accion=instalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Instalar" title="Instalar..." ></a>&nbsp;&nbsp;
+                        <a href="dispositivos?accion=desinstalar&servicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
                     </td>
                 </tr>
             </c:forEach>

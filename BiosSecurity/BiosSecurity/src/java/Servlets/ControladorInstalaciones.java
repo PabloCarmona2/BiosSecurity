@@ -45,6 +45,8 @@ public class ControladorInstalaciones extends Controlador {
             }
             
             
+            cargarMensaje("Servicios encontrados exitosamente, cantidad de servicios = " + servicios.size() + ".", request);
+            
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los servicios.", request);
         }
