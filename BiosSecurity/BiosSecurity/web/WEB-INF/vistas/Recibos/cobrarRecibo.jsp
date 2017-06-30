@@ -15,10 +15,12 @@
     <jsp:body>
         
         <h2>Cobrar un recibo mediante su numero de recibo.</h2>
+        <form method="post">
+            <p><input type="text" name="numRecibo" value="${param.buscar}"</p>
         
-        <p><input type="text" name="numRecibo" value="${param.buscar}"</p>
+            <p><input type="submit" name="accion" value="Cobrar" /></p>
+        </form>
         
-        <p><input type="submit" name="accion" value="Cobrar" /></p>
         
         <t:Mensaje />
         

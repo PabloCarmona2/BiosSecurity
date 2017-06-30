@@ -79,7 +79,7 @@ public class LogicaRecibo implements ILogicaRecibo{
             FabricaPersistencia.GetPersistenciaRecibo().Cobrar(recibo);
             
         }catch(Exception ex){
-            
+            throw new Exception(ex.getMessage());
         }
     }
     public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{

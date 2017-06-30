@@ -1008,7 +1008,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure Cobrar(pNumRecibo bigint, cobrador bigint, OUT pError VARCHAR(500))
+CREATE procedure CobrarRecibo(pNumRecibo bigint, pCobrador bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -1037,7 +1037,8 @@ cuerpo:BEGIN
 	
     
 	UPDATE CabezalRecibo
-    SET Cobrado = true, Cobrador = cobrador;
+    SET Cobrado = true, Cobrador = pCobrador
+    WHERE NumRecibo = pNumRecibo;
     
     SET sinErrores = 0;
 	

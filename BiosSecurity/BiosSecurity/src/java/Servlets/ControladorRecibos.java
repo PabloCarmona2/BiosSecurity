@@ -208,6 +208,8 @@ public class ControladorRecibos extends Controlador {
                     
                     cargarMensaje("Este recibo ya fue cobrado!.", request);
                     
+                    response.sendRedirect("recibos");
+                    
                     return;
                 }
                 recibo.setCobrado(true);

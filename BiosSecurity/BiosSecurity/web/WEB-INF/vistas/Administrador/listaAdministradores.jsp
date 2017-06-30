@@ -18,7 +18,7 @@
             <p><input type="text" name="buscar" value="${param.buscar}" id="buscar" /> <input type="submit" value="Buscar" /></p>
         </form>
         
-        <p><a href="administrador?accion=agregar"><img src="imagenes/glyphicons-191-plus-sign.png" alt="Agregar" title="Agregar..." ></a></p>
+        <p><a href="administrador?accion=agregar"><img src="imagenes/agregar.png" alt="Agregar" title="Agregar..." ></a></p>
         
         <table class="listado">
             <tr>
@@ -34,9 +34,9 @@
                     </td>
                     <td class="texto-derecha">${empleado.fIngreso}</td>
                     <td>
-                        <a href="administrador?accion=ver&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
-                        <a href="administrador?accion=modificar&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-31-pencil.png" alt="Modificar" title="Modificar..." ></a>&nbsp;&nbsp;
-                        <a href="administrador?accion=eliminar&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-192-minus-sign.png" alt="Eliminar" title="Eliminar..." ></a>
+                        <a href="administrador?accion=ver&cedula=${empleado.cedula}"><img src="imagenes/ver.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
+                        <a href="administrador?accion=modificar&cedula=${empleado.cedula}"><img src="imagenes/modificar.png" alt="Modificar" title="Modificar..." ></a>&nbsp;&nbsp;
+                        <a href="administrador?accion=eliminar&cedula=${empleado.cedula}"><img src="imagenes/eliminar.png" alt="Eliminar" title="Eliminar..." ></a>
                     </td>
                 </tr>
             </c:forEach>

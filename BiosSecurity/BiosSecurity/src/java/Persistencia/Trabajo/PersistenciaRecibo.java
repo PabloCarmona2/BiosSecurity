@@ -185,7 +185,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(2);
+            String error = consulta.getString(3);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);

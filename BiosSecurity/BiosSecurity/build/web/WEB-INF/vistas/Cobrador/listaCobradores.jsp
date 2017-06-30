@@ -35,9 +35,9 @@
                     <td class="texto-derecha">${empleado.fIngreso}</td>
                     <td class="texto-derecha">${empleado.transporte}</td>
                     <td>
-                        <a href="cobradores?accion=ver&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
-                        <a href="cobradores?accion=modificar&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-31-pencil.png" alt="Modificar" title="Modificar..." ></a>&nbsp;&nbsp;
-                        <a href="cobradores?accion=eliminar&cedula=${empleado.cedula}"><img src="imagenes/glyphicons-192-minus-sign.png" alt="Eliminar" title="Eliminar..." ></a>
+                        <a href="cobradores?accion=ver&cedula=${empleado.cedula}"><img src="imagenes/ver.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
+                        <a href="cobradores?accion=modificar&cedula=${empleado.cedula}"><img src="imagenes/modificar.png" alt="Modificar" title="Modificar..." ></a>&nbsp;&nbsp;
+                        <a href="cobradores?accion=eliminar&cedula=${empleado.cedula}"><img src="imagenes/eliminar.png" alt="Eliminar" title="Eliminar..." ></a>
                     </td>
                 </tr>
             </c:forEach>

@@ -21,7 +21,7 @@
             
             <h3>Dispositivos Instalados</h3>
             
-            <p><a href="dispositivos?accion=instalar&servicio=${servicio}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Instalar" title="Instalar..." ></a></p>
+            <p><a href="instalaciones?accion=instalar&servicio=${servicio}"><img src="imagenes/instalar.png" alt="Instalar" title="Instalar..." ></a></p>
             
             <table class="listado">
             <tr>
@@ -37,7 +37,7 @@
                         <td class="texto-centro">${dispositivo.getClass().simpleName}</td>
 
                         <td>
-                            <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
+                            <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/desinstalar.png" alt="Desinstalar" title="Desinstalar..." ></a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -53,7 +53,7 @@
                         <td class="texto-centro">${dispositivo.getClass().simpleName}</td>
 
                         <td>
-                            <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Desinstalar" title="Desinstalar..." ></a>
+                            <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/desinstalar.png" alt="Desinstalar" title="Desinstalar..." ></a>
                         </td>
                     </tr>
                 </c:forEach>

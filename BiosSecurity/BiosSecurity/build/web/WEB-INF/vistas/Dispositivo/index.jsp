@@ -18,7 +18,7 @@
             <p><input type="text" name="buscar" value="${param.buscar}" id="buscar" /> <input type="submit" value="Buscar" /></p>
         </form>
         
-        <p><a href="dispositivos?accion=agregar"><img src="imagenes/glyphicons-191-plus-sign.png" alt="Agregar" title="Agregar..." ></a></p>
+        <p><a href="dispositivos?accion=agregar"><img src="imagenes/agregar.png" alt="Agregar" title="Agregar..." ></a></p>
         
         <table class="listado">
             <tr>
@@ -38,8 +38,8 @@
                     </c:choose>
                     
                     <td>
-                        <a href="dispositivo?accion=ver&numInventario=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
-                        <a href="dispositivo?accion=eliminar&numInventario=${dispositivo.numInventario}"><img src="imagenes/glyphicons-52-eye-open.png" alt="Eliminar" title="Eliminar..." ></a>
+                        <a href="dispositivo?accion=ver&numInventario=${dispositivo.numInventario}"><img src="imagenes/ver.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
+                        <a href="dispositivo?accion=eliminar&numInventario=${dispositivo.numInventario}"><img src="imagenes/eliminar.png" alt="Eliminar" title="Eliminar..." ></a>
                         
                     </td>
                 </tr>

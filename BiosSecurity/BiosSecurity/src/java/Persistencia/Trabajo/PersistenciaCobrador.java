@@ -47,7 +47,7 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Cobradores INNER JOIN Empleados ON Tecnicos.Cedula = Empleados.Cedula WHERE Cedula = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM Cobradores INNER JOIN Empleados ON Cobradores.Cedula = Empleados.Cedula WHERE Cobradores.Cedula = ?;");
             
             consulta.setInt(1, cedula);
             
