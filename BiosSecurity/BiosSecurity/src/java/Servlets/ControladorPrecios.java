@@ -29,7 +29,7 @@ public class ControladorPrecios extends Controlador {
         
     }
     
-    public void agregar_post(HttpServletRequest request, HttpServletResponse response) {
+    public void setear_post(HttpServletRequest request, HttpServletResponse response) {
         
         int cedula = 0;
         

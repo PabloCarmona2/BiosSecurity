@@ -277,12 +277,15 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                Statement consulta = conexion.createStatement(); ResultSet resultadoConsulta = consulta.executeQuery("SELECT * FROM Alarmas INNER JOIN Dispositivos ON Alarmas.NumInventasrio = Dispositivos.NumInventario;")) {
+                Statement consulta = conexion.createStatement(); ResultSet resultadoConsulta = consulta.executeQuery("SELECT * FROM Alarmas INNER JOIN Dispositivos ON Alarmas.NumInventario = Dispositivos.NumInventario;")) {
            
             List<Alarma> alarmas = new ArrayList<Alarma>();
             Alarma alarma = null;
             
             while(resultadoConsulta.next()){
+                
+                alarma = new Alarma();
+                
                 alarma.setNumInventario(resultadoConsulta.getInt("NumInventario"));
                 alarma.setDescripcionUbicacion(resultadoConsulta.getString("DescripcionUbicacion"));
                 Tecnico tecnico = PersistenciaTecnico.GetInstancia().Buscar(resultadoConsulta.getInt("Tecnico"));

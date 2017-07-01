@@ -21,6 +21,7 @@
             <p><input type="submit" name="accion" value="Cobrar" /></p>
         </form>
         
+        <p><a href="recibos">Volver...</a></p>
         
         <t:Mensaje />
         

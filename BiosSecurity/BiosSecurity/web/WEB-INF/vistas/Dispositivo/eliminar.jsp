@@ -11,13 +11,16 @@
 <t:PaginaMaestra titulo="Eliminar Dispositivo">
     <jsp:body>
         
-        <c:if test="${!empty empleado}">
+        <c:if test="${!empty dispositivo}">
             <p>¿Confirma la eliminacion del dispositivo con el numero de inventario:  <strong>${dispositivo.numInventario}</strong> ?</p>
             
             <form method="post" accept-charset="ISO-8859-1">
                 <input type="hidden" name="numInventario" value="${dispositivo.numInventario}" />
                 <input type="submit" name="accion" value="Eliminar" />
             </form>
+        </c:if>
+        <c:if test="${empty dispositivo}">
+            <p>No hay ningun dispositivo seleccionado!</p>
         </c:if>
         
         <p><a href="dispositivos">Volver...</a></p>

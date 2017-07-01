@@ -55,7 +55,7 @@
             </c:forEach>
         </table>
         
-        <p><a href="inicio">Volver...</a></p>
+        <p><a href="login">Volver...</a></p>
         
         <t:Mensaje />
         

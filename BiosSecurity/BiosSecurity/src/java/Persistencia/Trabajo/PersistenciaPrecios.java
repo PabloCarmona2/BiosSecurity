@@ -68,7 +68,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                     switch(renglon){
                         case 1:
 
-                            precioAlarmas = Double.parseDouble(texto.substring(posicionDePeso - 1));
+                            precioAlarmas = Double.parseDouble(texto.substring(posicionDePeso - 1).trim());
 
                             precios.setBaseAlarmas(precioAlarmas);
 
@@ -77,7 +77,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 2:
 
-                            precioCamaras = Double.parseDouble(texto.substring(posicionDePeso - 1));
+                            precioCamaras = Double.parseDouble(texto.substring(posicionDePeso - 1).trim());
 
                             precios.setBaseCamaras(precioCamaras);
 
@@ -86,7 +86,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 3:
 
-                            precioXAlarma = Double.parseDouble(texto.substring(posicionDePeso - 1));
+                            precioXAlarma = Double.parseDouble(texto.substring(posicionDePeso - 1).trim());
 
                             precios.setAdicionalAlarma(precioXAlarma);
 
@@ -95,7 +95,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 4:
 
-                            precioXCamara = Double.parseDouble(texto.substring(posicionDePeso - 1));
+                            precioXCamara = Double.parseDouble(texto.substring(posicionDePeso - 1).trim());
 
                             precios.setAdicionalCamara(precioXCamara);
 
@@ -104,7 +104,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 5:
 
-                            porcentajeMonitoreoCamara = Integer.parseInt(texto.substring(posicionDePorcentaje - 1));
+                            porcentajeMonitoreoCamara = Integer.parseInt(texto.substring(posicionDePorcentaje - 1).trim());
 
                             precios.setTasaCamaras(porcentajeMonitoreoCamara);
 
@@ -113,7 +113,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 6:
 
-                            porcentajeMonitoreoAlarma = Integer.parseInt(texto.substring(posicionDePorcentaje - 1));
+                            porcentajeMonitoreoAlarma = Integer.parseInt(texto.substring(posicionDePorcentaje - 1).trim());
 
                             precios.setTasaAlarmas(porcentajeMonitoreoAlarma);
 

@@ -21,5 +21,8 @@
         
         <t:Mensaje />
         
+        
+        <p><a href="recibos">Volver...</a></p>
+        
     </jsp:body>
 </t:PaginaMaestra>

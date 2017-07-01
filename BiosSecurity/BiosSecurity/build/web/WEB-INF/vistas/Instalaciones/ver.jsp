@@ -63,7 +63,7 @@
         </table>
         </c:if>
         
-        <p><a href="empleados">Volver...</a></p>
+        <p><a href="instalaciones">Volver...</a></p>
         
         <t:Mensaje />
     </jsp:body>

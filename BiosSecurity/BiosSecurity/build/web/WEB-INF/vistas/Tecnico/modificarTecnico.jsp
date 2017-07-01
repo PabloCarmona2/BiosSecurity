@@ -73,7 +73,7 @@
             document.getElementById('${idFoco}').focus();
             document.getElementById('${idFoco}').select();
         </script>
-                    
+                    <p><a href="tecnicos">Volver...</a></p>
         <t:Mensaje />
         
     </jsp:body>

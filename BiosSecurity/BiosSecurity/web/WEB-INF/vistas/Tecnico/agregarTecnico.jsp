@@ -70,7 +70,8 @@
                 </tr>
             </table>
         </form>
-                    
+      
+        <p><a href="tecnicos">Volver...</a></p>
         <t:Mensaje />
         
     </jsp:body>

@@ -28,6 +28,8 @@
                 </tr>
             </table>
         </form>
+        
+        <p><a href="dispositivos">Volver...</a></p>
         <t:Mensaje />
     </jsp:body>
 </t:PaginaMaestra>

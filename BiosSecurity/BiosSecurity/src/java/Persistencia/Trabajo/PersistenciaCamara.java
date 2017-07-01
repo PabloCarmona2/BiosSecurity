@@ -277,12 +277,15 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                Statement consulta = conexion.createStatement(); ResultSet resultadoConsulta = consulta.executeQuery("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventasrio = Dispositivos.NumInventario;")) {
+                Statement consulta = conexion.createStatement(); ResultSet resultadoConsulta = consulta.executeQuery("SELECT * FROM Camaras INNER JOIN Dispositivos ON Camaras.NumInventario = Dispositivos.NumInventario;")) {
            
             List<Camara> camaras = new ArrayList<Camara>();
             Camara camara = null;
             
             while(resultadoConsulta.next()){
+                
+                camara = new Camara();
+                
                 camara.setNumInventario(resultadoConsulta.getInt("NumInventario"));
                 camara.setDescripcionUbicacion(resultadoConsulta.getString("DescripcionUbicacion"));
                 camara.setExterior(resultadoConsulta.getBoolean("Exterior"));
