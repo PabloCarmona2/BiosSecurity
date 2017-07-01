@@ -16,7 +16,7 @@ public abstract class Servicio {
     
     private int numServicio;
     private Date fecha;
-    private boolean monitoreo;
+    private Boolean monitoreo;
     private Propiedad propiedadCliente;
 
     public int getNumServicio() {
@@ -51,7 +51,12 @@ public abstract class Servicio {
         this.propiedadCliente = propiedadCliente;
     }
     
-    public Servicio(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente){
+    public Servicio(){
+        
+        this(0,new Date(), null, null);
+    }
+    
+    public Servicio(int numServicio, Date fecha, Boolean monitoreo, Propiedad propiedadCliente){
         
         setNumServicio(numServicio);
         setFecha(fecha);

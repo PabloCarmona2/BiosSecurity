@@ -23,6 +23,10 @@ public class Tecnico extends Empleado{
         this.especializacion = especializacion;
     }
     
+    public Tecnico() {
+        this(0,null,null,new Date(),0,null);
+    }
+    
     public Tecnico(int cedula, String nombre, String clave, Date fIngreso, double sueldo, String especializacion) {
         super(cedula, nombre, clave, fIngreso, sueldo);
         

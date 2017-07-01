@@ -5,6 +5,7 @@
  */
 package DataTypes;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
  */
 public class ServicioVideoVigilancia extends Servicio{
     
-    private boolean terminal;
+    private Boolean terminal;
     private List<Camara> camaras;
 
     public List<Camara> getCamaras() {
@@ -29,11 +30,16 @@ public class ServicioVideoVigilancia extends Servicio{
         return terminal;
     }
 
-    public void setTerminal(boolean terminal) {
+    public void setTerminal(Boolean terminal) {
         this.terminal = terminal;
     }
     
-    public ServicioVideoVigilancia(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Camara> dispositivos, boolean terminal) {
+    
+    public ServicioVideoVigilancia() {
+        this(0,new Date(), null, null, new ArrayList<Camara>(), null);
+    }
+    
+    public ServicioVideoVigilancia(int numServicio, Date fecha, Boolean monitoreo, Propiedad propiedadCliente, List<Camara> dispositivos, Boolean terminal) {
         super(numServicio, fecha, monitoreo, propiedadCliente);
         
         setTerminal(terminal);

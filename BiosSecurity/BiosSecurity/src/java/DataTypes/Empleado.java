@@ -59,6 +59,10 @@ public abstract class Empleado {
         this.sueldo = sueldo;
     }
     
+    public Empleado(){
+        this(0,null,null,new Date(),0);
+    }
+    
     public Empleado(int cedula, String nombre, String clave, Date fIngreso, double sueldo){
         setCedula(cedula);
         setNombre(nombre);

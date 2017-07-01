@@ -5,6 +5,7 @@
  */
 package DataTypes;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,14 +15,14 @@ import java.util.List;
  */
 public class ServicioAlarma extends Servicio{
     
-    private int codAnulacion;
+    private Integer codAnulacion;
     private List<Alarma> alarmas;
 
     public int getCodAnulacion() {
         return codAnulacion;
     }
 
-    public void setCodAnulacion(int codAnulacion) {
+    public void setCodAnulacion(Integer codAnulacion) {
         this.codAnulacion = codAnulacion;
     }
 
@@ -34,9 +35,11 @@ public class ServicioAlarma extends Servicio{
     }
     
     
+    public ServicioAlarma() {
+        this(0, new Date(), null, null, new ArrayList<Alarma>(), null);
+    }
     
-    
-    public ServicioAlarma(int numServicio, Date fecha, boolean monitoreo, Propiedad propiedadCliente, List<Alarma> dispositivos,  int codAnulacion) {
+    public ServicioAlarma(int numServicio, Date fecha, Boolean monitoreo, Propiedad propiedadCliente, List<Alarma> dispositivos,  Integer codAnulacion) {
         super(numServicio, fecha, monitoreo, propiedadCliente);
         
         setCodAnulacion(codAnulacion);

@@ -57,6 +57,10 @@ public class Cliente {
         this.telefono = telefono;
     }
     
+    public Cliente(){
+        this(0,null,null,null,null);
+    }
+    
     public Cliente(int cedula, String nombre, String barrio, String dirCobro, String telefono){
         
         setCedula(cedula);

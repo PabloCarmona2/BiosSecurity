@@ -91,6 +91,7 @@ public class ControladorRecibos extends Controlador {
                         FileReader fr = new FileReader("\\Precios.txt");
                         BufferedReader br = new BufferedReader(fr);
                         Recibo recibo;
+                        
 
                         int renglon = 1;
                         String error = null;

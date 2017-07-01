@@ -23,6 +23,11 @@ public class Cobrador extends Empleado{
         this.transporte = transporte;
     }
 
+    public Cobrador() {
+        this(0,null,null,new Date(),0,null);
+        
+    }
+    
     public Cobrador(int cedula, String nombre, String clave, Date fIngreso, double sueldo, String transporte) {
         super(cedula, nombre, clave, fIngreso, sueldo);
         

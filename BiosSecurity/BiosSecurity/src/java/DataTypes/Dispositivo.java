@@ -30,6 +30,11 @@ public abstract class Dispositivo {
         this.descripcionUbicacion = descripcionUbicacion;
     }
     
+    public Dispositivo(){
+        
+        this(0,null);
+    }
+    
     public Dispositivo(Integer numInventario, String descripcionUbicacion){
         
         setNumInventario(numInventario);

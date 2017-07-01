@@ -12,7 +12,9 @@ import java.util.Date;
  * @author Geronimo
  */
 public class Administrador extends Empleado{
-    
+    public Administrador() {
+        this(0,null,null,new Date(),1);
+    }
     public Administrador(int cedula, String nombre, String clave, Date fIngreso, double sueldo) {
         super(cedula, nombre, clave, fIngreso, sueldo);
     }

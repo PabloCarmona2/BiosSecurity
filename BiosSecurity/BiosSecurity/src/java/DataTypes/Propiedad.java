@@ -48,6 +48,12 @@ public class Propiedad {
         this.dueño = dueño;
     }
     
+    public Propiedad(){
+        
+        this(0,null,null,null);
+        
+    }
+    
     public Propiedad(int idProp, String tipo, String direccion, Cliente dueño){
         
         setIdProp(idProp);

@@ -30,6 +30,10 @@ public class Camara extends Dispositivo{
         this.instalador = instalador;
     }
     
+    public Camara() {
+        this(0,null,null,null);
+    }
+    
     public Camara(Integer numInventario, String descripcionUbicacion, Boolean exterior, Tecnico instalador) {
         super(numInventario, descripcionUbicacion);
         
