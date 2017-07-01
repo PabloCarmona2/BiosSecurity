@@ -260,7 +260,7 @@ VALUES(NULL, NULL, 13, NULL, false);
 INSERT INTO Camaras
 VALUES(NULL, NULL, 14, NULL, false);
 
-INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+/*INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20170630, 10000, 7, 5, false);
 
 INSERT INTO LineaRecibo
@@ -286,7 +286,7 @@ INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20170630, 10000, 10, 5, false);
 
 INSERT INTO LineaRecibo
-VALUES(10000, 4, 5);
+VALUES(10000, 4, 5);*/
 
 #
 set @salida :="";
