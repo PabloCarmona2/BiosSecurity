@@ -30,6 +30,7 @@ public class ControladorInstalaciones extends Controlador {
     @Override
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
+            verificarLogueo(request, response);
             
             List<Servicio> servicios = new ArrayList<Servicio>();
             

@@ -29,6 +29,8 @@ public class ControladorTecnico extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
+            verificarLogueo(request, response);
+            
             List<Empleado> empleados = new ArrayList<Empleado>();
             
             if(request.getSession().getAttribute("empleadosTodosT") == null){

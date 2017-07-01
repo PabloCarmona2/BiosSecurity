@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import DataTypes.Empleado;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -14,6 +15,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.catalina.Session;
 
 /**
  *
@@ -67,7 +69,7 @@ abstract class Controlador extends HttpServlet {
                 despachador.forward(request, response);
             }
         } catch (Exception ex) {
-            System.out.println("¡ERROR! No se pudo mostrar la vista " + vista + ".");
+            cargarMensaje("¡ERROR! No se pudo mostrar la vista " + vista + ".", request);
         }
     }
     
@@ -85,7 +87,23 @@ abstract class Controlador extends HttpServlet {
         try {
             despacharMetodoAccion(request, response);
         } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ex) {
-            System.out.println("¡ERROR! No se pudo despachar el método de la acción solicitada.");
+            cargarMensaje("¡ERROR! No se pudo despachar el método de la acción solicitada.", request);
+        }
+    }
+    
+    protected void verificarLogueo(HttpServletRequest request, HttpServletResponse response) {
+        
+        try {
+            
+            if(request.getSession().getAttribute("empleadoLogueado") == null){
+                
+                request.getSession().setAttribute("mensajeLogueo", "No hay usuario logueado, debe loguearse para ingresar al sistema");
+                
+                response.sendRedirect("login");
+            }
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! al verificarla sesion", request);
         }
     }
     

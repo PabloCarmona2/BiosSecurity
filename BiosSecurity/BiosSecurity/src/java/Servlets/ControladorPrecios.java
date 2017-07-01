@@ -25,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
 public class ControladorPrecios extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         
+        verificarLogueo(request, response);
+        
         mostrarVista("index", request, response);
         
     }

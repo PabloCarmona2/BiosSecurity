@@ -18,6 +18,14 @@ public class ControladorLogin extends Controlador{
     
     @Override
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        if(request.getSession().getAttribute("mensajeLogueo") != null){
+            
+            cargarMensaje((String)request.getSession().getAttribute("mensajeLogueo"), request.getSession());
+            
+            mostrarVista("login", request, response);
+        }
+        
         if(request.getSession().getAttribute("empleadoLogueado") != null){
             mostrarVista("MenuPrincipal", request, response);
         }else{

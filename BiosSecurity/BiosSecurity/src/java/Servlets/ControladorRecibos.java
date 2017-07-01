@@ -37,6 +37,8 @@ public class ControladorRecibos extends Controlador {
     @Override
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         
+        verificarLogueo(request, response);
+        
         mostrarVista("index", request, response);
     }
     

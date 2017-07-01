@@ -30,6 +30,8 @@ public class ControladorDispositivo extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
+            verificarLogueo(request, response);
+            
             List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
             
             if(request.getSession().getAttribute("dispositivos") == null){
