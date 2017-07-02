@@ -217,4 +217,49 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
             throw new Exception(ex.getMessage());
         }
     }
+    
+    public List<Cobrador> ListarCobradores() throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM Cobradores INNER JOIN Empleados ON Cobradores.Cedula = Empleados.Cedula;"); 
+                ResultSet resultadoConsulta = consulta.executeQuery()) {
+           
+            
+            List<Cobrador> cobradores = new ArrayList<Cobrador>();
+            Cobrador cob;
+            
+            int _cedula;
+            String nombre;
+            String clave;
+            Date fIngreso;
+            double sueldo;
+            String transporte;
+            
+            while(resultadoConsulta.next()){
+                _cedula = resultadoConsulta.getInt("Cedula");
+                nombre = resultadoConsulta.getString("Nombre");
+                clave = resultadoConsulta.getString("Clave");
+                fIngreso = resultadoConsulta.getDate("FIngreso");
+                sueldo = resultadoConsulta.getDouble("Sueldo");
+                transporte = resultadoConsulta.getString("Transporte");
+                
+                cob = new Cobrador(_cedula, nombre, clave, fIngreso, sueldo, transporte);
+                
+                cobradores.add(cob);
+            }
+            
+            return cobradores;
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+        
+    }
+    
 }

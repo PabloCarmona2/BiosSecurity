@@ -185,8 +185,8 @@ public class LogicaEmpleado implements ILogicaEmpleado{
                 }
                 else if(tipo.equalsIgnoreCase("cobrador")){
 
-                    //cobradores = FabricaPersistencia.getPersistenciaCobrador().ListarCobradores();
-                     empleados.addAll(cobradores);
+                    cobradores = FabricaPersistencia.getPersistenciaCobrador().ListarCobradores();
+                    empleados.addAll(cobradores);
 
                 }
 

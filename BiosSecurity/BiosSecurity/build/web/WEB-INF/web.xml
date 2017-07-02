@@ -28,6 +28,10 @@
         <servlet-name>ControladorPrecios</servlet-name>
         <servlet-class>Servlets.ControladorPrecios</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ControladorCobrador</servlet-name>
+        <servlet-class>Servlets.ControladorCobrador</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>ControladorLogin</servlet-name>
         <url-pattern>/login</url-pattern>
@@ -55,6 +59,10 @@
     <servlet-mapping>
         <servlet-name>ControladorPrecios</servlet-name>
         <url-pattern>/precios</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControladorCobrador</servlet-name>
+        <url-pattern>/ControladorCobrador</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
