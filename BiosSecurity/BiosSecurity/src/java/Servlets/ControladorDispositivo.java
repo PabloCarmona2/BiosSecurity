@@ -30,12 +30,14 @@ public class ControladorDispositivo extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
+            verificarLogueo(request, response);
+            
             List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
             
             if(request.getSession().getAttribute("dispositivos") == null){
                 
                 dispositivos = FabricaLogica.GetLogicaDispositivo().Listar();
-                request.getSession().setAttribute("dispositivos", request);
+                request.getSession().setAttribute("dispositivos", dispositivos);
                 
             }else{
                 
@@ -66,7 +68,6 @@ public class ControladorDispositivo extends Controlador {
             mostrarVista("ver", request, response);
             
             return;
-            
         }
         
         try {
@@ -127,6 +128,12 @@ public class ControladorDispositivo extends Controlador {
             
             cargarMensaje("¡Dispositivo agregado con éxito!", request.getSession());
             
+            List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
+            dispositivos = FabricaLogica.GetLogicaDispositivo().Listar();
+            request.getSession().removeAttribute("dispositivos");
+            request.getSession().setAttribute("dispositivos", dispositivos);
+            
+            
             response.sendRedirect("dispositivos");
             
         } catch (Exception ex) {
@@ -143,6 +150,8 @@ public class ControladorDispositivo extends Controlador {
         
         try {
             
+            
+            
             numInventario = Integer.parseInt(request.getParameter("numInventario"));
             
         } catch (NumberFormatException ex) {
@@ -152,6 +161,27 @@ public class ControladorDispositivo extends Controlador {
             mostrarVista("eliminar", request, response);
             
             return;
+            
+        }
+        
+        try {
+            
+            Dispositivo dispositivo = FabricaLogica.GetLogicaDispositivo().Buscar(numInventario);
+            
+            if (dispositivo != null) {
+                
+                request.setAttribute("dispositivo", dispositivo);
+                cargarMensaje("¡Dispositivo encontrado!", request);
+                
+            } else {
+                
+                cargarMensaje("¡ERROR! No se encontró ningún dispositivo con el numero de inventario " + numInventario + ".", request);
+                
+            }
+            
+        } catch (Exception ex) {
+            
+            cargarMensaje("¡ERROR! Se produjo un error al buscar el dispositivo.", request);
             
         }
         
@@ -177,11 +207,18 @@ public class ControladorDispositivo extends Controlador {
         
         try {
             
-            FabricaLogica.GetLogicaDispositivo().Eliminar((Dispositivo)request.getAttribute("dispositivo"));
+            Dispositivo dispositivo = FabricaLogica.GetLogicaDispositivo().Buscar(Integer.parseInt(request.getParameter("numInventario")));
+            
+            FabricaLogica.GetLogicaDispositivo().Eliminar(dispositivo);
             
             cargarMensaje("¡Dispositivo eliminado con éxito!", request.getSession());
             
-            response.sendRedirect("tecnicos");
+            List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
+            dispositivos = FabricaLogica.GetLogicaDispositivo().Listar();
+            request.getSession().removeAttribute("dispositivos");
+            request.getSession().setAttribute("dispositivos", dispositivos);
+            
+            response.sendRedirect("dispositivos");
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al eliminar el dispositivo.", request);

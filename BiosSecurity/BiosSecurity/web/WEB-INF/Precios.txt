@@ -1,0 +1,6 @@
+Precio base alarmas - $ 25.0
+Precio base camaras - $ 35.0
+Adicional por alarma - $ 5.0
+Adicional por camara - $ 8.0
+Tasa de monitoreo alarmas - (%) 5
+Tasa de monitoreo camaras - (%) 15

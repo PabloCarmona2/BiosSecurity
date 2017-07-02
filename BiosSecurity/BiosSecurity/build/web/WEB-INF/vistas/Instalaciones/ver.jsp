@@ -45,7 +45,7 @@
             </c:if>
             <c:if test="${servicio.getClass().simpleName == 'ServicioVideoVigilancia'}">
 
-                <c:forEach items="${servicio.dispositivos}" var="dispositivo">
+                <c:forEach items="${servicio.camaras}" var="dispositivo">
                     <tr>
 
                         <td class="texto-centro">${dispositivo.numInventario}</td>
@@ -63,7 +63,7 @@
         </table>
         </c:if>
         
-        <p><a href="empleados">Volver...</a></p>
+        <p><a href="instalaciones">Volver...</a></p>
         
         <t:Mensaje />
     </jsp:body>

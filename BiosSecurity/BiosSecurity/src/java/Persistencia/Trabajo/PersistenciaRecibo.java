@@ -201,7 +201,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             CallableStatement consulta = null;
         
             try {
-                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/EjemploJDBC", "root", "root");
+                conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
             
                 consulta = conexion.prepareCall("{ CALL GenerarCabezalRecibo(?, ?, ?, ?, ?, ?, ?) }");
             
@@ -221,7 +221,9 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     consulta.setNull(4, java.sql.Types.INTEGER);
                     consulta.setBoolean(5, false);
                     consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
-                    consulta.registerOutParameter(7, java.sql.Types.INTEGER);
+                    consulta.registerOutParameter(7, java.sql.Types.BIGINT);
+                    
+                    consulta.executeUpdate();
 
                     error = consulta.getString(6);
 
@@ -230,12 +232,10 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     }
 
                     numeroRecibo = consulta.getInt(7);
-
-                    consulta.executeUpdate();
-
+                    
                     for(LineaRecibo l : r.getLineas()){
 
-                        PersistenciaLineaRecibo.GetInstancia().RegitrarEnRecibo(l, numeroRecibo);
+                        PersistenciaLineaRecibo.GetInstancia().RegitrarEnRecibo(l);
                     }
             }
             
@@ -258,8 +258,8 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     }
 
                     if (conexion != null) {
-                        conexion.close();
                         conexion.setAutoCommit(true);
+                        conexion.close();
                     }
                 } catch (Exception ex) {
                     throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");

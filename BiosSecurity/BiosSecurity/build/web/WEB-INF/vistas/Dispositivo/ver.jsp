@@ -11,7 +11,11 @@
 
 <t:PaginaMaestra titulo="Ver Dispositivo">
     <jsp:body>
+<<<<<<< HEAD
         <c:if test="${!empty empleado}">
+=======
+        <c:if test="${!empty dispositivo}">
+>>>>>>> 7083f51878665a69e2bf2ae23c683ac387c41d74
             <jsp:useBean id="dispositivo" type="DataTypes.Dispositivo" scope="request" />
             
             
@@ -19,7 +23,7 @@
                 <li><strong>NumInventario:</strong> <jsp:getProperty name="dispositivo" property="numInventario" /></li>
                     
                 <c:if test="${!empty dispositivo.instalador}">
-                    <li><strong>Instalador:</strong> <jsp:getProperty name="empleado" property="nombre" /></li>
+                    <li><strong>Instalador:</strong> Actualmente instalado en un servicio</li>
                 </c:if>
                 <c:if test="${empty dispositivo.instalador}">
                     <li><strong>Instalador:</strong> No se ha instalado este dispositivo</li>

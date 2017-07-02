@@ -14,12 +14,18 @@
 <t:PaginaMaestra titulo="Generacion de Recibos">
     <jsp:body>
         
-        <c:set var = "now" value = "<% = new java.util.Date()%>" />
-        <h2>Generar los recibos correspondientes al mes actual: <fmt:formatDate pattern = "MM" value = "${now}"/></h2>
-        
-        <p><input type="submit" name="accion" value="Generar" /></p>
+        <form method="post">
+            <h2>Generar los recibos correspondientes al mes actual: </h2>
+            <h2>${mes}</h2>
+
+            <p><input type="submit" name="accion" value="Generar" /></p>
+
+        </form>
         
         <t:Mensaje />
+        
+        
+        <p><a href="recibos">Volver...</a></p>
         
     </jsp:body>
 </t:PaginaMaestra>

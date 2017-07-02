@@ -20,5 +20,7 @@
         </ul>
         <t:Mensaje />
         
+        <p><a href="login">Volver...</a></p>
+        
     </jsp:body>
 </t:PaginaMaestra>

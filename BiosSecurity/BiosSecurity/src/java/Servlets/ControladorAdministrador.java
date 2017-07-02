@@ -27,6 +27,8 @@ public class ControladorAdministrador extends Controlador {
    public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
+            verificarLogueo(request, response);
+            
             List<Empleado> empleados = new ArrayList<Empleado>();
             
             if(request.getSession().getAttribute("empleadosTodos") == null || !(((List<Empleado>)request.getSession().getAttribute("empleadosTodos")).toArray()[0] instanceof Administrador) ){

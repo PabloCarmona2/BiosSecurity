@@ -19,6 +19,8 @@
             <li><a href="listaCobradores.jsp">Cobradores...</a></li>
         </ul>
         
+        <p><a href="login">Volver...</a></p>
+        
     </jsp:body>
 </t:PaginaMaestra>
 

@@ -29,7 +29,7 @@ public class PersistenciaLineaRecibo {
         return _instancia;
     }
     
-    public void RegitrarEnRecibo(LineaRecibo linea, int numRecibo) throws Exception{
+    public void RegitrarEnRecibo(LineaRecibo linea) throws Exception{
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
@@ -37,16 +37,15 @@ public class PersistenciaLineaRecibo {
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL RegistrarLineaEnRecibo(?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL RegistrarLineaEnRecibo(?, ?, ?) }")) {
            
             consulta.setDouble(1, linea.getImporte());
-            consulta.setInt(2, numRecibo);
-            consulta.setInt(3, linea.getServicio().getNumServicio());
-            consulta.registerOutParameter(4, java.sql.Types.VARCHAR);
+            consulta.setInt(2, linea.getServicio().getNumServicio());
+            consulta.registerOutParameter(3, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(4);
+            String error = consulta.getString(3);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);

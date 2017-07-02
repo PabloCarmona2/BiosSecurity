@@ -29,6 +29,8 @@ public class ControladorTecnico extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             
+            verificarLogueo(request, response);
+            
             List<Empleado> empleados = new ArrayList<Empleado>();
             
             if(request.getSession().getAttribute("empleadosTodosT") == null){
@@ -70,6 +72,13 @@ public class ControladorTecnico extends Controlador {
         try {
             
             cedula = Integer.parseInt(request.getParameter("cedula"));
+            
+            if(cedula == 0)
+            {
+                cargarMensaje("¡ERROR! La cédula no puede ser 0.", request);
+            
+                mostrarVista("agregarTecnico", request, response);
+            }
             
         } catch (NumberFormatException ex) {
             

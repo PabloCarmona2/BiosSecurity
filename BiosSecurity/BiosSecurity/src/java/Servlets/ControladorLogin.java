@@ -19,7 +19,19 @@ public class ControladorLogin extends Controlador{
     @Override
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         
-        mostrarVista("login", request, response);
+        if(request.getSession().getAttribute("mensajeLogueo") != null){
+            
+            cargarMensaje((String)request.getSession().getAttribute("mensajeLogueo"), request.getSession());
+            
+            mostrarVista("login", request, response);
+        }
+        
+        if(request.getSession().getAttribute("empleadoLogueado") != null){
+            mostrarVista("MenuPrincipal", request, response);
+        }else{
+            mostrarVista("login", request, response);
+        }
+        
     }   
     public void login_post(HttpServletRequest request, HttpServletResponse response){
         
@@ -50,7 +62,7 @@ public class ControladorLogin extends Controlador{
             //habria que preguntar que tipo de empleado es de acuerdo esto le mostramos la vista correspondiente
             Empleado empleado = FabricaLogica.GetLogicaEmpleado().LoginEmpleado(cedula, clave);
             if (empleado != null) {
-                request.setAttribute("empleado", empleado);
+                request.getSession().setAttribute("empleadoLogueado", empleado);
                 
                 cargarMensaje("¡Login exitoso!", request);
                 mostrarVista("MenuPrincipal", request, response);
@@ -67,8 +79,8 @@ public class ControladorLogin extends Controlador{
         mostrarVista("MenuPrincipal", request, response);
     }   
     public void logout_get(HttpServletRequest request, HttpServletResponse response){
-        if(request.getSession().getAttribute("empleado")!= null){
-            request.getSession().removeAttribute("empleado");
+        if(request.getSession().getAttribute("empleadoLogueado")!= null){
+            request.getSession().removeAttribute("empleadoLogueado");
             mostrarVista("login", request, response);
         }
     }

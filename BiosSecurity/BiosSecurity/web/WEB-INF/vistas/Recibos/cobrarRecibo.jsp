@@ -16,11 +16,12 @@
         
         <h2>Cobrar un recibo mediante su numero de recibo.</h2>
         <form method="post">
-            <p><input type="text" name="numRecibo" value="${param.buscar}"</p>
+            <p><input type="text" name="numRecibo" value="${param.numRecibo}"</p>
         
             <p><input type="submit" name="accion" value="Cobrar" /></p>
         </form>
         
+        <p><a href="recibos">Volver...</a></p>
         
         <t:Mensaje />
         

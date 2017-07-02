@@ -6,7 +6,9 @@
 package Servlets;
 
 import DataTypes.Cliente;
+import DataTypes.Cobrador;
 import DataTypes.LineaRecibo;
+import DataTypes.Precios;
 import DataTypes.Recibo;
 import DataTypes.Servicio;
 import DataTypes.ServicioAlarma;
@@ -16,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -36,11 +39,20 @@ public class ControladorRecibos extends Controlador {
     @Override
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         
+        verificarLogueo(request, response);
+        
         mostrarVista("index", request, response);
     }
     
     public void generar_get(HttpServletRequest request, HttpServletResponse response) {
-        
+       try{
+            String fecha = new SimpleDateFormat("MMMM").format(new Date());
+            request.setAttribute("mes", fecha);
+       } catch(Exception ex){
+           cargarMensaje("¡ERROR! se produjo un error al mostrar el mes", request);
+           
+           mostrarVista("index", request, response);
+       }
         mostrarVista("generacionRecibos", request, response);
         
     }
@@ -87,100 +99,39 @@ public class ControladorRecibos extends Controlador {
                         
                         linea.setImporte(0);
                         
-                        String texto;
-                        FileReader fr = new FileReader("\\Precios.txt");
-                        BufferedReader br = new BufferedReader(fr);
-                        Recibo recibo;
+                        String rutaRelativa = "/Precios.txt";
+                        String rutaAbsoluta = getServletContext().getRealPath(rutaRelativa);
                         
-
-                        int renglon = 1;
-                        String error = null;
-
-                        double precioAlarmas = 0;
-                        double precioCamaras = 0;
-                        double precioXAlarma = 0;
-                        double precioXCamara = 0;
-                        double porcentajeMonitoreoCamara = 0;
-                        double porcentajeMonitoreoAlarma = 0;
-
-                        while((texto = br.readLine()) != null){
-
-                            int posicionDePeso;
-                            posicionDePeso = texto.indexOf("$");
-
-                            int posicionDePorcentaje;
-                            posicionDePorcentaje = texto.indexOf(")");
-
-                            switch(renglon){
-                                case 1:
-
-                                    precioAlarmas = Double.parseDouble(texto.substring(posicionDePeso - 1));
-
-                                    renglon++;
-
-                                    break;
-                                case 2:
-
-                                    precioCamaras = Double.parseDouble(texto.substring(posicionDePeso - 1));
-
-                                    renglon++;
-
-                                    break;
-                                case 3:
-
-                                    precioXAlarma = Double.parseDouble(texto.substring(posicionDePeso - 1));
-
-                                    renglon++;
-
-                                    break;
-                                case 4:
-
-                                    precioXCamara = Double.parseDouble(texto.substring(posicionDePeso - 1));
-
-                                    renglon++;
-
-                                    break;
-                                case 5:
-
-                                    porcentajeMonitoreoCamara = Double.parseDouble(texto.substring(posicionDePorcentaje - 1));
-
-                                    renglon++;
-
-                                    break;
-                                case 6:
-
-                                    porcentajeMonitoreoAlarma = Double.parseDouble(texto.substring(posicionDePorcentaje - 1));
-
-                                    renglon++;
-
-                                    break;    
-                            }
-                        }
+                        Precios precios = FabricaLogica.GetLogicaPrecio().Obtener(rutaAbsoluta);
                         
-                        importe += (s instanceof ServicioAlarma? precioAlarmas : precioCamaras);
+                        importe += (s instanceof ServicioAlarma? precios.getBaseAlarmas() : precios.getBaseCamaras());
                         
                         int cantidadDispositivos = (s instanceof ServicioAlarma? ((ServicioAlarma)s).getAlarmas().size() : ((ServicioVideoVigilancia)s).getCamaras().size());
                         
-                        importe += (s instanceof ServicioAlarma? (cantidadDispositivos * precioXAlarma) : (cantidadDispositivos * precioXCamara));
+                        importe += (s instanceof ServicioAlarma? (cantidadDispositivos * precios.getAdicionalAlarma()) : (cantidadDispositivos * precios.getAdicionalCamara()));
                         
-                        importe += (s instanceof ServicioAlarma? (importe * Double.parseDouble("0." + porcentajeMonitoreoAlarma)) : (importe * Double.parseDouble("0." + porcentajeMonitoreoCamara)));
+                        importe += (s instanceof ServicioAlarma? (importe * Double.parseDouble("0." + precios.getTasaAlarmas())) : (importe * Double.parseDouble("0." + precios.getTasaCamaras())));
                         
+                        total += importe;
                         
                         linea.setImporte(importe);
                         linea.setServicio(s);
                         
                         lineas.add(linea);
+                        
                     }
                     
+                    cabezal.setTotal(total);
                     cabezal.setLineas(lineas);
-                    
-                    FabricaLogica.GetLogicaRecibo().GenerarRecibos(recibos);
 
-                    cargarMensaje("¡Recibos generados con éxito!", request.getSession());
-
-                    response.sendRedirect("recibos");
-
+                    recibos.add(cabezal);
                 }
+                
+                FabricaLogica.GetLogicaRecibo().GenerarRecibos(recibos);
+
+                cargarMensaje("¡Recibos generados con éxito!", request.getSession());
+
+                response.sendRedirect("recibos");
             }else {
                 
                 cargarMensaje("No hay servicios contratados, por lo tanto no se pueden generar los recibos!.", request);
@@ -214,6 +165,10 @@ public class ControladorRecibos extends Controlador {
                     return;
                 }
                 recibo.setCobrado(true);
+                
+                Cobrador cobrador = (Cobrador)request.getSession().getAttribute("empleadoLogueado");
+                
+                recibo.setCobrador(cobrador);
                 
                 FabricaLogica.GetLogicaRecibo().Cobrar(recibo);
                 

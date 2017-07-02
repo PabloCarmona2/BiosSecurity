@@ -260,7 +260,7 @@ VALUES(NULL, NULL, 13, NULL, false);
 INSERT INTO Camaras
 VALUES(NULL, NULL, 14, NULL, false);
 
-INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+/*INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20170630, 10000, 7, 5, false);
 
 INSERT INTO LineaRecibo
@@ -286,10 +286,9 @@ INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20170630, 10000, 10, 5, false);
 
 INSERT INTO LineaRecibo
-VALUES(10000, 4, 5);
+VALUES(10000, 4, 5);*/
 
 #
-set @salida :="";
 
 #call ModificarAdministrador(1,'aaaa',9090,20101010,1000,@salida);
 #call ModificarAdministrador(1,'aaaa',9090,)
@@ -695,8 +694,12 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
+<<<<<<< HEAD
 	SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
 	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+=======
+	SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+>>>>>>> 7083f51878665a69e2bf2ae23c683ac387c41d74
     
 	UPDATE Dispositivos
     SET DescripcionUbicacion = null
@@ -807,7 +810,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AltaTecnico(cedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, especializacion VARCHAR(7), OUT pError VARCHAR(500))
+CREATE procedure AltaTecnico(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, especializacion VARCHAR(7), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -823,7 +826,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF EXISTS(SELECT * FROM Tecnicos WHERE Cedula = cedula)
+    IF EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula)
     THEN
 		SET pError = 'Ya existe el tecnico que desea ingresar en el sistema!';
             
@@ -839,12 +842,12 @@ cuerpo:BEGIN
 	
     
 	INSERT INTO Empleados
-    VALUES(cedula, nombre, clave, fIngreso, sueldo);
+    VALUES(pCedula, nombre, clave, fIngreso, sueldo);
     
 	SET mensajeError = 'No se pudo agregar el tecnico correctamente!.';
 	
 	INSERT INTO Tecnicos
-	VALUES(especializacion, cedula);
+	VALUES(especializacion, pCedula);
 	
 	COMMIT;
     
@@ -995,12 +998,10 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo agregar el recibo correctamente!';
 	
     
-	INSERT INTO CabezalRecibo
+	INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
     VALUES(fecha, total, cliente, cobrador, cobrado);
     
     SET sinErrores = 0;
-    
-    SELECT pNumRecibo = NumRecibo FROM CabezalRecibo ORDER BY NumRecibo asc limit 1;
 	
 END//
 
@@ -1055,11 +1056,12 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure RegistrarLineaEnRecibo(importe double, pNumRecibo bigint, servicio bigint, OUT pError VARCHAR(500))
+CREATE procedure RegistrarLineaEnRecibo(IN _importe double,IN _servicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
     DECLARE sinErrores BIT;
+    DECLARE pNumRecibo BIGINT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
 	BEGIN
@@ -1070,21 +1072,18 @@ cuerpo:BEGIN
 		SET pError = mensajeError;
 	END;
     
-    
-    IF NOT EXISTS(SELECT * FROM CabezalRecibo WHERE NumRecibo = pNumRecibo)
-    THEN
-		SET pError = 'No existe el recibo en el que quiere agregar la linea!';
-            
-		LEAVE cuerpo;
-    END IF;
-    
-    
     SET sinErrores = 1;
     
 	SET mensajeError = 'No se pudo agregar la linea al recibo correctamente!';
     
-	INSERT INTO LineaRecibo
-    VALUES(importe, pNumRecibo, servicio);
+    SET pNumRecibo = (SELECT MAX(NumRecibo) FROM CabezalRecibo);
+    
+    SET FOREIGN_KEY_CHECKS = 0;
+    
+	INSERT INTO LineaRecibo(Importe, NumRecibo, Servicio)
+    VALUES(_importe, pNumRecibo, _servicio);
+    
+    SET FOREIGN_KEY_CHECKS = 1;
     
     SET sinErrores = 0;
 	
@@ -1196,8 +1195,7 @@ CREATE PROCEDURE ServicioAlarmaXCliente(pCliente bigint)
 BEGIN
 
 SELECT *
-FROM ServicioAlarmas INNER JOIN Servicios
-	
+FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio
 WHERE Servicios.Cliente = pCliente;
 
 END//
@@ -1215,7 +1213,7 @@ CREATE PROCEDURE ServicioCamaraXCliente(pCliente bigint)
 BEGIN
 
 SELECT *
-FROM ServicioVideoVigilancia INNER JOIN Servicios
+FROM ServicioVideoVigilancia INNER JOIN Servicios ON ServicioVideoVigilancia.NumServicio = Servicios.NumServicio
 WHERE Servicios.Cliente = pCliente;
 
 END//
@@ -1463,3 +1461,4 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
