@@ -162,18 +162,18 @@ public class PersistenciaCamara implements IPersistenciaCamara{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL DesinstalarCamara(?, ?) }")) {
-           
+                CallableStatement consulta = conexion.prepareCall("{ CALL DesinstalarCamara(?) }")) {
+                //saque el parametro de salida                
             consulta.setInt(1, camara.getNumInventario());
-            consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
+            //consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(6);
+            //String error = consulta.getString(2);
             
-            if(error != null){
-                throw new Exception("ERROR: " + error);
-            }
+//            if(error != null){
+//                throw new Exception("ERROR: " + error);
+//            }
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());

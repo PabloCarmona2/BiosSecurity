@@ -11,11 +11,9 @@
 
 <t:PaginaMaestra titulo="Ver Dispositivo">
     <jsp:body>
-<<<<<<< HEAD
-        <c:if test="${!empty empleado}">
-=======
+
         <c:if test="${!empty dispositivo}">
->>>>>>> 7083f51878665a69e2bf2ae23c683ac387c41d74
+
             <jsp:useBean id="dispositivo" type="DataTypes.Dispositivo" scope="request" />
             
             
