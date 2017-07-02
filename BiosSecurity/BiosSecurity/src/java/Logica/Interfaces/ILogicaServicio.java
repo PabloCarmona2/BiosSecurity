@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface ILogicaServicio {
     void InstalarDispositivo(Servicio servicio) throws Exception;
-    List<Servicio> Listar() throws Exception;
+    List<Servicio> Listar(String criterio) throws Exception;
     Servicio Buscar(int numServicio) throws Exception;
     void altaServicioAlarma(ServicioAlarma unServicio);
     void altaServicioVideo(ServicioVideoVigilancia unServicio);

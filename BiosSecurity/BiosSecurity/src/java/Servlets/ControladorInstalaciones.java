@@ -34,14 +34,32 @@ public class ControladorInstalaciones extends Controlador {
             
             List<Servicio> servicios = new ArrayList<Servicio>();
             
-            if(request.getSession().getAttribute("servicios") == null){
+            if(request.getParameter("buscar") != null){
+                try {
+            
+                    Integer.parseInt(request.getParameter("buscar"));
+
+                } catch (NumberFormatException ex) {
+
+                    cargarMensaje("¡ERROR! El numero de servicio ingresado no es válido.", request);
+
+                    mostrarVista("index", request, response);
+
+                    return;
+
+                }
+            }
+            
+            servicios = FabricaLogica.GetLogicaServicio().Listar(request.getParameter("buscar"));
+            
+            if(servicios.isEmpty()){
                 
-                servicios = FabricaLogica.GetLogicaServicio().Listar();
+                servicios = FabricaLogica.GetLogicaServicio().Listar("");
                 request.getSession().setAttribute("servicios", servicios);
                 
             }else{
                 
-                servicios = ((List<Servicio>)request.getSession().getAttribute("servicios"));
+                request.getSession().setAttribute("servicios", servicios);
             
             }
             
@@ -147,9 +165,6 @@ public class ControladorInstalaciones extends Controlador {
 
                         cargarMensaje("¡Alarma instalado con éxito!", request.getSession());
 
-                        List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
-                        request.getSession().setAttribute("servicios", servicios);
-
                         response.sendRedirect("instalaciones");
 
 
@@ -175,8 +190,6 @@ public class ControladorInstalaciones extends Controlador {
 
                         cargarMensaje("¡Camara instalada con éxito!", request.getSession());
 
-                        List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
-                        request.getSession().setAttribute("servicios", servicios);
 
                         response.sendRedirect("instalaciones");
 
@@ -218,8 +231,6 @@ public class ControladorInstalaciones extends Controlador {
             
                 cargarMensaje("¡Alarma instalado con éxito!", request.getSession());
                 
-                List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
-                request.getSession().setAttribute("servicios", servicios);
 
                 response.sendRedirect("instalaciones");
                 
@@ -246,8 +257,6 @@ public class ControladorInstalaciones extends Controlador {
             
                 cargarMensaje("¡Camara instalada con éxito!", request.getSession());
                 
-                List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
-                request.getSession().setAttribute("servicios", servicios);
 
                 response.sendRedirect("instalaciones");
                 
@@ -326,8 +335,6 @@ public class ControladorInstalaciones extends Controlador {
                 
                 cargarMensaje("¡Dispositivo desinstalado con éxito!", request.getSession());
                 
-                List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
-                request.getSession().setAttribute("servicios", servicios);
 
                 response.sendRedirect("instalaciones");
                 

@@ -78,7 +78,7 @@ public class LogicaEmpleado implements ILogicaEmpleado{
        }
        
        if(emp == null){
-           //falta cobrador
+           emp = FabricaPersistencia.GetPersistenciaCobrador().Buscar(cedula);
        }
        
        return emp; 
@@ -160,32 +160,60 @@ public class LogicaEmpleado implements ILogicaEmpleado{
         return empleado;
     }
     
-    public List<Empleado> Listar(String tipo) throws Exception {
+    public List<Empleado> Listar(String tipo, String criterio) throws Exception {
         try{
+            
             
             List<Empleado> empleados = new ArrayList<Empleado>();
             List<Tecnico> tecnicos = new ArrayList<Tecnico>();
             List<Cobrador> cobradores = new ArrayList<Cobrador>();
             List<Administrador> administradores = new ArrayList<Administrador>();
-
-            if(tipo.equalsIgnoreCase("admin")){
-                
-                administradores = FabricaPersistencia.GetPersistenciaAdministrador().ListarAdministrador();
-                empleados.addAll(administradores);
-                
-            }else if(tipo.equalsIgnoreCase("tecnico")){
-                
-                tecnicos = FabricaPersistencia.GetPersistenciaTecnico().ListarTecnicos();
-                empleados.addAll(tecnicos);
-            }
-            else if(tipo.equalsIgnoreCase("cobrador")){
-                
-                //cobradores = FabricaPersistencia.getPersistenciaCobrador().ListarCobradores();
-                 empleados.addAll(cobradores);
-                 
-            }
             
-            return empleados;
+            if(criterio == null || criterio.length() == 0){
+                
+                if(tipo.equalsIgnoreCase("admin")){
+
+                    administradores = FabricaPersistencia.GetPersistenciaAdministrador().ListarAdministrador();
+                    empleados.addAll(administradores);
+
+                }else if(tipo.equalsIgnoreCase("tecnico")){
+
+                    tecnicos = FabricaPersistencia.GetPersistenciaTecnico().ListarTecnicos();
+                    empleados.addAll(tecnicos);
+                }
+                else if(tipo.equalsIgnoreCase("cobrador")){
+
+                    //cobradores = FabricaPersistencia.getPersistenciaCobrador().ListarCobradores();
+                     empleados.addAll(cobradores);
+
+                }
+
+                return empleados;
+                
+            }else{
+                
+                if(tipo.equalsIgnoreCase("admin")){
+                    
+                    Administrador admin = (Administrador)this.Buscar(Integer.parseInt(criterio));
+                    administradores.add(admin);
+                    empleados.addAll(administradores);
+
+                }else if(tipo.equalsIgnoreCase("tecnico")){
+                    
+                    Tecnico tec = (Tecnico)this.Buscar(Integer.parseInt(criterio));
+                    tecnicos.add(tec);
+                    empleados.addAll(tecnicos);
+                }
+                else if(tipo.equalsIgnoreCase("cobrador")){
+
+                    Cobrador cob = (Cobrador)this.Buscar(Integer.parseInt(criterio));
+                    cobradores.add(cob);
+                    empleados.addAll(cobradores);
+
+                }
+                
+                return empleados;
+            }
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());

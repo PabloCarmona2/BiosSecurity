@@ -34,14 +34,33 @@ public class ControladorDispositivo extends Controlador {
             
             List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
             
-            if(request.getSession().getAttribute("dispositivos") == null){
+            if(request.getParameter("buscar") != null){
+                try {
+            
+                    Integer.parseInt(request.getParameter("buscar"));
+
+                } catch (NumberFormatException ex) {
+
+                    cargarMensaje("¡ERROR! El numero de inventario ingresado no es válido.", request);
+
+                    mostrarVista("index", request, response);
+
+                    return;
+
+                }
+            }
+            
+            
+            dispositivos = FabricaLogica.GetLogicaDispositivo().Listar(request.getParameter("buscar"));
+            
+            if(dispositivos.isEmpty()){
                 
-                dispositivos = FabricaLogica.GetLogicaDispositivo().Listar();
+                dispositivos = FabricaLogica.GetLogicaDispositivo().Listar(request.getParameter(""));
                 request.getSession().setAttribute("dispositivos", dispositivos);
                 
             }else{
                 
-                dispositivos = (List<Dispositivo>)request.getSession().getAttribute("dispositivos");
+                request.getSession().setAttribute("dispositivos", dispositivos);
             
             }
             
@@ -127,13 +146,6 @@ public class ControladorDispositivo extends Controlador {
             FabricaLogica.GetLogicaDispositivo().Agregar(dispositivo);
             
             cargarMensaje("¡Dispositivo agregado con éxito!", request.getSession());
-            
-            List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
-            dispositivos = FabricaLogica.GetLogicaDispositivo().Listar();
-            request.getSession().removeAttribute("dispositivos");
-            request.getSession().setAttribute("dispositivos", dispositivos);
-            
-            
             response.sendRedirect("dispositivos");
             
         } catch (Exception ex) {
@@ -212,11 +224,6 @@ public class ControladorDispositivo extends Controlador {
             FabricaLogica.GetLogicaDispositivo().Eliminar(dispositivo);
             
             cargarMensaje("¡Dispositivo eliminado con éxito!", request.getSession());
-            
-            List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
-            dispositivos = FabricaLogica.GetLogicaDispositivo().Listar();
-            request.getSession().removeAttribute("dispositivos");
-            request.getSession().setAttribute("dispositivos", dispositivos);
             
             response.sendRedirect("dispositivos");
             

@@ -78,25 +78,42 @@ public class LogicaServicio implements ILogicaServicio{
         }
     }
     
-    public List<Servicio> Listar() throws Exception{
+    public List<Servicio> Listar(String criterio) throws Exception{
         
         List<Servicio> servicios = new ArrayList<Servicio>();
-        List<ServicioAlarma> serviciosA = new ArrayList<ServicioAlarma>();
-        List<ServicioVideoVigilancia> serviciosV = new ArrayList<ServicioVideoVigilancia>();
         
-        try{
+        if(criterio == null || criterio.length() == 0)
+        {
             
-            serviciosA = FabricaPersistencia.getPersistenciaServicioAlarma().Listar();
-            serviciosV = FabricaPersistencia.getPersistenciaVideoVigilancia().Listar();
-            
-            servicios.addAll(serviciosA);
-            servicios.addAll(serviciosV);
-            
-            
-            return servicios;
-            
-        }catch (Exception ex){
-            throw new Exception(ex.getMessage());
+            List<ServicioAlarma> serviciosA = new ArrayList<ServicioAlarma>();
+            List<ServicioVideoVigilancia> serviciosV = new ArrayList<ServicioVideoVigilancia>();
+
+            try{
+
+                serviciosA = FabricaPersistencia.getPersistenciaServicioAlarma().Listar();
+                serviciosV = FabricaPersistencia.getPersistenciaVideoVigilancia().Listar();
+
+                servicios.addAll(serviciosA);
+                servicios.addAll(serviciosV);
+
+
+                return servicios;
+
+            }catch (Exception ex){
+                throw new Exception(ex.getMessage());
+            }
+        }else{
+            try{
+
+                Servicio servicio = this.Buscar(Integer.parseInt(criterio));
+                servicios.add(servicio);
+                
+                return servicios;
+
+            }catch (Exception ex){
+                throw new Exception(ex.getMessage());
+            }
+              
         }
         
     }

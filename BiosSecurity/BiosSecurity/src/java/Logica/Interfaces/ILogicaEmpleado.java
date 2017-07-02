@@ -20,6 +20,6 @@ public interface ILogicaEmpleado {
     void Modificar(Empleado emp) throws Exception;
     void Eliminar(Empleado emp) throws Exception;
     Empleado LoginEmpleado(int cedula, String clave)throws Exception;
-    List<Empleado> Listar(String tipo) throws Exception;
+    List<Empleado> Listar(String tipo, String criterio) throws Exception;
     
 }
