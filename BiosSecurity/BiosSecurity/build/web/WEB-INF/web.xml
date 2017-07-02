@@ -70,7 +70,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>ControladorCobrador</servlet-name>
-        <url-pattern>/ControladorCobrador</url-pattern>
+        <url-pattern>/cobradores</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
