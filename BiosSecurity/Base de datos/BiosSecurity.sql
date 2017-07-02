@@ -291,13 +291,13 @@ VALUES(10000, 4, 5);
 #
 set @salida :="";
 
-#call ModificarAdministrador(2,'aaaa',9090,20101010,1000);
-
+#call ModificarAdministrador(1,'aaaa',9090,20101010,1000,@salida);
+#call ModificarAdministrador(1,'aaaa',9090,)
 #delete from administradores where cedula = 2;
-#call EliminarAdministrador(2);
+#call modificarAdministrador(2);
 #UPDATE Empleados SET Nombre = 'asas', Clave = 2121 , empleados.FIngreso=20101010 , empleados.Sueldo=1212 WHERE Cedula = 2;
 #call BajaTecnico (4, @Salida);
-
+#call desinstalarCamara(5,@salida);
 
 #
 #
@@ -425,7 +425,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure DesinstalarCamara(numeroInventario bigint, OUT pError VARCHAR(500))
+CREATE procedure DesinstalarCamara(pnumeroInventario bigint,pError varchar(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
@@ -440,7 +440,7 @@ cuerpo:BEGIN
 		SET pError = mensajeError;
 	END;
     
-    IF NOT EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario) 
+    IF NOT EXISTS(SELECT * FROM Camaras WHERE NumInventario = pnumeroInventario) 
     THEN
 			SET pError = 'No existe la camara que desea desinstalar!';
             
@@ -453,17 +453,17 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
-	SET mensajeError = 'No se pudo desinstalar la camara correctamente!';
-	
-	UPDATE Camaras
-    SET Servicio = null, Tecnico = null, Exterior = null
-    WHERE Camaras.NumInventario = numeroInventario;
+	SET pError = 'No se pudo desinstalar la camara correctamente!';
     
-    SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
-    
-    UPDATE Dispositivos
+	 UPDATE Dispositivos
     SET DescripcionUbicacion = null
-    WHERE Dispositivos.NumInventario = numeroInventario;
+    WHERE Dispositivos.NumInventario = pnumeroInventario;
+	
+    SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
+    
+    UPDATE Camaras
+    SET Servicio = null, Tecnico = null, Exterior = null
+    WHERE Camaras.NumInventario = pnumeroInventario;
     
 	SET FOREIGN_KEY_CHECKS = 1;
     
@@ -695,15 +695,15 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
-	SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
-	
+	SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
+	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
     
 	UPDATE Dispositivos
     SET DescripcionUbicacion = null
     WHERE NumInventario = numeroInventario;
     
-	SET mensajeError = 'No se pudo desinstalar la alarma correctamente!.';
-	
+	SET pError = 'No se pudo desinstalar la alarma correctamente!.';
+	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
 	UPDATE Alarmas
     SET Servicio = null, Tecnico = null
     WHERE NumInventario = numeroInventario;
@@ -1360,15 +1360,26 @@ END//
 DELIMITER ;
 DELIMITER //
 
-CREATE procedure ModificarAdministrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double)
+CREATE procedure ModificarAdministrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, OUT pError varchar(500))
 cuerpo:BEGIN
 
+	DECLARE mensajeError VARCHAR(50);
  
- UPDATE Empleados SET empleados.Nombre = nombre, empleados.Clave = clave , empleados.FIngreso= fIngreso , empleados.Sueldo= sueldo WHERE empleados.Cedula = pCedula;
-    
-
-    
+    IF NOT EXISTS(SELECT * FROM administradores WHERE Cedula = pCedula)
+    THEN
+		SET pError = 'No existe el administrativo que desea modificar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
 	
+	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
+    
+	SET FOREIGN_KEY_CHECKS = 0;
+    
+	UPDATE Empleados
+    SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
+    WHERE Cedula = pCedula;
+    
 END//
 
 DELIMITER ;
@@ -1390,7 +1401,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF NOT EXISTS(SELECT * FROM Administradores WHERE Cedula = pCedula)
+    IF NOT EXISTS(SELECT * FROM empleados WHERE Cedula = pCedula)
     THEN
 		SET pError = 'El tecnico que desea eliminar no existe en el sistema!';
             

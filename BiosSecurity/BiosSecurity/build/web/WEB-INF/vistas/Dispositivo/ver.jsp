@@ -12,7 +12,7 @@
 <t:PaginaMaestra titulo="Ver Dispositivo">
     <jsp:body>
         <c:if test="${!empty empleado}">
-            <jsp:useBean id="dispositivo" type="DataTypes.Camara" scope="request" />
+            <jsp:useBean id="dispositivo" type="DataTypes.Dispositivo" scope="request" />
             
             
             <ul>
