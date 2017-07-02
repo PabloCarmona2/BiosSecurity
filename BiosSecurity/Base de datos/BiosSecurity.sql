@@ -1140,6 +1140,36 @@ DELIMITER ;
 
 DELIMITER //
 
+CREATE procedure EditarServicioAlarma(pNumServicio bigint, pFecha datetime, pMonitoreo boolean, pPropiedad bigint, pCliente bigint, pCodAnulacion bigint, OUT pError varchar(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+ 
+    IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE NumServicio = pNumServicio)
+    THEN
+		SET pError = 'No existe el servicio a modificar';
+		LEAVE cuerpo;
+    END IF;
+	
+	SET mensajeError = 'No se pudo modificar el servicio correctamente!';
+    
+	SET FOREIGN_KEY_CHECKS = 0;
+    
+	UPDATE biossecurity.servicios
+    SET Fecha = pFecha, Monitoreo = pMonitoreo, Propiedad = pPropiedad, Cliente = pCliente
+    WHERE NumServicio = pNumServicio;
+    
+    UPDATE biossecurity.servicioalarmas
+    SET CodAnulacion = pCodAnulacion
+    WHERE NumServicio = pNumServicio;
+    
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+
 CREATE procedure EliminarServicioAlarma(pNumservicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
@@ -1260,6 +1290,9 @@ END//
 
 DELIMITER ;
 
+
+
+
 DELIMITER //
 
 CREATE procedure EliminarServicioVideo(pNumservicio bigint, OUT pError VARCHAR(500))
@@ -1306,6 +1339,35 @@ cuerpo:BEGIN
     SET transaccionActiva = 0;
     
 	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure EditarServicioVideo(pNumServicio bigint, pFecha datetime, pMonitoreo boolean, pPropiedad bigint, pCliente bigint, pTerminal boolean, OUT pError varchar(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+ 
+    IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE NumServicio = pNumServicio)
+    THEN
+		SET pError = 'No existe el servicio a modificar';
+		LEAVE cuerpo;
+    END IF;
+	
+	SET mensajeError = 'No se pudo modificar el servicio correctamente!';
+    
+	SET FOREIGN_KEY_CHECKS = 0;
+    
+	UPDATE biossecurity.servicios
+    SET Fecha = pFecha, Monitoreo = pMonitoreo, Propiedad = pPropiedad, Cliente = pCliente
+    WHERE NumServicio = pNumServicio;
+    
+    UPDATE biossecurity.serviciovideovigilancia
+    SET Terminal = pTerminal
+    WHERE NumServicio = pNumServicio;
+    
 END//
 
 DELIMITER ;

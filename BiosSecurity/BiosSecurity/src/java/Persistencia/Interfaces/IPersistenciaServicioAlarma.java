@@ -19,6 +19,8 @@ public interface IPersistenciaServicioAlarma {
     List<ServicioAlarma> ListaXCliente(Cliente cliente) throws Exception;
     List<ServicioAlarma> Listar() throws Exception;
     void altaServicioAlarma(ServicioAlarma servicio)throws Exception;
+    void eliminarServicioAlarma(ServicioAlarma servicio)throws Exception;
+    void editarServicioAlarma(ServicioAlarma unServicio)throws Exception;
     void DesinstalarDispositivo(ServicioAlarma servicio) throws Exception;
     
 }
