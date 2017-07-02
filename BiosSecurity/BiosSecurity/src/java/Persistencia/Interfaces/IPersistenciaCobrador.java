@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface IPersistenciaCobrador {
     Cobrador Buscar(int cedula) throws Exception;
-    
+    void AgregarCobrador(Cobrador Cob) throws Exception;
     Cobrador LoginCobrador(int cedula, String clave)throws Exception;
+    void EliminarCobrador(Cobrador Cob) throws Exception;
+    void EditarCobrador(Cobrador Cob) throws Exception;
 }

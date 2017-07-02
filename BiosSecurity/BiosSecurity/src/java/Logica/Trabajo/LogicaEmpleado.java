@@ -57,7 +57,9 @@ public class LogicaEmpleado implements ILogicaEmpleado{
                     throw new Exception("La longitud del texto ingresado no coincide con las especializaciones disponibles!");
                 }
             }else if(empleado instanceof Cobrador){
-                //codigo para cobrador (comprobarias el tema del transporte)
+                if(((Cobrador)empleado).getTransporte().length() > 20){
+                    throw new Exception("La longitud del texto referido al transporte no puede superar los 20 caracteres");
+                }
             }
             
             
@@ -78,7 +80,7 @@ public class LogicaEmpleado implements ILogicaEmpleado{
        }
        
        if(emp == null){
-           //falta cobrador
+           emp = Persistencia.FabricaPersistencia.getPersistenciaCobrador().Buscar(cedula);
        }
        
        return emp; 
@@ -98,8 +100,8 @@ public class LogicaEmpleado implements ILogicaEmpleado{
        
         }else if(emp instanceof Cobrador){
             
-            //falta cobrador
-        
+            Persistencia.FabricaPersistencia.GetPersistenciaCobrador().AgregarCobrador((Cobrador)emp);
+            
         }
     }
     
@@ -117,7 +119,7 @@ public class LogicaEmpleado implements ILogicaEmpleado{
         
         }else if(emp instanceof Cobrador){
            
-            //falta cobrador
+            Persistencia.FabricaPersistencia.GetPersistenciaCobrador().EditarCobrador((Cobrador)emp);
        
         }
     }
@@ -134,7 +136,7 @@ public class LogicaEmpleado implements ILogicaEmpleado{
         
         }else if(emp instanceof Cobrador){
            
-            //falta cobrador
+            Persistencia.FabricaPersistencia.GetPersistenciaCobrador().EliminarCobrador((Cobrador)emp);
         
         }
     }

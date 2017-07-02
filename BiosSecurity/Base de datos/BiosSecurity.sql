@@ -1524,3 +1524,128 @@ END//
 
 DELIMITER ;
 
+#---------------------------------SP Cobradores---------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------
+
+DELIMITER //
+
+CREATE procedure AgregarCobrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, Transporte varchar(20), OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+	
+	SET mensajeError = 'No se pudo agregar el empleado correctamente!';
+	
+    
+	INSERT INTO biossecurity.empleados
+    VALUES(pCedula, nombre, clave, fIngreso, sueldo);
+    
+	SET mensajeError = 'No se pudo agregar el cobrador correctamente!.';
+	
+	INSERT INTO biossecurity.cobradores
+	VALUES(Transporte, pCedula);
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+    
+	
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure ModificarCobrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, pTransporte varchar(20), OUT pError varchar(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+ 
+    IF NOT EXISTS(SELECT * FROM biossecurity.empleados WHERE Cedula = pCedula)
+    THEN
+		SET pError = 'No existe el cobrador que desea modificar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+	
+	SET mensajeError = 'No se pudo modificar el cobrador correctamente!';
+    
+	SET FOREIGN_KEY_CHECKS = 0;
+    
+	UPDATE biossecurity.empleados
+    SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
+    WHERE Cedula = pCedula;
+    
+    update biossecurity.cobradores
+    set Transporte = pTransporte
+    where Cedula = pCedula;
+    
+END//
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE procedure EliminarCobrador(pCedula bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE transaccionActiva BIT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    
+    IF NOT EXISTS(SELECT * FROM empleados WHERE Cedula = pCedula)
+    THEN
+		SET pError = 'El cobrador que desea eliminar no existe en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
+    
+    SET transaccionActiva = 1;
+    
+	START TRANSACTION; 
+    
+    SET FOREIGN_KEY_CHECKS = 0;
+	
+	SET mensajeError = 'No se pudo eliminar el cobrador correctamente!';
+	
+    DELETE FROM biossecurity.cobradores WHERE cobradores.Cedula = pCedula;
+	 
+    
+	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
+	
+	DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
+    
+    SET FOREIGN_KEY_CHECKS = 1;
+	
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+	
+END//
+
+
+DELIMITER ;

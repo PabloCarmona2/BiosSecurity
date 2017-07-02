@@ -12,6 +12,7 @@ import DataTypes.Recibo;
 import DataTypes.Cobrador;
 import DataTypes.Tecnico;
 import Persistencia.Interfaces.IPersistenciaCobrador;
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -121,5 +122,99 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
             }
         }
          return cobrador;
+    }
+    
+    public void AgregarCobrador(Cobrador Cob) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL AgregarCobrador(?, ?, ?, ?, ?, ?, ?) }")) {
+           
+            consulta.setInt(1, Cob.getCedula());
+            consulta.setString(2, Cob.getNombre());
+            consulta.setString(3, Cob.getClave());
+            consulta.setDate(4, new java.sql.Date(Cob.getfIngreso().getTime()));
+            consulta.setDouble(5, Cob.getSueldo());
+            consulta.setString(6, Cob.getTransporte());
+     
+           consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(6);
+            
+           if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void EliminarCobrador(Cobrador Cob) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL EliminarCobrador(?, ?) }")) {
+           
+            consulta.setInt(1, Cob.getCedula());
+            consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(2);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void EditarCobrador(Cobrador Cob) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL ModificarCobrador(?, ?, ?, ?, ?, ?, ?) }")) {
+           
+            consulta.setInt(1, Cob.getCedula());
+            consulta.setString(2, Cob.getNombre());
+            consulta.setString(3, Cob.getClave());
+            consulta.setDate(4, new java.sql.Date(Cob.getfIngreso().getTime()));
+            consulta.setDouble(5, Cob.getSueldo());
+            consulta.setString(6, Cob.getTransporte());
+            
+             consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(6);
+            
+           if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
     }
 }
