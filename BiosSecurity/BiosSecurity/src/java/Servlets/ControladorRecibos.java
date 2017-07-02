@@ -6,6 +6,7 @@
 package Servlets;
 
 import DataTypes.Cliente;
+import DataTypes.Cobrador;
 import DataTypes.LineaRecibo;
 import DataTypes.Precios;
 import DataTypes.Recibo;
@@ -164,6 +165,10 @@ public class ControladorRecibos extends Controlador {
                     return;
                 }
                 recibo.setCobrado(true);
+                
+                Cobrador cobrador = (Cobrador)request.getSession().getAttribute("empleadoLogueado");
+                
+                recibo.setCobrador(cobrador);
                 
                 FabricaLogica.GetLogicaRecibo().Cobrar(recibo);
                 
