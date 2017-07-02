@@ -80,11 +80,7 @@ public class LogicaEmpleado implements ILogicaEmpleado{
        }
        
        if(emp == null){
-<<<<<<< HEAD
            emp = Persistencia.FabricaPersistencia.getPersistenciaCobrador().Buscar(cedula);
-=======
-           emp = FabricaPersistencia.GetPersistenciaCobrador().Buscar(cedula);
->>>>>>> 8d91881f0cfe50953e0efb1f58134388a28cedd2
        }
        
        return emp; 
