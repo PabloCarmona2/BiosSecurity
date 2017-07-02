@@ -118,32 +118,36 @@ public class LogicaServicio implements ILogicaServicio{
         
     }
     
-    public void altaServicio(Servicio unServicio){
+    public void altaServicio(Servicio unServicio) throws Exception{
+        
         if(unServicio instanceof ServicioAlarma){
+            
             try{
-            FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma((ServicioAlarma)unServicio);
-        }catch (Exception ex){
-            try {
+                
+                FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma((ServicioAlarma)unServicio);
+                
+            }catch (Exception ex){
+                
                 throw new Exception(ex.getMessage());
-            } catch (Exception ex1) {
-                Logger.getLogger(LogicaServicio.class.getName()).log(Level.SEVERE, null, ex1);
+                
             }
-        }
         }
         else if(unServicio instanceof ServicioVideoVigilancia){
-        try{
-            FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia((ServicioVideoVigilancia)unServicio);
-        }catch (Exception ex){
-            try {
+            
+            try{
+                
+                FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia((ServicioVideoVigilancia)unServicio);
+                
+            }catch (Exception ex){
+                
                 throw new Exception(ex.getMessage());
-            } catch (Exception ex1) {
-                Logger.getLogger(LogicaServicio.class.getName()).log(Level.SEVERE, null, ex1);
+                
             }
         }
-    }
     }
     
     public void EliminarServicio(Servicio unServicio)throws Exception{
+        
         if (unServicio instanceof ServicioAlarma ){
             
           Persistencia.FabricaPersistencia.getPersistenciaServicioAlarma().eliminarServicioAlarma((ServicioAlarma)unServicio);
@@ -156,12 +160,18 @@ public class LogicaServicio implements ILogicaServicio{
     }
     
     public void EditarServicio(Servicio unServicio)throws Exception{
+        
         Validar(unServicio);
+        
         if(unServicio instanceof ServicioAlarma){
+            
             Persistencia.FabricaPersistencia.getPersistenciaServicioAlarma().editarServicioAlarma((ServicioAlarma)unServicio);
+            
         }
         else if(unServicio instanceof ServicioVideoVigilancia){
+            
             Persistencia.FabricaPersistencia.getPersistenciaVideoVigilancia().editarServicioVideoVigilancia((ServicioVideoVigilancia)unServicio);
+            
         }
         
     }
@@ -173,13 +183,17 @@ public class LogicaServicio implements ILogicaServicio{
             servicio = FabricaPersistencia.getPersistenciaServicioAlarma().Buscar(numServicio);
 
             if(servicio == null){
+                
                 servicio = FabricaPersistencia.getPersistenciaVideoVigilancia().Buscar(numServicio);
+                
             }
             
             return servicio;
             
         }catch(Exception ex){
+            
             throw new Exception(ex.getMessage());
+            
         }
     }
     

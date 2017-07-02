@@ -172,7 +172,7 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
                 numServicio = resultadoConsulta.getInt("NumServicio");
                 fecha = resultadoConsulta.getDate("Fecha");
                 monitoreo = resultadoConsulta.getBoolean("Monitoreo");
-                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"));
+                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"), cliente.getCedula());
                 terminal = resultadoConsulta.getBoolean("Terminal");
                 
                 dispositivos = PersistenciaCamara.GetInstancia().ListarXServicio(numServicio);
@@ -324,7 +324,8 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
                 numServicio = resultadoConsulta.getInt("NumServicio");
                 fecha = resultadoConsulta.getDate("Fecha");
                 monitoreo = resultadoConsulta.getBoolean("Monitoreo");
-                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"));
+                Cliente cliente = PersistenciaCliente.GetInstancia().Buscar(resultadoConsulta.getInt("Cliente"));
+                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"), cliente.getCedula());
                 terminal = resultadoConsulta.getBoolean("Terminal");
                 
                 dispositivos = PersistenciaCamara.GetInstancia().ListarXServicio(numServicio);

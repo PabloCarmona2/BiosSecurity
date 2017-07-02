@@ -56,8 +56,11 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
             consulta.setInt(5, servicio.getCodAnulacion());
      
             consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            
             consulta.executeUpdate();
+            
             String error = consulta.getString(7);
+            
             if(error != null){
                 throw new Exception("ERROR: " + error);
             }
@@ -75,14 +78,17 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL EliminarServicioAlarma(?, ?) }")) {           
+                CallableStatement consulta = conexion.prepareCall("{ CALL EliminarServicioAlarma(?, ?) }")) {   
+            
             consulta.setInt(1, servicio.getNumServicio());
             consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
             consulta.executeUpdate();           
             String error = consulta.getString(2);
+            
             if(error != null){
                 throw new Exception("Error: " + error);
             }
+            
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
         }
@@ -249,7 +255,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
                 numServicio = resultadoConsulta.getInt("NumServicio");
                 fecha = resultadoConsulta.getDate("Fecha");
                 monitoreo = resultadoConsulta.getBoolean("Monitoreo");
-                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"));
+                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"), cliente.getCedula());
                 codigoAnulacion = resultadoConsulta.getInt("CodAnulacion");
                 
                 dispositivos = PersistenciaAlarma.GetInstancia().ListarXServicio(numServicio);
@@ -319,7 +325,8 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
                 numServicio = resultadoConsulta.getInt("NumServicio");
                 fecha = resultadoConsulta.getDate("Fecha");
                 monitoreo = resultadoConsulta.getBoolean("Monitoreo");
-                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"));
+                Cliente cliente = PersistenciaCliente.GetInstancia().Buscar(resultadoConsulta.getInt("Cliente"));
+                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"), cliente.getCedula());
                 codigoAnulacion = resultadoConsulta.getInt("CodAnulacion");
                 
                 dispositivos = PersistenciaAlarma.GetInstancia().ListarXServicio(numServicio);

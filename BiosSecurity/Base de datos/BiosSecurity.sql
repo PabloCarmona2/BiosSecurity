@@ -694,12 +694,8 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
-<<<<<<< HEAD
 	SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
 	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
-=======
-	SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
->>>>>>> 7083f51878665a69e2bf2ae23c683ac387c41d74
     
 	UPDATE Dispositivos
     SET DescripcionUbicacion = null
@@ -707,6 +703,7 @@ cuerpo:BEGIN
     
 	SET pError = 'No se pudo desinstalar la alarma correctamente!.';
 	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+    
 	UPDATE Alarmas
     SET Servicio = null, Tecnico = null
     WHERE NumInventario = numeroInventario;
@@ -1503,7 +1500,16 @@ CREATE procedure ModificarCliente(pCedula bigint, nombre VARCHAR(25), barrio VAR
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(50);
+    DECLARE sinErrores BIT;
 	
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF sinErrores THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
 	
     IF NOT EXISTS(SELECT * FROM clientes WHERE Cedula = pCedula)
     THEN
@@ -1512,15 +1518,83 @@ cuerpo:BEGIN
 		LEAVE cuerpo;
     END IF;
 
+	Set sinErrores = 1;
+
 	SET mensajeError = 'No se pudo modificar el cliente correctamente!';
 	
     
 	UPDATE clientes
     SET Nombre = nombre, Barrio = barrio, DirCobro = dircobro, Telefono = telefono
     WHERE Cedula = pCedula;
-    
+	
+    Set sinErrores = 0;
 	
 END//
 
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE AltaCliente(pCedula bigint, nombre VARCHAR(25), barrio VARCHAR(20),  telefono VARCHAR(20),  dirCobro VARCHAR(25), OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+    DECLARE sinErrores BIT;
+	
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF sinErrores THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+	
+    IF exists (SELECT * FROM clientes WHERE Cedula = pCedula)
+    THEN
+		SET pError = 'Ya existe el cliente que desea agregar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+	
+    Set sinErrores = 1;
+
+	SET mensajeError = 'No se pudo dar de alta el cliente correctamente!';
+	
+    
+	INSERT INTO clientes (Cedula, Nombre, Barrio, DirCobro, Telefono)
+    VALUES(pCedula, nombre, barrio, dirCobro, telefono);
+    
+    SET sinErrores = 0;
+END//
+
+DELIMITER ;
+
+
+DELIMITER //
+CREATE PROCEDURE AltaPropiedad(tipo VARCHAR(20), direccion VARCHAR(25),  pCliente bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(50);
+	DECLARE pIdProp BIGINT;
+    DECLARE sinErrores BIT;
+
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF sinErrores THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+
+	SET mensajeError = 'No se pudo dar de alta el cliente correctamente!';
+	
+    SET pIdProp = (SELECT MAX(IdProp) FROM Propiedades WHERE Cliente = pCliente);
+    
+    
+	INSERT INTO Propiedades (IdProp, Tipo, Direccion, Cliente)
+    VALUES(pIdProp, tipo, direccion, pCliente);
+
+END//
+
+DELIMITER ;

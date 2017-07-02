@@ -84,7 +84,7 @@ public class ControladorInstalaciones extends Controlador {
             
             cargarMensaje("¡ERROR! El numero de servicio no es válido.", request);
             
-            mostrarVista("ver", request, response);
+            mostrarVista("index", request, response);
             
             return;
             
@@ -104,10 +104,16 @@ public class ControladorInstalaciones extends Controlador {
                 
                 cargarMensaje("¡ERROR! No se encontró ningún servicio con el numero de servicio " + numServicio + ".", request);
                 
+                mostrarVista("index", request, response);
+                
+                return;
+                
             }
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al buscar el servicio.", request);
+            
+            mostrarVista("index", request, response);
         }
         
         mostrarVista("ver", request, response);

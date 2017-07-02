@@ -18,7 +18,7 @@ public interface ILogicaServicio {
     void InstalarDispositivo(Servicio servicio) throws Exception;
     List<Servicio> Listar(String criterio) throws Exception;
     Servicio Buscar(int numServicio) throws Exception;
-    void altaServicio(Servicio unServicio);
+    void altaServicio(Servicio unServicio)throws Exception;
     void EliminarServicio(Servicio unServicio)throws Exception;
     void EditarServicio(Servicio unServicio)throws Exception;
     void DesinstalarDispositivo(Servicio servicio) throws Exception;

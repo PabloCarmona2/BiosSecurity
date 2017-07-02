@@ -221,4 +221,35 @@ public class PersistenciaCliente implements IPersistenciaCliente{
             throw new Exception(ex.getMessage());
         }
     }
+    
+    public void Alta(Cliente cliente) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaCliente(?, ?, ?, ?, ?,?) }")) {
+           
+            consulta.setInt(1, cliente.getCedula());
+            consulta.setString(2, cliente.getNombre());
+            consulta.setString(3, cliente.getBarrio());
+            consulta.setString(4, cliente.getTelefono());
+            consulta.setString(5, cliente.getDirCobro());
+            consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(6);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
 }
