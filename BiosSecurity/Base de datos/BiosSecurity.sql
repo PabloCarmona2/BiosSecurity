@@ -1569,7 +1569,6 @@ END//
 
 DELIMITER ;
 
-<<<<<<< HEAD
 
 DELIMITER //
 CREATE PROCEDURE AltaPropiedad(tipo VARCHAR(20), direccion VARCHAR(25),  pCliente bigint, OUT pError VARCHAR(500))
@@ -1582,7 +1581,26 @@ cuerpo:BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
 	BEGIN
 		IF sinErrores THEN
-=======
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+
+	SET mensajeError = 'No se pudo dar de alta el cliente correctamente!';
+	
+    SET pIdProp = (SELECT MAX(IdProp) FROM Propiedades WHERE Cliente = pCliente);
+    
+    
+	INSERT INTO Propiedades (IdProp, Tipo, Direccion, Cliente)
+    VALUES(pIdProp, tipo, direccion, pCliente);
+
+END//
+
+DELIMITER ;
+
+
+
 #---------------------------------SP Cobradores---------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------
 
@@ -1597,25 +1615,12 @@ cuerpo:BEGIN
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
 	BEGIN
 		IF transaccionActiva THEN
->>>>>>> c7a7b2a9b5c3b795dda89d8ad71f9b071a31a649
 			ROLLBACK;
         END IF;
 		
 		SET pError = mensajeError;
 	END;
-
-<<<<<<< HEAD
-	SET mensajeError = 'No se pudo dar de alta el cliente correctamente!';
-	
-    SET pIdProp = (SELECT MAX(IdProp) FROM Propiedades WHERE Cliente = pCliente);
     
-    
-	INSERT INTO Propiedades (IdProp, Tipo, Direccion, Cliente)
-    VALUES(pIdProp, tipo, direccion, pCliente);
-
-END//
-
-=======
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
@@ -1719,6 +1724,4 @@ cuerpo:BEGIN
 	
 END//
 
-
->>>>>>> c7a7b2a9b5c3b795dda89d8ad71f9b071a31a649
 DELIMITER ;
