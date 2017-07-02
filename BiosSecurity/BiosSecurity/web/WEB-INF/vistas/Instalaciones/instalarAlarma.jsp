@@ -30,14 +30,25 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>Descripcion de Ubicacion:</td>
                     <td>
-                        <input type="submit" name="accion" value="Rellenar"/>
+                        <input type="text" name="descripcion" value="${param.descripcionUbicacion}" id="descripcionUbicacion" />
                     </td>
                 </tr>
+                <tr>
+                    <td>Instalador:</td>
+                    <td>
+                        <input type="text" name="instalador" value="" id="empleado" />
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <input type="submit" name="accion" value="Instalar"/>
+                    </td>
+                </tr>
+                
             </table>
-
-
         </form>
         <p><a href="instalaciones">Volver...</a></p>
     </jsp:body>

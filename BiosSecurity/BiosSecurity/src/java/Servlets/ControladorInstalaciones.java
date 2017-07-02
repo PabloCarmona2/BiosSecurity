@@ -96,6 +96,25 @@ public class ControladorInstalaciones extends Controlador {
     }
     
     public void instalar_get(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            
+            Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
+            
+            if(servicio instanceof ServicioAlarma){
+                mostrarVista("instalarAlarma", request, response);
+            }
+            else if(servicio instanceof ServicioVideoVigilancia){
+                mostrarVista("instalarCamara", request, response);
+            }else{
+                cargarMensaje("¡ERROR! Tipo de servicio invalido.", request);
+                return;
+            }
+            
+        }catch(Exception ex){
+            
+            cargarMensaje("¡ERROR! se produjo un error al buscar el servicio", request);
+            mostrarVista("index", request, response);
+        }
         
         mostrarVista("instalar", request, response);
         
@@ -106,19 +125,70 @@ public class ControladorInstalaciones extends Controlador {
         try{
             if(request.getParameter("numServicio") != null && request.getParameter("dispositivo") != null){
                 
-               
-                
                 Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
                 
-                if(servicio instanceof ServicioAlarma){
-                    mostrarVista("rellenarAlarma", request, response);
+                try{
+                    
+                    Dispositivo dispositivo = FabricaLogica.GetLogicaDispositivo().Buscar(Integer.parseInt(request.getParameter("numInventario")));
+                    Tecnico tecnico = (Tecnico)request.getSession().getAttribute("empleadoLogueado");
+
+                    if(servicio instanceof ServicioAlarma){
+
+                        Alarma alarma = (Alarma)dispositivo;
+                        alarma.setDescripcionUbicacion(request.getParameter("descripcion"));
+                        alarma.setInstalador(tecnico);
+
+
+                        List<Alarma> alarmasInstaladas = ((ServicioAlarma) servicio).getAlarmas();
+                        alarmasInstaladas.add((Alarma)dispositivo);
+                        ((ServicioAlarma) servicio).setAlarmas(alarmasInstaladas);
+
+                        FabricaLogica.GetLogicaServicio().InstalarDispositivo(servicio);
+
+                        cargarMensaje("¡Alarma instalado con éxito!", request.getSession());
+
+                        List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
+                        request.getSession().setAttribute("servicios", servicios);
+
+                        response.sendRedirect("instalaciones");
+
+
+                    }
+                    else if(servicio instanceof ServicioVideoVigilancia){
+
+                        Camara camara = (Camara)dispositivo;
+                        camara.setDescripcionUbicacion(request.getParameter("descripcion"));
+                        camara.setInstalador(tecnico);
+
+                        if(request.getParameter("exterior") != null){
+                            camara.setExterior(true);
+                        }else{
+                            camara.setExterior(false);
+                        }
+
+                        List<Camara> camarasInstaladas = ((ServicioVideoVigilancia) servicio).getCamaras();
+                        camarasInstaladas.add((Camara)dispositivo);
+                        ((ServicioVideoVigilancia) servicio).setCamaras(camarasInstaladas);
+
+
+                        FabricaLogica.GetLogicaServicio().InstalarDispositivo(servicio);
+
+                        cargarMensaje("¡Camara instalada con éxito!", request.getSession());
+
+                        List<Servicio> servicios = FabricaLogica.GetLogicaServicio().Listar();
+                        request.getSession().setAttribute("servicios", servicios);
+
+                        response.sendRedirect("instalaciones");
+
+                    }else{
+                        cargarMensaje("¡ERROR! Tipo de servicio invalido.", request);
+                        return;
+                    }
+                }catch(Exception ex){
+                    cargarMensaje("¡ERROR! Se produjo un error al instalar el dispositivo.", request);
                 }
-                else if(servicio instanceof ServicioVideoVigilancia){
-                    mostrarVista("rellenarCamara", request, response);
-                }else{
-                    cargarMensaje("¡ERROR! Tipo de servicio invalido.", request);
-                    return;
-                }
+                
+//                
                 
             }
         }catch(Exception ex){
@@ -126,8 +196,7 @@ public class ControladorInstalaciones extends Controlador {
         }
     }
     
-    public void rellenar_post(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        
+    public void rellenar_post(HttpServletRequest request, HttpServletResponse response) {
         
         try{
             Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));

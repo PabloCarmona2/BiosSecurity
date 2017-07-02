@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -43,7 +44,14 @@ public class ControladorRecibos extends Controlador {
     }
     
     public void generar_get(HttpServletRequest request, HttpServletResponse response) {
-        
+       try{
+            String fecha = new SimpleDateFormat("MMMM").format(new Date());
+            request.setAttribute("mes", fecha);
+       } catch(Exception ex){
+           cargarMensaje("¡ERROR! se produjo un error al mostrar el mes", request);
+           
+           mostrarVista("index", request, response);
+       }
         mostrarVista("generacionRecibos", request, response);
         
     }
@@ -90,7 +98,10 @@ public class ControladorRecibos extends Controlador {
                         
                         linea.setImporte(0);
                         
-                        Precios precios = FabricaLogica.GetLogicaPrecio().Obtener();
+                        String rutaRelativa = "/Precios.txt";
+                        String rutaAbsoluta = getServletContext().getRealPath(rutaRelativa);
+                        
+                        Precios precios = FabricaLogica.GetLogicaPrecio().Obtener(rutaAbsoluta);
                         
                         importe += (s instanceof ServicioAlarma? precios.getBaseAlarmas() : precios.getBaseCamaras());
                         
@@ -100,22 +111,26 @@ public class ControladorRecibos extends Controlador {
                         
                         importe += (s instanceof ServicioAlarma? (importe * Double.parseDouble("0." + precios.getTasaAlarmas())) : (importe * Double.parseDouble("0." + precios.getTasaCamaras())));
                         
+                        total += importe;
                         
                         linea.setImporte(importe);
                         linea.setServicio(s);
                         
                         lineas.add(linea);
+                        
                     }
                     
+                    cabezal.setTotal(total);
                     cabezal.setLineas(lineas);
-                    
-                    FabricaLogica.GetLogicaRecibo().GenerarRecibos(recibos);
 
-                    cargarMensaje("¡Recibos generados con éxito!", request.getSession());
-
-                    response.sendRedirect("recibos");
-
+                    recibos.add(cabezal);
                 }
+                
+                FabricaLogica.GetLogicaRecibo().GenerarRecibos(recibos);
+
+                cargarMensaje("¡Recibos generados con éxito!", request.getSession());
+
+                response.sendRedirect("recibos");
             }else {
                 
                 cargarMensaje("No hay servicios contratados, por lo tanto no se pueden generar los recibos!.", request);

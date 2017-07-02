@@ -7,6 +7,7 @@ package Servlets;
 
 import DataTypes.Administrador;
 import DataTypes.Empleado;
+import DataTypes.Precios;
 import Logica.FabricaLogica;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -33,60 +34,113 @@ public class ControladorPrecios extends Controlador {
     
     public void setear_post(HttpServletRequest request, HttpServletResponse response) {
         
-        int cedula = 0;
+        double  baseAlarmas = 0;
         
         try {
             
-            cedula = Integer.parseInt(request.getParameter("cedula"));
+            baseAlarmas = Double.parseDouble(request.getParameter("baseAlarmas"));
             
         } catch (NumberFormatException ex) {
             
-            cargarMensaje("¡ERROR! La cédula no es válida.", request);
+            cargarMensaje("¡ERROR! Precio base de alarmas no valido.", request);
             
-            mostrarVista("agregarAdministrador", request, response);
+            mostrarVista("index", request, response);
             
             return;
             
         }
         
-        String nombre = request.getParameter("nombre");
-        
-        double sueldo = 0;
+         double  baseCamaras = 0;
         
         try {
             
-            sueldo = Double.parseDouble(request.getParameter("sueldo"));
+            baseCamaras = Double.parseDouble(request.getParameter("baseCamaras"));
             
         } catch (NumberFormatException ex) {
             
-            cargarMensaje("¡ERROR! El sueldo no es válido.", request);
+            cargarMensaje("¡ERROR! Precio base de camaras no valido.", request);
             
-            mostrarVista("agregarAdministrador", request, response);
+            mostrarVista("index", request, response);
             
             return;
             
-            
         }
         
-        String clave = request.getParameter("clave");
-        
-        Date fIngreso = new Date();
-        
-        
-        Administrador admin = new Administrador(cedula, nombre, clave, fIngreso, sueldo);
+        double  adicionalCamara = 0;
         
         try {
             
-            FabricaLogica.GetLogicaEmpleado().Agregar(admin);
+            adicionalCamara = Double.parseDouble(request.getParameter("adicionalCamara"));
             
-            cargarMensaje("¡Administrador agregado con éxito!", request.getSession());
+        } catch (NumberFormatException ex) {
             
-            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("admin");
-                
-            request.getSession().removeAttribute("empleadosTodos");
-            request.getSession().setAttribute("empleadosTodos", empleados);
+            cargarMensaje("¡ERROR! Precio adicional por camara no valido.", request);
             
-            response.sendRedirect("administrador");
+            mostrarVista("index", request, response);
+            
+            return;
+            
+        }
+        
+        double  adicionalAlarma = 0;
+        
+        try {
+            
+            adicionalAlarma = Double.parseDouble(request.getParameter("adicionalAlarma"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! Precio adicional por alarma no valido.", request);
+            
+            mostrarVista("index", request, response);
+            
+            return;
+            
+        }
+        
+        int  monitoreoAlarmas = 0;
+        
+        try {
+            
+            monitoreoAlarmas = Integer.parseInt(request.getParameter("monitoreoAlarmas"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! Precio por monitoreo de camaras no valido.", request);
+            
+            mostrarVista("index", request, response);
+            
+            return;
+            
+        }
+        
+        int  monitoreoCamaras = 0;
+        
+        try {
+            
+            monitoreoCamaras = Integer.parseInt(request.getParameter("monitoreoCamaras"));
+            
+        } catch (NumberFormatException ex) {
+            
+            cargarMensaje("¡ERROR! Precio por monitoreo de camaras no valido.", request);
+            
+            mostrarVista("index", request, response);
+            
+            return;
+            
+        }
+        String rutaRelativa = "/Precios.txt";
+        String rutaAbsoluta = getServletContext().getRealPath(rutaRelativa);
+        
+        Precios precios = new Precios(baseAlarmas, baseCamaras, adicionalAlarma, adicionalCamara, monitoreoAlarmas, monitoreoCamaras);
+        
+        try {
+            
+            FabricaLogica.GetLogicaPrecio().Actualizar(precios, rutaAbsoluta);
+            
+            cargarMensaje("¡Precios actualizados con éxito!", request.getSession());
+            
+            response.sendRedirect("precios");
             
         } catch (Exception ex) {
             

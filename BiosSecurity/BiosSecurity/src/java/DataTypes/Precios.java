@@ -74,7 +74,7 @@ public class Precios {
         this.setBaseCamaras(baseCamaras);
         this.setAdicionalAlarma(adicionalAlarma);
         this.setAdicionalCamara(adicionalCamara);
-        this.setTasaAlarmas(tasaAlarmas);
-        this.setTasaCamaras(tasaCamaras);
+        this.setTasaAlarmas(monitoreoAlarmas);
+        this.setTasaCamaras(monitoreoCamaras);
     }
 }

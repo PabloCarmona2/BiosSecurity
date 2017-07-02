@@ -73,6 +73,13 @@ public class ControladorTecnico extends Controlador {
             
             cedula = Integer.parseInt(request.getParameter("cedula"));
             
+            if(cedula == 0)
+            {
+                cargarMensaje("¡ERROR! La cédula no puede ser 0.", request);
+            
+                mostrarVista("agregarTecnico", request, response);
+            }
+            
         } catch (NumberFormatException ex) {
             
             cargarMensaje("¡ERROR! La cédula no es válida.", request);

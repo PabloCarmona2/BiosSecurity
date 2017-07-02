@@ -181,7 +181,7 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
         try{
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
         
-           consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.administradores t where t.Cedula = ? and e.Clave = ?;"); 
+           consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.administradores t ON e.Cedula = t.Cedula where t.Cedula = ? and e.Clave = ?;"); 
            
         
         consulta.setInt(1, cedula);
@@ -200,11 +200,20 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
                     
            admin = new Administrador(cedula, nombre, claveAdmin, fIngreso, sueldo);
         }
-        }catch(Exception ex){
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }finally {
+
             try {
-                throw new Exception(ex.getMessage());
-            } catch (Exception ex1) {
-                Logger.getLogger(PersistenciaAdministrador.class.getName()).log(Level.SEVERE, null, ex1);
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
             }
         }
          return admin;

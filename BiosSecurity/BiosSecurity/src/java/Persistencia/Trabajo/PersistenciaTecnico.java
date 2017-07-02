@@ -104,7 +104,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AltaTecnico(?, ?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaTecnico(?, ?, ?, ?, ?, ?, ?) }")) {
            
             java.util.Date fecha = tecnico.getfIngreso();
             java.sql.Date fechaIngreso = new java.sql.Date(fecha.getTime());
@@ -236,8 +236,12 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         
     }
     
-    public Tecnico LoginTenico(int cedula, String clave){
+    public Tecnico LoginTenico(int cedula, String clave) throws Exception{
+        
         Tecnico tecnico = null;
+        Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
         
          try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -245,9 +249,15 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-        PreparedStatement consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.tecnicos t where t.Cedula = ? and e.Clave = ?;"); ResultSet resultado = consulta.executeQuery()) {
+        try{
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
         
+           consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.tecnicos t ON e.Cedula = t.Cedula where t.Cedula = ? and e.Clave = ?;"); 
+           
+        
+        consulta.setInt(1, cedula);
+        consulta.setString(2, clave);
+        ResultSet resultado = consulta.executeQuery(); 
         consulta.setInt(1, cedula);
         consulta.setString(2, clave);
         String nombre;
@@ -265,11 +275,20 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
                     
            tecnico = new Tecnico(cedula, nombre, claveAdmin, fIngreso, sueldo, especializacion);
         }
-        }catch(Exception ex){
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }finally {
+
             try {
-                throw new Exception(ex.getMessage());
-            } catch (Exception ex1) {
-                Logger.getLogger(PersistenciaAdministrador.class.getName()).log(Level.SEVERE, null, ex1);
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
             }
         }
          return tecnico;

@@ -14,7 +14,7 @@ import java.io.IOException;
  * @author Geronimo
  */
 public interface ILogicaPrecios {
-    Precios Obtener() throws FileNotFoundException, IOException, Exception;
+    Precios Obtener(String ruta) throws FileNotFoundException, IOException, Exception;
     
-    void Actualizar(Precios pPrecios) throws FileNotFoundException, IOException, Exception;
+    void Actualizar(Precios pPrecios, String ruta) throws FileNotFoundException, IOException, Exception;
 }

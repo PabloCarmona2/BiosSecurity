@@ -22,7 +22,6 @@
             <input type="hidden" name="dispositivo" value="${dispositivo}" />
             <input type="hidden" name="servicio" value="${servicio}" />
 
-
             <table>
                 <tr>
                     <td>Descripcion de Ubicacion:</td>
@@ -39,7 +38,7 @@
                 <tr>
                     <td></td>
                     <td>
-                        <input type="submit" name="accion" value="Instalar"/>
+                        <input type="submit" name="accion" value="Rellenar"/>
                     </td>
                 </tr>
             </table>   

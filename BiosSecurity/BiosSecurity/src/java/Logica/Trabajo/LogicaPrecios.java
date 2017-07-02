@@ -41,20 +41,20 @@ public class LogicaPrecios implements ILogicaPrecios {
         }   
     }
     
-    public Precios Obtener() throws FileNotFoundException, IOException, Exception{
+    public Precios Obtener(String ruta) throws FileNotFoundException, IOException, Exception{
         try{
-            return FabricaPersistencia.GetPersistenciaPrecios().Obtener();
+            return FabricaPersistencia.GetPersistenciaPrecios().Obtener(ruta);
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
         }
     }
     
-    public void Actualizar(Precios pPrecios) throws FileNotFoundException, IOException, Exception{
+    public void Actualizar(Precios pPrecios, String ruta) throws FileNotFoundException, IOException, Exception{
         Validar(pPrecios);
         
         try{
             
-            FabricaPersistencia.GetPersistenciaPrecios().Actualizar(pPrecios);
+            FabricaPersistencia.GetPersistenciaPrecios().Actualizar(pPrecios, ruta);
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());

@@ -14,8 +14,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.util.Random;
 
 /**
@@ -33,11 +36,10 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
         return _instancia;
     }
     
-    public Precios Obtener() throws FileNotFoundException, IOException, Exception{
+    public Precios Obtener(String ruta) throws FileNotFoundException, IOException, Exception{
         try{
             String texto;
-            String ruta = "\\WEB-INF\\Precios.txt";
-            File archivo = new File(getClass().getResource(ruta).getFile());
+            File archivo = new File(ruta);
 
             Precios precios = new Precios();
 
@@ -68,7 +70,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                     switch(renglon){
                         case 1:
 
-                            precioAlarmas = Double.parseDouble(texto.substring(posicionDePeso - 1).trim());
+                            precioAlarmas = Double.parseDouble(texto.substring(posicionDePeso + 1).trim());
 
                             precios.setBaseAlarmas(precioAlarmas);
 
@@ -77,7 +79,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 2:
 
-                            precioCamaras = Double.parseDouble(texto.substring(posicionDePeso - 1).trim());
+                            precioCamaras = Double.parseDouble(texto.substring(posicionDePeso + 1).trim());
 
                             precios.setBaseCamaras(precioCamaras);
 
@@ -86,7 +88,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 3:
 
-                            precioXAlarma = Double.parseDouble(texto.substring(posicionDePeso - 1).trim());
+                            precioXAlarma = Double.parseDouble(texto.substring(posicionDePeso + 1).trim());
 
                             precios.setAdicionalAlarma(precioXAlarma);
 
@@ -95,7 +97,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 4:
 
-                            precioXCamara = Double.parseDouble(texto.substring(posicionDePeso - 1).trim());
+                            precioXCamara = Double.parseDouble(texto.substring(posicionDePeso + 1).trim());
 
                             precios.setAdicionalCamara(precioXCamara);
 
@@ -104,7 +106,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 5:
 
-                            porcentajeMonitoreoCamara = Integer.parseInt(texto.substring(posicionDePorcentaje - 1).trim());
+                            porcentajeMonitoreoCamara = Integer.parseInt(texto.substring(posicionDePorcentaje + 1).trim());
 
                             precios.setTasaCamaras(porcentajeMonitoreoCamara);
 
@@ -113,7 +115,7 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
                             break;
                         case 6:
 
-                            porcentajeMonitoreoAlarma = Integer.parseInt(texto.substring(posicionDePorcentaje - 1).trim());
+                            porcentajeMonitoreoAlarma = Integer.parseInt(texto.substring(posicionDePorcentaje + 1).trim());
 
                             precios.setTasaAlarmas(porcentajeMonitoreoAlarma);
 
@@ -133,196 +135,45 @@ public class PersistenciaPrecios implements IPersistenciaPrecios{
         }
     }
     
-    public void Actualizar(Precios pPrecios) throws FileNotFoundException, IOException, Exception{
+    public void Actualizar(Precios pPrecios, String ruta) throws FileNotFoundException, IOException, Exception{
+        
+        FileWriter fw = null;
+        PrintWriter pw = null;
+        
         try{
+            double precioAlarmas = pPrecios.getBaseAlarmas();
+            double precioCamaras = pPrecios.getBaseCamaras();
+            double precioXAlarma = pPrecios.getAdicionalAlarma();
+            double precioXCamara = pPrecios.getAdicionalCamara();
+            int porcentajeMonitoreoCamara = pPrecios.getTasaCamaras();
+            int porcentajeMonitoreoAlarma = pPrecios.getTasaAlarmas();
             
-            String texto;
-            String ruta = "\\Precios.txt";
-            File archivo = new File(getClass().getResource(ruta).getFile());
+            fw = new FileWriter(ruta);
             
-            if(archivo.exists())
-            {
-
-                FileReader fr = new FileReader(archivo);
-                BufferedReader br = new BufferedReader(fr);
-                Recibo recibo;
-
-                Precios precios = new Precios();
-
-                int renglon = 1;
-                String error = null;
-
-                double precioAlarmas = pPrecios.getBaseAlarmas();
-                double precioCamaras = pPrecios.getBaseCamaras();
-                double precioXAlarma = pPrecios.getAdicionalAlarma();
-                double precioXCamara = pPrecios.getAdicionalCamara();
-                int porcentajeMonitoreoCamara = pPrecios.getTasaCamaras();
-                int porcentajeMonitoreoAlarma = pPrecios.getTasaAlarmas();
-
-                String lineaNueva;
-                String lineaVieja;
-
-                while((texto = br.readLine()) != null){
-
-                    int posicionDePeso;
-                    posicionDePeso = texto.indexOf("$");
-
-                    int posicionDePorcentaje;
-                    posicionDePorcentaje = texto.indexOf(")");
-
-                    switch(renglon){
-                        case 1:
-
-                            lineaNueva = "Precio base alarmas - $ " + precioAlarmas;
-                            lineaVieja = texto;
-
-                            ModificarArchivo(archivo, lineaVieja, lineaNueva);
-
-                            renglon++;
-
-                            break;
-                        case 2:
-
-                            lineaNueva = "Precio base cámara - $ " + precioCamaras;
-                            lineaVieja = texto;
-
-                            ModificarArchivo(archivo, lineaVieja, lineaNueva);
-
-                            renglon++;
-
-                            break;
-                        case 3:
-
-                            lineaNueva = "Adicional por alarma - $ " + precioXAlarma;
-                            lineaVieja = texto;
-
-                            ModificarArchivo(archivo, lineaVieja, lineaNueva);
-
-                            renglon++;
-
-                            break;
-                        case 4:
-
-                            lineaNueva = "Adicional por cámara - $ " + precioXCamara;
-                            lineaVieja = texto;
-
-                            ModificarArchivo(archivo, lineaVieja, lineaNueva);
-
-                            renglon++;
-
-                            break;
-                        case 5:
-
-                            lineaNueva = "Tasa de monitoreo alarmas - $ " + porcentajeMonitoreoAlarma;
-                            lineaVieja = texto;
-
-                            ModificarArchivo(archivo, lineaVieja, lineaNueva);
-
-                            renglon++;
-
-                            break;
-                        case 6:
-
-                            lineaNueva = "Tasa de monitoreo cámaras - $ " + porcentajeMonitoreoCamara;
-                            lineaVieja = texto;
-
-                            ModificarArchivo(archivo, lineaVieja, lineaNueva);
-
-                            renglon++;
-
-                            break;    
-                    }
-                }
-            }else{
-
-                throw new Exception("No existe un fichero con los precios!.");
-
-            }
+            pw= new PrintWriter(fw);
+            pw.println("Precio base alarmas - $ " + precioAlarmas);
+            pw.println("Precio base camaras - $ " + precioCamaras);
+            pw.println("Adicional por alarma - $ " + precioXAlarma);
+            pw.println("Adicional por camara - $ " + precioXCamara);
+            pw.println("Tasa de monitoreo alarmas - (%) " + porcentajeMonitoreoAlarma);
+            pw.println("Tasa de monitoreo camaras - (%) " + porcentajeMonitoreoCamara);
+            
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
-        }
-        
-    }
-    
-    public static void EscribirEnArchivo(File archivo,String texto) throws Exception{
-      try {
-          
-            if(!archivo.exists()){
-                
-               archivo.createNewFile();
-               
-            }
+        }finally {
 
-            BufferedWriter Escribir = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archivo, true), "utf-8"));
-
-            Escribir.write(texto + "\r\n");
-
-            Escribir.close();
-
-        } catch (Exception ex) {
-
-            throw new Exception(ex.getMessage());
-        } 
-    }
-    
-    public static  void BorrarArchivo(File archivo) throws Exception{
-     try {
-         if(archivo.exists()){
-             
-           archivo.delete(); 
-           
-           System.out.println("Archivo Borrado Exitosamente");
-         }
-     } catch (Exception ex) {
-         
-          throw new Exception(ex.getMessage());
-          
-     }
-} 
-    
-    public static  void ModificarArchivo(File archivoViejo, String lineaVieja, String nuevaLinea) throws Exception{ 
-        
-        Random numaleatorio= new Random(3816L); 
-        
-        String nombreArchivoNuevo = archivoViejo.getParent()+ "/aux" + String.valueOf(Math.abs(numaleatorio.nextInt()))+".txt";
-        
-        File archivoNuevo = new File(nombreArchivoNuevo);
-        
-        try {
-            if(archivoViejo.exists()){
-                
-                BufferedReader br = new BufferedReader(new FileReader(archivoViejo));
-                String linea;
-                
-                while((linea = br.readLine())!=null) { 
-                    
-                    if (linea.toUpperCase().trim().equals(lineaVieja.toUpperCase().trim())) {
-                        
-                        EscribirEnArchivo(archivoNuevo,nuevaLinea);
-                        
-                    }else{
-                        
-                        EscribirEnArchivo(archivoNuevo, linea);
-                         
-                    }             
+            try {
+                if (pw != null) {
+                    pw.close();
                 }
-                
-                String nombreArchivoViejo = archivoViejo.getName();
-                
-                BorrarArchivo(archivoViejo);
-                
-                archivoNuevo.renameTo(archivoViejo);
-                
-                br.close();
-            }else{
-                
-                throw new Exception("No Existe El archivo que desea modificar!.");
-                
+
+                if (fw != null) {
+                    fw.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
             }
-        } catch (Exception ex) {
-            
-            throw new Exception(ex.getMessage());
-            
         }
+        
     }
 }
