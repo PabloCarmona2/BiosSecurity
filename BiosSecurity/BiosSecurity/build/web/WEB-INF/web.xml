@@ -29,8 +29,13 @@
         <servlet-class>Servlets.ControladorPrecios</servlet-class>
     </servlet>
     <servlet>
+<<<<<<< HEAD
         <servlet-name>ControladorServicios</servlet-name>
         <servlet-class>Servlets.ControladorServicios</servlet-class>
+=======
+        <servlet-name>ControladorCobrador</servlet-name>
+        <servlet-class>Servlets.ControladorCobrador</servlet-class>
+>>>>>>> c7a7b2a9b5c3b795dda89d8ad71f9b071a31a649
     </servlet>
     <servlet-mapping>
         <servlet-name>ControladorLogin</servlet-name>
@@ -61,8 +66,13 @@
         <url-pattern>/precios</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+<<<<<<< HEAD
         <servlet-name>ControladorServicios</servlet-name>
         <url-pattern>/servicios</url-pattern>
+=======
+        <servlet-name>ControladorCobrador</servlet-name>
+        <url-pattern>/ControladorCobrador</url-pattern>
+>>>>>>> c7a7b2a9b5c3b795dda89d8ad71f9b071a31a649
     </servlet-mapping>
     <session-config>
         <session-timeout>
