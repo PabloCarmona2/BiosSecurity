@@ -33,16 +33,32 @@ public class ControladorTecnico extends Controlador {
             
             List<Empleado> empleados = new ArrayList<Empleado>();
             
-            if(request.getSession().getAttribute("empleadosTodosT") == null){
+            if(request.getParameter("buscar") != null){
+                try {
+            
+                    Integer.parseInt(request.getParameter("buscar"));
+
+                } catch (NumberFormatException ex) {
+
+                    cargarMensaje("¡ERROR! El numero de documento ingresado no es válido.", request);
+
+                    mostrarVista("index", request, response);
+
+                    return;
+
+                }
+            }
+            
+            empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico", request.getParameter("buscar"));
+            
+            if(empleados.isEmpty() || !(empleados.toArray()[0] instanceof Tecnico)){
                 
-                empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico");
-                
-                request.getSession().removeAttribute("empleadosTodosT");
+                empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico", "");
                 request.getSession().setAttribute("empleadosTodosT", empleados);
                 
             }else{
                 
-                empleados = (List<Empleado>)request.getSession().getAttribute("empleadosTodosT");
+                request.getSession().setAttribute("empleadosTodosT", empleados);
             
             }
             
@@ -122,11 +138,6 @@ public class ControladorTecnico extends Controlador {
             FabricaLogica.GetLogicaEmpleado().Agregar(tecnico);
             
             cargarMensaje("¡Tecnico agregado con éxito!", request.getSession());
-            
-            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico");
-                
-            request.getSession().removeAttribute("empleadosTodosT");
-            request.getSession().setAttribute("empleadosTodosT", empleados);
             
             response.sendRedirect("tecnicos");
             
@@ -272,10 +283,6 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡Tecnico modificado con éxito!", request.getSession());
             
-            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico");
-                
-            request.getSession().removeAttribute("empleadosTodosT");
-            request.getSession().setAttribute("empleadosTodosT", empleados);
             
             response.sendRedirect("tecnicos");
             
@@ -354,10 +361,6 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡Empleado eliminado con éxito!", request.getSession());
             
-            List<Empleado> empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico");
-                
-            request.getSession().removeAttribute("empleadosTodosT");
-            request.getSession().setAttribute("empleadosTodos", empleados);
             
             response.sendRedirect("tecnicos");
             

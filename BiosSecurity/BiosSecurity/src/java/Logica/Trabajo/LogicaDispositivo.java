@@ -96,20 +96,33 @@ public class LogicaDispositivo implements ILogicaDispositivo{
         }
     }
     
-    public List<Dispositivo> Listar() throws Exception {
+    public List<Dispositivo> Listar(String criterio) throws Exception {
         try{
-            
             List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
-            List<Alarma> alarmas = new ArrayList<Alarma>();
-            List<Camara> camaras = new ArrayList<Camara>();
-
-            alarmas = FabricaPersistencia.GetPersistenciaAlarma().Listar();
-            camaras = FabricaPersistencia.GetPersistenciaCamara().Listar();
-
-            dispositivos.addAll(alarmas);
-            dispositivos.addAll(camaras);
             
-            return dispositivos;
+            if(criterio == null || criterio.length() == 0){
+                
+                
+                List<Alarma> alarmas = new ArrayList<Alarma>();
+                List<Camara> camaras = new ArrayList<Camara>();
+
+                alarmas = FabricaPersistencia.GetPersistenciaAlarma().Listar();
+                camaras = FabricaPersistencia.GetPersistenciaCamara().Listar();
+
+                dispositivos.addAll(alarmas);
+                dispositivos.addAll(camaras);
+
+                return dispositivos;
+                
+            }else{
+                
+                Dispositivo dispositivo = this.Buscar(Integer.parseInt(criterio));
+                dispositivos.add(dispositivo);
+                
+                return dispositivos;
+                
+            }
+            
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
