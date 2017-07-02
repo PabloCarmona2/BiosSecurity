@@ -11,7 +11,9 @@
 
 <t:PaginaMaestra titulo="Ver Dispositivo">
     <jsp:body>
+
         <c:if test="${!empty dispositivo}">
+
             <jsp:useBean id="dispositivo" type="DataTypes.Dispositivo" scope="request" />
             
             

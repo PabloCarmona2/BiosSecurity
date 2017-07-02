@@ -118,10 +118,10 @@ public class LogicaServicio implements ILogicaServicio{
         
     }
     
-    public void altaServicioAlarma(ServicioAlarma unServicio){
-        
-        try{
-            FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma(unServicio);
+    public void altaServicio(Servicio unServicio){
+        if(unServicio instanceof ServicioAlarma){
+            try{
+            FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma((ServicioAlarma)unServicio);
         }catch (Exception ex){
             try {
                 throw new Exception(ex.getMessage());
@@ -129,13 +129,10 @@ public class LogicaServicio implements ILogicaServicio{
                 Logger.getLogger(LogicaServicio.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-        
-    }
-    
-    public void altaServicioVideo(ServicioVideoVigilancia unServicio){
-        
+        }
+        else if(unServicio instanceof ServicioVideoVigilancia){
         try{
-            FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia(unServicio);
+            FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia((ServicioVideoVigilancia)unServicio);
         }catch (Exception ex){
             try {
                 throw new Exception(ex.getMessage());
@@ -143,9 +140,31 @@ public class LogicaServicio implements ILogicaServicio{
                 Logger.getLogger(LogicaServicio.class.getName()).log(Level.SEVERE, null, ex1);
             }
         }
-        
+    }
     }
     
+    public void EliminarServicio(Servicio unServicio)throws Exception{
+        if (unServicio instanceof ServicioAlarma ){
+            
+          Persistencia.FabricaPersistencia.getPersistenciaServicioAlarma().eliminarServicioAlarma((ServicioAlarma)unServicio);
+        
+        }else if(unServicio instanceof ServicioVideoVigilancia){
+           
+            Persistencia.FabricaPersistencia.getPersistenciaVideoVigilancia().eliminarServicioVideoVigilancia((ServicioVideoVigilancia)unServicio);
+        
+        }
+    }
+    
+    public void EditarServicio(Servicio unServicio)throws Exception{
+        Validar(unServicio);
+        if(unServicio instanceof ServicioAlarma){
+            Persistencia.FabricaPersistencia.getPersistenciaServicioAlarma().editarServicioAlarma((ServicioAlarma)unServicio);
+        }
+        else if(unServicio instanceof ServicioVideoVigilancia){
+            Persistencia.FabricaPersistencia.getPersistenciaVideoVigilancia().editarServicioVideoVigilancia((ServicioVideoVigilancia)unServicio);
+        }
+        
+    }
     
     public Servicio Buscar(int numServicio) throws Exception{
         try{

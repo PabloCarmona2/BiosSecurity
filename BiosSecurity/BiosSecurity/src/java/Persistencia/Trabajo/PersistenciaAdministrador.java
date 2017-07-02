@@ -125,7 +125,7 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL ModificarAdministrador(?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL ModificarAdministrador(?, ?, ?, ?, ?,?) }")) {
            
             consulta.setInt(1, admin.getCedula());
             consulta.setString(2, admin.getNombre());
@@ -133,7 +133,16 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
            consulta.setDate(4, new java.sql.Date(admin.getfIngreso().getTime()));
             consulta.setDouble(5, admin.getSueldo());
             
+             consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            
             consulta.executeUpdate();
+            
+            String error = consulta.getString(6);
+            
+           if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
