@@ -28,7 +28,7 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
         return _instancia;
     }
     
-    public Propiedad Buscar(int id) throws Exception{
+    public Propiedad Buscar(int id, int pCliente) throws Exception{
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
@@ -43,9 +43,10 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Propiedades WHERE IdProp = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM Propiedades WHERE IdProp = ? AND Cliente = ?;");
             
             consulta.setInt(1, id);
+            consulta.setInt(2, pCliente);
             
             resultadoConsulta = consulta.executeQuery();
             
@@ -59,7 +60,7 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
                 tipo = resultadoConsulta.getString("Tipo");
                 direccion = resultadoConsulta.getString("Direccion");
                 
-                cliente = PersistenciaCliente.GetInstancia().Buscar(resultadoConsulta.getInt("Cliente"));
+                cliente = PersistenciaCliente.GetInstancia().Buscar(pCliente);
                 
                 propiedad = new Propiedad(id, tipo, direccion, cliente);
             }
@@ -152,17 +153,41 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
         } catch (Exception ex) {
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
-//        private int idProp;
-//    private String tipo;
-//    private String direccion;
-//    private Cliente dueño;
-
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
                 CallableStatement consulta = conexion.prepareCall("{ CALL ModificarPropiedad(?, ?, ?, ?) }")) {
            
             consulta.setInt(1, casa.getIdProp());
             consulta.setString(2, casa.getTipo());
             consulta.setString(3, casa.getDireccion());
+            consulta.registerOutParameter(4, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(4);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void Alta(Propiedad casa) throws Exception{
+        
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaPropiedad(?, ?, ?, ?) }")) {
+           
+            
+            consulta.setString(1, casa.getTipo());
+            consulta.setString(2, casa.getDireccion());
+            consulta.setInt(3, casa.getDueño().getCedula());
             consulta.registerOutParameter(4, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();

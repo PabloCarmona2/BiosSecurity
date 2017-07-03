@@ -78,57 +78,103 @@ public class LogicaServicio implements ILogicaServicio{
         }
     }
     
-    public List<Servicio> Listar() throws Exception{
+    public List<Servicio> Listar(String criterio) throws Exception{
         
         List<Servicio> servicios = new ArrayList<Servicio>();
-        List<ServicioAlarma> serviciosA = new ArrayList<ServicioAlarma>();
-        List<ServicioVideoVigilancia> serviciosV = new ArrayList<ServicioVideoVigilancia>();
         
-        try{
+        if(criterio == null || criterio.length() == 0)
+        {
             
-            serviciosA = FabricaPersistencia.getPersistenciaServicioAlarma().Listar();
-            serviciosV = FabricaPersistencia.getPersistenciaVideoVigilancia().Listar();
-            
-            servicios.addAll(serviciosA);
-            servicios.addAll(serviciosV);
-            
-            
-            return servicios;
-            
-        }catch (Exception ex){
-            throw new Exception(ex.getMessage());
+            List<ServicioAlarma> serviciosA = new ArrayList<ServicioAlarma>();
+            List<ServicioVideoVigilancia> serviciosV = new ArrayList<ServicioVideoVigilancia>();
+
+            try{
+
+                serviciosA = FabricaPersistencia.getPersistenciaServicioAlarma().Listar();
+                serviciosV = FabricaPersistencia.getPersistenciaVideoVigilancia().Listar();
+
+                servicios.addAll(serviciosA);
+                servicios.addAll(serviciosV);
+
+
+                return servicios;
+
+            }catch (Exception ex){
+                throw new Exception(ex.getMessage());
+            }
+        }else{
+            try{
+
+                Servicio servicio = this.Buscar(Integer.parseInt(criterio));
+                servicios.add(servicio);
+                
+                return servicios;
+
+            }catch (Exception ex){
+                throw new Exception(ex.getMessage());
+            }
+              
         }
         
     }
     
-    public void altaServicioAlarma(ServicioAlarma unServicio){
+    public void altaServicio(Servicio unServicio) throws Exception{
         
-        try{
-            FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma(unServicio);
-        }catch (Exception ex){
-            try {
+        if(unServicio instanceof ServicioAlarma){
+            
+            try{
+                
+                FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma((ServicioAlarma)unServicio);
+                
+            }catch (Exception ex){
+                
                 throw new Exception(ex.getMessage());
-            } catch (Exception ex1) {
-                Logger.getLogger(LogicaServicio.class.getName()).log(Level.SEVERE, null, ex1);
+                
             }
         }
-        
+        else if(unServicio instanceof ServicioVideoVigilancia){
+            
+            try{
+                
+                FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia((ServicioVideoVigilancia)unServicio);
+                
+            }catch (Exception ex){
+                
+                throw new Exception(ex.getMessage());
+                
+            }
+        }
     }
     
-    public void altaServicioVideo(ServicioVideoVigilancia unServicio){
+    public void EliminarServicio(Servicio unServicio)throws Exception{
         
-        try{
-            FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia(unServicio);
-        }catch (Exception ex){
-            try {
-                throw new Exception(ex.getMessage());
-            } catch (Exception ex1) {
-                Logger.getLogger(LogicaServicio.class.getName()).log(Level.SEVERE, null, ex1);
-            }
+        if (unServicio instanceof ServicioAlarma ){
+            
+          Persistencia.FabricaPersistencia.getPersistenciaServicioAlarma().eliminarServicioAlarma((ServicioAlarma)unServicio);
+        
+        }else if(unServicio instanceof ServicioVideoVigilancia){
+           
+            Persistencia.FabricaPersistencia.getPersistenciaVideoVigilancia().eliminarServicioVideoVigilancia((ServicioVideoVigilancia)unServicio);
+        
+        }
+    }
+    
+    public void EditarServicio(Servicio unServicio)throws Exception{
+        
+        Validar(unServicio);
+        
+        if(unServicio instanceof ServicioAlarma){
+            
+            Persistencia.FabricaPersistencia.getPersistenciaServicioAlarma().editarServicioAlarma((ServicioAlarma)unServicio);
+            
+        }
+        else if(unServicio instanceof ServicioVideoVigilancia){
+            
+            Persistencia.FabricaPersistencia.getPersistenciaVideoVigilancia().editarServicioVideoVigilancia((ServicioVideoVigilancia)unServicio);
+            
         }
         
     }
-    
     
     public Servicio Buscar(int numServicio) throws Exception{
         try{
@@ -137,13 +183,17 @@ public class LogicaServicio implements ILogicaServicio{
             servicio = FabricaPersistencia.getPersistenciaServicioAlarma().Buscar(numServicio);
 
             if(servicio == null){
+                
                 servicio = FabricaPersistencia.getPersistenciaVideoVigilancia().Buscar(numServicio);
+                
             }
             
             return servicio;
             
         }catch(Exception ex){
+            
             throw new Exception(ex.getMessage());
+            
         }
     }
     

@@ -172,7 +172,7 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
                 numServicio = resultadoConsulta.getInt("NumServicio");
                 fecha = resultadoConsulta.getDate("Fecha");
                 monitoreo = resultadoConsulta.getBoolean("Monitoreo");
-                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"));
+                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"), cliente.getCedula());
                 terminal = resultadoConsulta.getBoolean("Terminal");
                 
                 dispositivos = PersistenciaCamara.GetInstancia().ListarXServicio(numServicio);
@@ -234,6 +234,56 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
         
     }
     
+    public void eliminarServicioVideoVigilancia(ServicioVideoVigilancia servicio)throws Exception{
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL EliminarServicioVideo(?, ?) }")) {           
+            consulta.setInt(1, servicio.getNumServicio());
+            consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
+            consulta.executeUpdate();           
+            String error = consulta.getString(2);
+            if(error != null){
+                throw new Exception("Error: " + error);
+            }
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void editarServicioVideoVigilancia(ServicioVideoVigilancia unServicio)throws Exception{
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                CallableStatement consulta = conexion.prepareCall("{ CALL EditarServicioVideo(?, ?, ?, ?, ?, ?, ?) }")) {
+           
+            consulta.setInt(1, unServicio.getNumServicio());
+            consulta.setDate(2, (java.sql.Date)unServicio.getFecha());
+            consulta.setBoolean(3, unServicio.isMonitoreo());
+            consulta.setInt(4, unServicio.getPropiedadCliente().getIdProp());
+            consulta.setInt(5, unServicio.getPropiedadCliente().getDueño().getCedula());
+            consulta.setBoolean(6, unServicio.isTerminal());
+            
+             consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(6);
+            
+           if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+                    
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
     
     public List<ServicioVideoVigilancia> Listar() throws Exception{
         
@@ -274,7 +324,8 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
                 numServicio = resultadoConsulta.getInt("NumServicio");
                 fecha = resultadoConsulta.getDate("Fecha");
                 monitoreo = resultadoConsulta.getBoolean("Monitoreo");
-                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"));
+                Cliente cliente = PersistenciaCliente.GetInstancia().Buscar(resultadoConsulta.getInt("Cliente"));
+                propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"), cliente.getCedula());
                 terminal = resultadoConsulta.getBoolean("Terminal");
                 
                 dispositivos = PersistenciaCamara.GetInstancia().ListarXServicio(numServicio);

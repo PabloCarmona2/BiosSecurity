@@ -19,4 +19,5 @@ public interface IPersistenciaCliente {
       HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception;
       List<Cliente> Listar()throws Exception;
       void Modificar(Cliente cliente) throws Exception;
+      void Alta(Cliente cliente) throws Exception;
 }

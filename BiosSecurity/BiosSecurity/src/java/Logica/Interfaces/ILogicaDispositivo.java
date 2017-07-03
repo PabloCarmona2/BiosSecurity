@@ -16,5 +16,5 @@ public interface ILogicaDispositivo {
     Dispositivo Buscar(int numInventario) throws Exception;
     void Agregar(Dispositivo dispositivo) throws Exception;
     void Eliminar(Dispositivo dispositivo) throws Exception;
-    List<Dispositivo> Listar() throws Exception;
+    List<Dispositivo> Listar(String criterio) throws Exception;
 }

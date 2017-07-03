@@ -36,9 +36,36 @@ public class LogicaPropiedad implements ILogicaPropiedad{
         }   
     }
     public void Modificar(Propiedad casa) throws Exception{
-        Validar(casa);
+        try{
+         
+            Validar(casa);
         
-        Persistencia.FabricaPersistencia.getPersistenciaPropiedad().Modificar(casa);
+            Persistencia.FabricaPersistencia.getPersistenciaPropiedad().Modificar(casa);
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        } 
+    }
     
+    public Propiedad Buscar(int numero, int cliente) throws Exception{
+        try{
+            
+            return Persistencia.FabricaPersistencia.getPersistenciaPropiedad().Buscar(numero, cliente);
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        } 
+    }
+    
+    public void Alta(Propiedad casa) throws Exception{
+        try{
+         
+            Validar(casa);
+        
+            Persistencia.FabricaPersistencia.getPersistenciaPropiedad().Alta(casa);
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        } 
     }
 }

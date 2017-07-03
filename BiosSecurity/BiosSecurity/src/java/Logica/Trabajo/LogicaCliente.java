@@ -8,6 +8,7 @@ package Logica.Trabajo;
 import DataTypes.Cliente;
 import DataTypes.Servicio;
 import Logica.Interfaces.ILogicaCliente;
+import static Logica.Trabajo.LogicaPropiedad.Validar;
 import Persistencia.FabricaPersistencia;
 import java.util.HashMap;
 import java.util.List;
@@ -50,19 +51,46 @@ public class LogicaCliente implements ILogicaCliente{
                 throw new Exception("El campo direccion de cobro del cliente no puede tener mas de 30 caracteres o estar vacío!");
             }
             if(Logica.Trabajo.LogicaCliente.comprobarTel(cliente.getTelefono())){
-                throw new Exception("El nombre del cliente no puede tener mas de 25 caracteres!");
+                throw new Exception("No se puede validar este numero de telefono!");
             }           
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
         }   
     }
+    
+    public Cliente Buscar(int cedula) throws Exception{
+        try{
+            return FabricaPersistencia.getPersistenciaCliente().Buscar(cedula);
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
     public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
         return FabricaPersistencia.getPersistenciaCliente().ClientesYServiciosOrdenados();
     }
-    public void Modificar(Cliente cliente) throws Exception{
-        Validar(cliente);
-        
-        Persistencia.FabricaPersistencia.getPersistenciaCliente().Modificar(cliente);
     
+    public void Modificar(Cliente cliente) throws Exception{
+        try{
+         
+            Validar(cliente);
+        
+            Persistencia.FabricaPersistencia.getPersistenciaCliente().Modificar(cliente);
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public void Alta(Cliente cliente) throws Exception{
+        try{
+         
+            Validar(cliente);
+        
+            Persistencia.FabricaPersistencia.getPersistenciaCliente().Alta(cliente);
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
     }
 }

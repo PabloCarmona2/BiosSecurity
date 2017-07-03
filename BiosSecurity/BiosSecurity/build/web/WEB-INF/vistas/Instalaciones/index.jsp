@@ -37,7 +37,7 @@
                             <td>
                                 <a href="instalaciones?accion=ver&numServicio=${servicio.numServicio}"><img src="imagenes/ver.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
                                 <a href="instalaciones?accion=instalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/instalar.png" alt="Instalar" title="Instalar..." ></a>&nbsp;&nbsp;
-                                <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/desinstalar.png" alt="Desinstalar" title="Desinstalar..." ></a>
+                                
                             </td>
 
                     </c:if>
@@ -52,7 +52,7 @@
                             <td>
                                 <a href="instalaciones?accion=ver&numServicio=${servicio.numServicio}"><img src="imagenes/ver.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
                                 <a href="instalaciones?accion=instalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/instalar.png" alt="Instalar" title="Instalar..." ></a>&nbsp;&nbsp;
-                                <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/desinstalar.png" alt="Desinstalar" title="Desinstalar..." ></a>
+                                
                             </td>
 
                     </c:if>
