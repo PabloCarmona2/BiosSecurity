@@ -20,5 +20,6 @@ public interface ILogicaRecibo {
     void GenerarRecibos(List<Recibo> recibos) throws Exception;
     void Cobrar(Recibo recibo) throws Exception;
     Recibo Buscar(int numRecibo) throws Exception;
-    
+    List<Recibo> RecibosaCobrar(String zona) throws Exception;
+    List<Recibo> ListarRecibos() throws Exception;
 }

@@ -85,4 +85,28 @@ public class LogicaRecibo implements ILogicaRecibo{
     public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
         return null;
     }
+    public List<Recibo> RecibosaCobrar(String zona) throws Exception{
+        
+        try {
+        List<Recibo>recibos=new ArrayList<Recibo>();
+        
+        recibos=FabricaPersistencia.GetPersistenciaRecibo().RecibosaCobrar(zona);
+        
+        return recibos;
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+    }
+    public List<Recibo> ListarRecibos() throws Exception{
+        
+        try {
+        List<Recibo>recibos=new ArrayList<Recibo>();
+        
+        recibos=FabricaPersistencia.GetPersistenciaRecibo().ListarRecibos();
+        
+        return recibos;
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }
+    }
 }

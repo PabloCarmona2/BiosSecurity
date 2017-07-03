@@ -16,6 +16,7 @@
         <ul>
             <li><a href="recibos?accion=generar">Generar Recibos de Cobro...</a></li>
             <li><a href="recibos?accion=cobrar">Cobrar un Recibo...</a></li>
+            <li><a href="recibos?accion=recibosacobrar">Listar Recibos para Cobrar por Barrio...</a></li>
         
         </ul>
         <t:Mensaje />

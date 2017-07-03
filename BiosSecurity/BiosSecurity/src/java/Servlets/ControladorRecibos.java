@@ -189,5 +189,54 @@ public class ControladorRecibos extends Controlador {
         
         }
     }
+    public void recibosacobrar_post(HttpServletRequest request, HttpServletResponse response){
     
+        try {
+            List<Recibo> recibos = new ArrayList<Recibo>();
+            List<String> barrios= new ArrayList<String>();
+            
+            String barrio= request.getParameter("recibosacobrar");
+            
+            recibos = FabricaLogica.GetLogicaRecibo().RecibosaCobrar(barrio);
+            
+                for (Recibo r : recibos){
+                    if (!barrios.contains(r.getCliente().getBarrio())) {
+                         barrios.add(r.getCliente().getBarrio());   
+                    }
+                }
+                
+            barrios= (List<String>)request.getSession().getAttribute("barrios");
+            request.getSession().setAttribute("barrios", barrios);
+            request.setAttribute("recibos", recibos);
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al mostrar los recibos.", request);
+        }
+        
+        mostrarVista("listarRecibosPorZona", request, response);
+    }
+    public void recibosacobrar_get(HttpServletRequest request, HttpServletResponse response){
+     String barrio="";
+        try {
+            List<Recibo> recibos = new ArrayList<Recibo>();
+            List<String> barrios= new ArrayList<String>();
+            
+            recibos = FabricaLogica.GetLogicaRecibo().ListarRecibos();
+            
+                for (Recibo r : recibos){
+                    if (!barrios.contains(r.getCliente().getBarrio())) {
+                         barrios.add(r.getCliente().getBarrio());   
+                    }
+                }
+                
+            request.getSession().setAttribute("barrios", barrios);
+            request.setAttribute("recibosGenerales", recibos);
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al mostrar los recibos.", request);
+        }
+        
+        mostrarVista("listarRecibosPorZona", request, response);
+    }
+     
 }

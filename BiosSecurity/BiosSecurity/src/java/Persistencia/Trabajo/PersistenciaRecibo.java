@@ -105,22 +105,28 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             }
         }
     }
-    
+    //SELECT * FROM CabezalRecibo INNER JOIN Clientes ON CabezalRecibo.Cliente = Clientes.Cedula Where Clientes.Barrio=?
     public List<Recibo> RecibosaCobrar(String zona) throws Exception{
-        ResultSet resultado=null;
-        PreparedStatement consulta=null;
-        Connection conexion=null;
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-        }catch(Exception ex){
+        
+                try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
-        try{
-            conexion= DriverManager.getConnection("jdbc:mysql//localhost:3306/BiosSecurity,root,root");
-            consulta=conexion.prepareCall("SELECT * FROM CabezaldeRecibo INNERJOIN Clientes ON CabezaldeRecibo.Cliente = Clientes.Cedula Where Cliente.Barrio=?;");
-            resultado= consulta.executeQuery();
+        
+        Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultado;
+        
+        try {
+            
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
+            consulta = conexion.prepareStatement("SELECT * FROM CabezalRecibo INNER JOIN Clientes ON CabezalRecibo.Cliente = Clientes.Cedula Where Clientes.Barrio=?;");
+            
             consulta.setString(1, zona);
+            
+            resultado = consulta.executeQuery();
             
             List<Recibo> listaRecibo = new ArrayList<Recibo>();
             Recibo unRecibo=null;
@@ -167,7 +173,50 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
         }
        
     }
-    
+    public List<Recibo> ListarRecibos() throws Exception{
+        try {
+            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        } catch (Exception ex) {
+            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
+        
+        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+                PreparedStatement consulta = conexion.prepareStatement("SELECT * FROM cabezalrecibo where cobrado=false;"); 
+                ResultSet resultado = consulta.executeQuery()) {
+           
+            
+            List<Recibo> listaRecibo = new ArrayList<Recibo>();
+            Recibo unRecibo=null;
+            
+            int numRecibo;
+            Date fecha;
+            double total;
+            Cliente cliente;
+            Cobrador cobrador;
+            boolean cobrado;
+            List<LineaRecibo> lineas;
+            
+            while(resultado.next()){
+                numRecibo = resultado.getInt("NumRecibo");
+                fecha = resultado.getDate("Fecha");
+                total = resultado.getDouble("Total");
+                cliente =Persistencia.FabricaPersistencia.getPersistenciaCliente().Buscar(resultado.getInt("Cliente"));
+                cobrador =Persistencia.FabricaPersistencia.getPersistenciaCobrador().Buscar(resultado.getInt("Cobrador"));
+                cobrado = resultado.getBoolean("Cobrado");
+                lineas= Persistencia.Trabajo.PersistenciaLineaRecibo.GetInstancia().ListarLineas(resultado.getInt("NumRecibo"));
+                unRecibo = new Recibo(numRecibo,fecha,total,cliente,cobrador,cobrado,lineas);
+                
+                listaRecibo.add(unRecibo);
+            }
+            
+            
+             return listaRecibo;
+        } catch (Exception ex) {
+            
+          throw new Exception(ex.getMessage());
+        }
+       
+    }
     public void Cobrar(Recibo recibo) throws Exception{
         
         try {

@@ -263,7 +263,7 @@ VALUES(NULL, NULL, 13, NULL, false);
 INSERT INTO Camaras
 VALUES(NULL, NULL, 14, NULL, false);
 
-/*INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20170630, 10000, 7, 5, false);
 
 INSERT INTO LineaRecibo
@@ -289,7 +289,7 @@ INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20170630, 10000, 10, 5, false);
 
 INSERT INTO LineaRecibo
-VALUES(10000, 4, 5);*/
+VALUES(10000, 4, 5);
 
 #
 
@@ -299,8 +299,7 @@ VALUES(10000, 4, 5);*/
 #call modificarAdministrador(2);
 #UPDATE Empleados SET Nombre = 'asas', Clave = 2121 , empleados.FIngreso=20101010 , empleados.Sueldo=1212 WHERE Cedula = 2;
 #call BajaTecnico (4, @Salida);
-#call desinstalarCamara(5,@salida);
-
+#call DesinstalarCamara(5);
 #
 #
 #
@@ -427,10 +426,10 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure DesinstalarCamara(pnumeroInventario bigint,pError varchar(500))
+CREATE procedure DesinstalarCamara(pnumeroInventario bigint)#,pError varchar(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	#DECLARE mensajeError VARCHAR(50);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -439,12 +438,12 @@ cuerpo:BEGIN
 			ROLLBACK;
         END IF;
 		
-		SET pError = mensajeError;
+		#SET pError = mensajeError;
 	END;
     
     IF NOT EXISTS(SELECT * FROM Camaras WHERE NumInventario = pnumeroInventario) 
     THEN
-			SET pError = 'No existe la camara que desea desinstalar!';
+			#SET pError = 'No existe la camara que desea desinstalar!';
             
 			LEAVE cuerpo;
 	END IF;
@@ -455,13 +454,13 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
-	SET pError = 'No se pudo desinstalar la camara correctamente!';
+	#SET pError = 'No se pudo desinstalar la camara correctamente!';
     
 	 UPDATE Dispositivos
     SET DescripcionUbicacion = null
     WHERE Dispositivos.NumInventario = pnumeroInventario;
 	
-    SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
+    #SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
     
     UPDATE Camaras
     SET Servicio = null, Tecnico = null, Exterior = null
@@ -669,10 +668,10 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure DesinstalarAlarma(numeroInventario int, OUT pError VARCHAR(500))
+CREATE procedure DesinstalarAlarma(numeroInventario int)#, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	#DECLARE mensajeError VARCHAR(50);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -681,12 +680,12 @@ cuerpo:BEGIN
 			ROLLBACK;
         END IF;
 		
-		SET pError = mensajeError;
+	#	SET pError = mensajeError;
 	END;
     
     IF NOT EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario) 
     THEN
-			SET pError = 'No existe la alarma que desea desinstalar!';
+	#		SET pError = 'No existe la alarma que desea desinstalar!';
             
 			LEAVE cuerpo;
 	END IF;
@@ -697,14 +696,20 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
+<<<<<<< HEAD
+	#SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
+	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+
+=======
 	SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
 	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+>>>>>>> 2ca0deb69dccf3c899d254cc0eb302b84fef3aae
     
 	UPDATE Dispositivos
     SET DescripcionUbicacion = null
     WHERE NumInventario = numeroInventario;
     
-	SET pError = 'No se pudo desinstalar la alarma correctamente!.';
+	#SET pError = 'No se pudo desinstalar la alarma correctamente!.';
 	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
     
 	UPDATE Alarmas
