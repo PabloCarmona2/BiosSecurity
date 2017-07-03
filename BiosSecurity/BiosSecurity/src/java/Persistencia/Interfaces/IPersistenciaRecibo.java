@@ -19,4 +19,5 @@ public interface IPersistenciaRecibo {
     List<Recibo> RecibosaCobrar(String zona) throws Exception;
     void GenerarRecibos(List<Recibo> lista) throws Exception;
     Recibo Buscar(int numRecibo) throws Exception;
+    List<Recibo> ListarRecibos() throws Exception;
 }
