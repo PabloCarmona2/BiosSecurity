@@ -30,9 +30,10 @@
                 <tr>
                     <td>Cliente inexistente?:(rellene los campos de cliente (Rojos) en caso de marcar esta casilla)</td>
                     <td>
-                        <input type="check" name="clienteInexistente" value="${param.clienteInexistente}" id="clienteInexistente" />
+                        <input type="checkbox" name="clienteInexistente" value="${param.clienteInexistente}" id="clienteInexistente" />
                     </td>
                 </tr>
+                <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
                 <tr>
                     <td style="color:red">(cliente)Nombre:</td>
                     <td>
@@ -63,6 +64,9 @@
                         <input type="text" name="telefonoCliente" value="${param.telefonoCliente}" id="telefonoCliente" />
                     </td>
                 </tr>
+                <tr></tr>
+                <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
+                
                 <tr>
                     <td>(*)Numero de propiedad :</td>
                     <td>
@@ -72,9 +76,10 @@
                 <tr>
                     <td>Propiedad inexistente?:(rellene los campos de propiedad (Verde) en caso de marcar esta casilla)</td>
                     <td>
-                        <input type="check" name="propiedadInexistente" value="${param.propiedadInexistente}" id="propiedadInexistente" />
+                        <input type="checkbox" name="propiedadInexistente" value="${param.propiedadInexistente}" id="propiedadInexistente" />
                     </td>
                 </tr>
+                <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
                 <tr>
                     <td style="color:green">(propiedad)Tipo:</td>
                     <td>
@@ -87,6 +92,10 @@
                         <input type="text" name="direccionPropiedad" value="${param.direccionPropiedad}" id="direccionPropiedad" />
                     </td>
                 </tr>
+                <tr></tr>
+                <tr></tr>
+                <tr></tr><tr></tr>
+                <tr></tr><tr></tr>
                 <tr>
                     <td>(*)Monitoreo:</td>
                     <td>

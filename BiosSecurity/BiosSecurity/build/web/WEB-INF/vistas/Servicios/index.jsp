@@ -59,7 +59,6 @@
                                 <a href="servicios?accion=desactivar&numServicio=${servicio.numServicio}"><img src="imagenes/eliminar.png" alt="Desactivar" title="Desactivar..." ></a>&nbsp;&nbsp;
                                 
                             </td>
-
                     </c:if>
                     
                 </tr>
