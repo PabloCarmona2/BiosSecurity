@@ -426,10 +426,10 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure DesinstalarCamara(pnumeroInventario bigint)#,pError varchar(500))
+CREATE procedure DesinstalarCamara(pnumeroInventario bigint, pError varchar(500))
 cuerpo:BEGIN
 
-	#DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(50);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -438,12 +438,12 @@ cuerpo:BEGIN
 			ROLLBACK;
         END IF;
 		
-		#SET pError = mensajeError;
+		SET pError = mensajeError;
 	END;
     
     IF NOT EXISTS(SELECT * FROM Camaras WHERE NumInventario = pnumeroInventario) 
     THEN
-			#SET pError = 'No existe la camara que desea desinstalar!';
+			SET pError = 'No existe la camara que desea desinstalar!';
             
 			LEAVE cuerpo;
 	END IF;
@@ -452,21 +452,19 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
-	SET FOREIGN_KEY_CHECKS = 0;
     
-	#SET pError = 'No se pudo desinstalar la camara correctamente!';
+	SET mensajeError = 'No se pudo desinstalar la camara correctamente!';
     
 	 UPDATE Dispositivos
     SET DescripcionUbicacion = null
     WHERE Dispositivos.NumInventario = pnumeroInventario;
 	
-    #SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
+    SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
     
     UPDATE Camaras
     SET Servicio = null, Tecnico = null, Exterior = null
     WHERE Camaras.NumInventario = pnumeroInventario;
     
-	SET FOREIGN_KEY_CHECKS = 1;
     
 	COMMIT;
     
@@ -511,7 +509,7 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
-    SET FOREIGN_KEY_CHECKS = 0;
+    
     IF EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario AND Servicio != null)
     THEN
 			SET mensajeError = 'No se pudo dar de baja la camara indicada!';
@@ -543,7 +541,7 @@ cuerpo:BEGIN
            
         
 	END IF;
-	SET FOREIGN_KEY_CHECKS = 1;
+    
 	COMMIT;
     
     SET transaccionActiva = 0;
@@ -668,10 +666,10 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure DesinstalarAlarma(numeroInventario int)#, OUT pError VARCHAR(500))
+CREATE procedure DesinstalarAlarma(numeroInventario int, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	#DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(50);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -680,12 +678,12 @@ cuerpo:BEGIN
 			ROLLBACK;
         END IF;
 		
-	#	SET pError = mensajeError;
+		SET pError = mensajeError;
 	END;
     
     IF NOT EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario) 
     THEN
-	#		SET pError = 'No existe la alarma que desea desinstalar!';
+			SET pError = 'No existe la alarma que desea desinstalar!';
             
 			LEAVE cuerpo;
 	END IF;
@@ -694,22 +692,16 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
-	SET FOREIGN_KEY_CHECKS = 0;
-    
-<<<<<<< HEAD
-	#SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
-	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
-
 
 	#SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
-	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+	SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
     
 	UPDATE Dispositivos
     SET DescripcionUbicacion = null
     WHERE NumInventario = numeroInventario;
     
 	#SET pError = 'No se pudo desinstalar la alarma correctamente!.';
-	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+	SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
     
 	UPDATE Alarmas
     SET Servicio = null, Tecnico = null
@@ -761,7 +753,6 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
-    SET FOREIGN_KEY_CHECKS = 0;
     
     IF EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario AND Servicio != null)
     THEN
@@ -792,7 +783,6 @@ cuerpo:BEGIN
         
 	END IF;
 	
-    SET FOREIGN_KEY_CHECKS = 1;
     
 	COMMIT;
     
@@ -893,7 +883,6 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
-    SET FOREIGN_KEY_CHECKS = 0;
 	
 	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
 	
@@ -908,7 +897,6 @@ cuerpo:BEGIN
 	SET Especializacion = especializacion
     WHERE Cedula = pCedula;
     
-    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -950,7 +938,6 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
-    SET FOREIGN_KEY_CHECKS = 0;
 	
 	SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
 	
@@ -961,7 +948,6 @@ cuerpo:BEGIN
 	
 	DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
     
-    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -1082,12 +1068,10 @@ cuerpo:BEGIN
     
     SET pNumRecibo = (SELECT MAX(NumRecibo) FROM CabezalRecibo);
     
-    SET FOREIGN_KEY_CHECKS = 0;
     
 	INSERT INTO LineaRecibo(Importe, NumRecibo, Servicio)
     VALUES(_importe, pNumRecibo, _servicio);
     
-    SET FOREIGN_KEY_CHECKS = 1;
     
     SET sinErrores = 0;
 	
@@ -1170,7 +1154,6 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
-	SET FOREIGN_KEY_CHECKS = 0;
     
     SET mensajeError = 'No se pudo modificar el servicio correctamente!';
     
@@ -1184,7 +1167,6 @@ cuerpo:BEGIN
     SET CodAnulacion = pCodAnulacion
     WHERE NumServicio = pNumServicio;
     
-    SET FOREIGN_KEY_CHECKS = 1;
     
     COMMIT;
     
@@ -1224,7 +1206,6 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
-    SET FOREIGN_KEY_CHECKS = 0;
     #SET pError = 'No se pudo desinstalar la alarma correctamente!.';
 	SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
     
@@ -1243,7 +1224,6 @@ cuerpo:BEGIN
 	DELETE FROM biossecurity.servicios
     WHERE servicios.NumServicio = pNumservicio;
     
-    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -1255,7 +1235,6 @@ END//
 DELIMITER ;
 
 
-CALL EliminarServicioAlarma(5, @salida);
 
 DELIMITER //
 
@@ -1361,7 +1340,6 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
 	
-    SET FOREIGN_KEY_CHECKS = 0;
     
     #SET pError = 'No se pudo desinstalar la alarma correctamente!.';
 	SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
@@ -1381,7 +1359,6 @@ cuerpo:BEGIN
 	DELETE FROM servicios
     WHERE servicios.NumServicio = pNumservicio;
     
-    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -1421,7 +1398,6 @@ cuerpo:BEGIN
     
 	SET mensajeError = 'No se pudo modificar el servicio correctamente!';
     
-	SET FOREIGN_KEY_CHECKS = 0;
     
 	UPDATE servicios
     SET Fecha = pFecha, Monitoreo = pMonitoreo, Propiedad = pPropiedad, Cliente = pCliente
@@ -1431,7 +1407,6 @@ cuerpo:BEGIN
     SET Terminal = pTerminal
     WHERE NumServicio = pNumServicio;
     
-    SET FOREIGN_KEY_CHECKS = 1;
     
     COMMIT;
     
@@ -1515,7 +1490,6 @@ cuerpo:BEGIN
     
     SET sinErrores = 1;
     
-	SET FOREIGN_KEY_CHECKS = 0;
     
 	UPDATE Empleados
     SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
@@ -1523,7 +1497,6 @@ cuerpo:BEGIN
     
     SET sinErrores = 0;
     
-    SET FOREIGN_KEY_CHECKS = 1;
     
 END//
 
@@ -1558,7 +1531,6 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
-    SET FOREIGN_KEY_CHECKS = 0;
 	
 	SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
 	
@@ -1569,7 +1541,6 @@ cuerpo:BEGIN
 	
 	DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
     
-    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -1587,7 +1558,7 @@ DELIMITER //
 CREATE procedure ModificarCliente(pCedula bigint, nombre VARCHAR(25), barrio VARCHAR(20),  dirCobro VARCHAR(25),  telefono VARCHAR(20), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE sinErrores BIT;
 	
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1625,7 +1596,7 @@ DELIMITER //
 CREATE PROCEDURE AltaCliente(pCedula bigint, nombre VARCHAR(25), barrio VARCHAR(20),  telefono VARCHAR(20),  dirCobro VARCHAR(25), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE sinErrores BIT;
 	
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1662,7 +1633,7 @@ DELIMITER //
 CREATE PROCEDURE AltaPropiedad(tipo VARCHAR(20), direccion VARCHAR(25),  pCliente bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
 	DECLARE pIdProp BIGINT;
     DECLARE sinErrores BIT;
 
@@ -1700,7 +1671,7 @@ DELIMITER //
 CREATE procedure AgregarCobrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, Transporte varchar(20), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1741,7 +1712,7 @@ DELIMITER //
 CREATE procedure ModificarCobrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, pTransporte varchar(20), OUT pError varchar(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1764,7 +1735,6 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
 	
-    SET FOREIGN_KEY_CHECKS = 0;
     
 	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
     
@@ -1778,7 +1748,6 @@ cuerpo:BEGIN
     set Transporte = pTransporte
     where Cedula = pCedula;
     
-    SET FOREIGN_KEY_CHECKS = 1;
     
     COMMIT;
     
@@ -1793,7 +1762,7 @@ DELIMITER //
 CREATE procedure EliminarCobrador(pCedula bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1817,8 +1786,6 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
-    
-    SET FOREIGN_KEY_CHECKS = 0;
 	
 	SET mensajeError = 'No se pudo eliminar el cobrador correctamente!';
 	
@@ -1828,8 +1795,6 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
 	
 	DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
-    
-    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -1838,5 +1803,4 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
-
 

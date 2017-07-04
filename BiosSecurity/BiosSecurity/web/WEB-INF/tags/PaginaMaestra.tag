@@ -26,6 +26,5 @@
         
         <jsp:doBody />
         
-        <script src="js/general.js"></script>
     </body>
 </html>
