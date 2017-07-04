@@ -6,6 +6,7 @@
 package Servlets;
 
 import DataTypes.Administrador;
+import DataTypes.Cobrador;
 import DataTypes.Empleado;
 import DataTypes.Precios;
 import Logica.FabricaLogica;
@@ -26,7 +27,21 @@ import javax.servlet.http.HttpServletResponse;
 public class ControladorPrecios extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         
-        verificarLogueo(request, response);
+            verificarLogueo(request, response);
+        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         
         mostrarVista("index", request, response);
         

@@ -7,6 +7,7 @@ package Servlets;
 
 import DataTypes.Administrador;
 import DataTypes.Empleado;
+import DataTypes.Tecnico;
 import Logica.FabricaLogica;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -28,6 +29,20 @@ public class ControladorAdministrador extends Controlador {
         try {
             
             verificarLogueo(request, response);
+            
+            try{
+                try{
+                    Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+                }catch(Exception ex){
+
+                    request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                    response.sendRedirect("login");
+
+                }
+            }catch(Exception ex){
+                cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+            }
             
             List<Empleado> empleados = new ArrayList<Empleado>();
             
@@ -69,7 +84,19 @@ public class ControladorAdministrador extends Controlador {
         mostrarVista("listaAdministradores", request, response);
     }
     public void agregar_get(HttpServletRequest request, HttpServletResponse response) {
-        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         mostrarVista("agregarAdministrador", request, response);
         
     }
@@ -135,6 +162,19 @@ public class ControladorAdministrador extends Controlador {
         }
     }
     public void ver_get(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         int cedula;
         
         try {
@@ -174,6 +214,19 @@ public class ControladorAdministrador extends Controlador {
         mostrarVista("verAdministrador", request, response);
     }
     public void modificar_get(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         int cedula;
         
         try {
@@ -276,6 +329,19 @@ public class ControladorAdministrador extends Controlador {
         }
     }
     public void eliminar_get(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         int cedula;
         
         try {

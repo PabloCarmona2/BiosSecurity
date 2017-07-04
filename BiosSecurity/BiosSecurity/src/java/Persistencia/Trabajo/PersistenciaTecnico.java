@@ -258,8 +258,6 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         consulta.setInt(1, cedula);
         consulta.setString(2, clave);
         ResultSet resultado = consulta.executeQuery(); 
-        consulta.setInt(1, cedula);
-        consulta.setString(2, clave);
         String nombre;
         String claveAdmin;
         Date fIngreso;

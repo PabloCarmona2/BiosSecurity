@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import DataTypes.Administrador;
 import DataTypes.Alarma;
 import DataTypes.Camara;
 import DataTypes.Dispositivo;
@@ -31,6 +32,20 @@ public class ControladorDispositivo extends Controlador {
         try {
             
             verificarLogueo(request, response);
+            
+            try{
+                try{
+                    Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+                }catch(Exception ex){
+
+                    request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                    response.sendRedirect("login");
+
+                }
+            }catch(Exception ex){
+                cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+            }
             
             List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
             
@@ -74,6 +89,21 @@ public class ControladorDispositivo extends Controlador {
     }
     
     public void ver_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
+        
         int numInventario;
         
         try {
@@ -113,7 +143,19 @@ public class ControladorDispositivo extends Controlador {
     }
     
     public void agregar_get(HttpServletRequest request, HttpServletResponse response) {
-        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         mostrarVista("agregar", request, response);
         
     }
@@ -158,6 +200,20 @@ public class ControladorDispositivo extends Controlador {
     }
     
     public void eliminar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         Integer numInventario;
         
         try {

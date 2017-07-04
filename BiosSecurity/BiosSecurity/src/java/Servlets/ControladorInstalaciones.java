@@ -5,8 +5,10 @@
  */
 package Servlets;
 
+import DataTypes.Administrador;
 import DataTypes.Alarma;
 import DataTypes.Camara;
+import DataTypes.Cobrador;
 import DataTypes.Dispositivo;
 import Logica.FabricaLogica;
 import java.io.IOException;
@@ -31,6 +33,20 @@ public class ControladorInstalaciones extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             verificarLogueo(request, response);
+            
+            try{
+                try{
+                    Tecnico tec = (Tecnico)request.getSession().getAttribute("empleadoLogueado");
+                }catch(Exception ex){
+
+                    request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                    response.sendRedirect("login");
+
+                }
+            }catch(Exception ex){
+                cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+            }
             
             List<Servicio> servicios = new ArrayList<Servicio>();
             
@@ -74,6 +90,20 @@ public class ControladorInstalaciones extends Controlador {
     }
     
     public void ver_get(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            try{
+                Tecnico tec = (Tecnico)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
+        
         int numServicio;
         
         try {
@@ -120,6 +150,21 @@ public class ControladorInstalaciones extends Controlador {
     }
     
     public void instalar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            try{
+                Tecnico tec = (Tecnico)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
+        
         try{
             
             Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
@@ -215,67 +260,23 @@ public class ControladorInstalaciones extends Controlador {
         }
     }
     
-    public void rellenar_post(HttpServletRequest request, HttpServletResponse response) {
-        
-        try{
-            Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
-            Dispositivo dispositivo = FabricaLogica.GetLogicaDispositivo().Buscar(Integer.parseInt(request.getParameter("numInventario")));
-            Tecnico tecnico = (Tecnico)FabricaLogica.GetLogicaEmpleado().Buscar(Integer.parseInt(request.getParameter("empleado")));
-            
-            if(servicio instanceof ServicioAlarma){
-                
-                Alarma alarma = (Alarma)dispositivo;
-                alarma.setDescripcionUbicacion(request.getParameter("descripcion"));
-                alarma.setInstalador(tecnico);
-                
-                
-                List<Alarma> alarmasInstaladas = ((ServicioAlarma) servicio).getAlarmas();
-                alarmasInstaladas.add((Alarma)dispositivo);
-                ((ServicioAlarma) servicio).setAlarmas(alarmasInstaladas);
-                
-                FabricaLogica.GetLogicaServicio().InstalarDispositivo(servicio);
-            
-                cargarMensaje("¡Alarma instalado con éxito!", request.getSession());
-                
-
-                response.sendRedirect("instalaciones");
-                
-                
-            }
-            else if(servicio instanceof ServicioVideoVigilancia){
-                
-                Camara camara = (Camara)dispositivo;
-                camara.setDescripcionUbicacion(request.getParameter("descripcion"));
-                camara.setInstalador(tecnico);
-                
-                if(request.getParameter("exterior") != null){
-                    camara.setExterior(true);
-                }else{
-                    camara.setExterior(false);
-                }
-                
-                List<Camara> camarasInstaladas = ((ServicioVideoVigilancia) servicio).getCamaras();
-                camarasInstaladas.add((Camara)dispositivo);
-                ((ServicioVideoVigilancia) servicio).setCamaras(camarasInstaladas);
-                
-                
-                FabricaLogica.GetLogicaServicio().InstalarDispositivo(servicio);
-            
-                cargarMensaje("¡Camara instalada con éxito!", request.getSession());
-                
-
-                response.sendRedirect("instalaciones");
-                
-            }else{
-                cargarMensaje("¡ERROR! Tipo de servicio invalido.", request);
-                return;
-            }
-        }catch(Exception ex){
-            cargarMensaje("¡ERROR! Se produjo un error al instalar el dispositivo.", request);
-        }
-    }
+    
     
     public void desinstalar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            try{
+                Tecnico tec = (Tecnico)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         
         int numInventario;
         

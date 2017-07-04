@@ -7,6 +7,7 @@ package Servlets;
 
 import DataTypes.Empleado;
 import Logica.FabricaLogica;
+import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -23,7 +24,22 @@ public class ControladorLogin extends Controlador{
             
             cargarMensaje((String)request.getSession().getAttribute("mensajeLogueo"), request.getSession());
             
+            if(request.getSession().getAttribute("empleadoLogueado") != null){
+                mostrarVista("MenuPrincipal", request, response);
+                request.getSession().removeAttribute("mensajeLogueo");
+                return;
+            }else{
+                mostrarVista("login", request, response);
+                request.getSession().removeAttribute("mensajeLogueo");
+                return;
+            }
+        }
+        
+        if(request.getSession().getAttribute("mensaje") != null){
+            
             mostrarVista("login", request, response);
+            
+            request.getSession().removeAttribute("mensaje");
         }
         
         if(request.getSession().getAttribute("empleadoLogueado") != null){
@@ -73,15 +89,15 @@ public class ControladorLogin extends Controlador{
             cargarMensaje("¡ERROR! Se produjo un error al intentar login.", request);
         }
         mostrarVista("login", request, response);
-}
-    public void login_get(HttpServletRequest request, HttpServletResponse response) {
+    }
+    public void logout_get(HttpServletRequest request, HttpServletResponse response) throws IOException{
         
-        mostrarVista("MenuPrincipal", request, response);
-    }   
-    public void logout_get(HttpServletRequest request, HttpServletResponse response){
         if(request.getSession().getAttribute("empleadoLogueado")!= null){
+            
             request.getSession().removeAttribute("empleadoLogueado");
-            mostrarVista("login", request, response);
+            cargarMensaje("Empleado deslogueado con exito!!.", request.getSession());
+            
+            response.sendRedirect("login");
         }
     }
 }

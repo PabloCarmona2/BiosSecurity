@@ -5,8 +5,10 @@
  */
 package Servlets;
 
+import DataTypes.Administrador;
 import DataTypes.Cliente;
 import DataTypes.Cobrador;
+import DataTypes.Empleado;
 import DataTypes.LineaRecibo;
 import DataTypes.Precios;
 import DataTypes.Recibo;
@@ -38,23 +40,51 @@ public class ControladorRecibos extends Controlador {
     
     @Override
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
-        
-        verificarLogueo(request, response);
+        try {
+            verificarLogueo(request, response);
+            
+            Empleado empleado = (Empleado)request.getSession().getAttribute("empleadoLogueado");
+            
+            if(!(empleado instanceof Administrador) && !(empleado instanceof Cobrador)){
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+            }
+            
+        } catch (Exception ex) {
+            cargarMensaje("¡ERROR! Se produjo un error al ingresar al sitio.", request);
+        }
         
         mostrarVista("index", request, response);
     }
     
     public void generar_get(HttpServletRequest request, HttpServletResponse response) {
        try{
+           
+           try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
+           
             String fecha = new SimpleDateFormat("MMMM").format(new Date());
             request.setAttribute("mes", fecha);
+            
+            mostrarVista("generacionRecibos", request, response);
+            
        } catch(Exception ex){
            cargarMensaje("¡ERROR! se produjo un error al mostrar el mes", request);
            
            mostrarVista("index", request, response);
        }
-        mostrarVista("generacionRecibos", request, response);
-        
     }
     
     public void generar_post(HttpServletRequest request, HttpServletResponse response) {
@@ -144,8 +174,23 @@ public class ControladorRecibos extends Controlador {
     }
     public void cobrar_get(HttpServletRequest request, HttpServletResponse response) {
         
-        mostrarVista("cobrarRecibo", request, response);
         
+        try{
+            try{
+                    Cobrador cob = (Cobrador)request.getSession().getAttribute("empleadoLogueado");
+                }catch(Exception ex){
+
+                    request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                    response.sendRedirect("login");
+            }
+
+            } catch(Exception ex){
+               cargarMensaje("¡ERROR! se produjo un error al mostrar el sitio", request);
+
+               mostrarVista("index", request, response);
+           }
+            mostrarVista("cobrarRecibo", request, response);
     }
     
     public void cobrar_post(HttpServletRequest request, HttpServletResponse response) {
@@ -217,8 +262,23 @@ public class ControladorRecibos extends Controlador {
         mostrarVista("listarRecibosPorZona", request, response);
     }
     public void recibosacobrar_get(HttpServletRequest request, HttpServletResponse response){
+        try{
+            try{
+                Cobrador cob = (Cobrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
+        
+        
         request.setAttribute("zona", "");
-     String barrio="";
+        String barrio="";
         try {
             List<Recibo> recibos = new ArrayList<Recibo>();
             List<String> barrios= new ArrayList<String>();

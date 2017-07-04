@@ -32,6 +32,20 @@ public class ControladorCobrador extends Controlador {
             
             verificarLogueo(request, response);
             
+            try{
+                try{
+                    Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+                }catch(Exception ex){
+
+                    request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                    response.sendRedirect("login");
+
+                }
+            }catch(Exception ex){
+                cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+            }
+            
             List<Empleado> empleados = new ArrayList<Empleado>();
             
             if(request.getParameter("buscar") != null){
@@ -77,7 +91,19 @@ public class ControladorCobrador extends Controlador {
     
     
     public void agregar_get(HttpServletRequest request, HttpServletResponse response) {
-        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         mostrarVista("agregarCobrador", request, response);
         
     }
@@ -152,6 +178,19 @@ public class ControladorCobrador extends Controlador {
     }
     
     public void ver_get(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         int cedula;
         
         try {
@@ -192,6 +231,19 @@ public class ControladorCobrador extends Controlador {
     }
     
     public void modificar_get(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         int cedula;
         
         try {
@@ -297,6 +349,19 @@ public class ControladorCobrador extends Controlador {
     }
     
     public void eliminar_get(HttpServletRequest request, HttpServletResponse response) {
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         int cedula;
         
         try {

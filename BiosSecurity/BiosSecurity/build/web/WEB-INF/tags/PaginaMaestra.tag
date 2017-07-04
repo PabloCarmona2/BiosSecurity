@@ -5,6 +5,7 @@
 --%>
 
 <%@tag description="Pagina Maestra" pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 
 <%-- The list of normal or fragment attributes can be specified here: --%>
 <%@attribute name="titulo"%>
@@ -19,7 +20,10 @@
     </head>
     <body>
         <div class="cabezal">
-            <h1>Bios Security</h1> <p style="float:right"><a href="login">LOGOUT</a></p>
+            <h1>Bios Security</h1> <p style="float:right">
+            <c:if test="${!empty empleadoLogueado}">
+                <a href="login?accion=logout">LOGOUT</a></p>
+            </c:if>
             
             <h2>${titulo}</h2>
         </div>

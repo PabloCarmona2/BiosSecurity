@@ -42,7 +42,7 @@
             </c:forEach>
         </table>
         
-        <p><a href="login?accion=login">Volver...</a></p>
+        <p><a href="login">Volver...</a></p>
      
         <t:Mensaje />
         

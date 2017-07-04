@@ -5,6 +5,7 @@
  */
 package Servlets;
 
+import DataTypes.Administrador;
 import DataTypes.Alarma;
 import DataTypes.Camara;
 import DataTypes.Cliente;
@@ -34,6 +35,20 @@ public class ControladorServicios extends Controlador {
     public void index_get(HttpServletRequest request, HttpServletResponse response) {
         try {
             verificarLogueo(request, response);
+            
+            try{
+                try{
+                    Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+                }catch(Exception ex){
+
+                    request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                    response.sendRedirect("login");
+
+                }
+            }catch(Exception ex){
+                cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+            }
             
             List<Servicio> servicios = new ArrayList<Servicio>();
             
@@ -77,6 +92,21 @@ public class ControladorServicios extends Controlador {
     }
     
     public void ver_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
+        
         int numServicio;
         
         try {
@@ -118,6 +148,21 @@ public class ControladorServicios extends Controlador {
     }
     
     public void registrar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
+        
         try{
             
             if(request.getParameter("tipo").equalsIgnoreCase("alarma")){
@@ -382,6 +427,20 @@ public class ControladorServicios extends Controlador {
     }
     
     public void desactivar_get(HttpServletRequest request, HttpServletResponse response) {
+        
+        try{
+            try{
+                Administrador admin = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+            }catch(Exception ex){
+
+                request.getSession().setAttribute("mensajeLogueo", "El usuario logueado no tiene los permisos para ingresar a este sitio!");
+
+                response.sendRedirect("login");
+
+            }
+        }catch(Exception ex){
+            cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
+        }
         
         int numServicio;
         

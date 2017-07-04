@@ -103,7 +103,7 @@ abstract class Controlador extends HttpServlet {
             }
             
         } catch (Exception ex) {
-            cargarMensaje("¡ERROR! al verificarla sesion", request);
+            cargarMensaje("¡ERROR! al verificar la sesion", request);
         }
     }
     

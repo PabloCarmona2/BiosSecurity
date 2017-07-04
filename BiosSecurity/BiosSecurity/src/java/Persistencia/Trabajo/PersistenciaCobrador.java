@@ -86,19 +86,27 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
             }
         }
      }
-    public Cobrador LoginCobrador(int cedula, String clave){
+    public Cobrador LoginCobrador(int cedula, String clave) throws Exception{
         Cobrador cobrador = null;
+        Connection conexion = null;
+        PreparedStatement consulta = null;
+        ResultSet resultadoConsulta;
         
          try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
-        }        
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-        PreparedStatement consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.cobradores c where c.Cedula = ? and e.Clave = ?;"); ResultSet resultado = consulta.executeQuery()) {
+        }
+        
+        try{
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+        
+           consulta = conexion.prepareStatement("Select * from biossecurity.empleados e inner join biossecurity.cobradores t ON e.Cedula = t.Cedula where t.Cedula = ? and e.Clave = ?;"); 
+           
         
         consulta.setInt(1, cedula);
         consulta.setString(2, clave);
+        ResultSet resultado = consulta.executeQuery();
         String nombre;
         String claveAdmin;
         Date fIngreso;
@@ -114,11 +122,20 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
                     
            cobrador = new Cobrador(cedula, nombre, claveAdmin, fIngreso, sueldo, transporte);
         }
-        }catch(Exception ex){
+        } catch (Exception ex) {
+            throw new Exception(ex.getMessage());
+        }finally {
+
             try {
-                throw new Exception(ex.getMessage());
-            } catch (Exception ex1) {
-                Logger.getLogger(PersistenciaAdministrador.class.getName()).log(Level.SEVERE, null, ex1);
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
             }
         }
          return cobrador;
