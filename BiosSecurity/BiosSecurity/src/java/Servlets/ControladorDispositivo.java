@@ -174,18 +174,22 @@ public class ControladorDispositivo extends Controlador {
             cargarMensaje("¡ERROR! Se produjo un error al determinar el tipo de dispositivo!.", request);
         }
         
-        Dispositivo dispositivo = null;
+        Camara oCamara = new Camara();
+        Alarma alarma = new Alarma();
         
         if(camara){
-            dispositivo = new Camara(null, null, null, null);
-        }
-        else{
-            dispositivo = new Alarma(null, null, null);
+            oCamara = new Camara(0, null, null, null);
+        }else{
+            alarma = new Alarma(0, null, null);
         }
         
         try {
+            if(camara){
+                FabricaLogica.GetLogicaDispositivo().Agregar(oCamara);
+            }else{
+                FabricaLogica.GetLogicaDispositivo().Agregar(alarma);
+            }
             
-            FabricaLogica.GetLogicaDispositivo().Agregar(dispositivo);
             
             cargarMensaje("¡Dispositivo agregado con éxito!", request.getSession());
             response.sendRedirect("dispositivos");

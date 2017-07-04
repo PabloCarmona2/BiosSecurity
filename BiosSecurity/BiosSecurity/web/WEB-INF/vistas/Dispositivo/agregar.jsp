@@ -19,8 +19,8 @@
         <form method="post" accept-charset="ISO-8859-1">
             <table>
                 <tr>
-                    <td>Tipo: Camara(Marcado)/Alarma(Desmarcado)</td>
-                    <input type="checkbox" name="tipoDispositivo" value="Camara">
+                    <td>Tipo: Camara(Marcado)/Alarma(Desmarcado)<input type="checkbox" name="tipoDispositivo" value="Camara"></td>
+                    
                 <tr>
                     <td>
                         <input type="submit" name="accion" value="Agregar" />

@@ -159,11 +159,11 @@ public class PersistenciaCobrador implements IPersistenciaCobrador{
             consulta.setDouble(5, Cob.getSueldo());
             consulta.setString(6, Cob.getTransporte());
      
-           consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+           consulta.registerOutParameter(7, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(6);
+            String error = consulta.getString(7);
             
            if(error != null){
                 throw new Exception("ERROR: " + error);

@@ -34,7 +34,7 @@ public class LogicaDispositivo implements ILogicaDispositivo{
             {
                 throw new Exception("El dispositivo no puede ser nulo.");
             }
-            if (dispositivo.getDescripcionUbicacion() != null && dispositivo.getDescripcionUbicacion().length() > 100 || dispositivo.getDescripcionUbicacion().length() == 0)
+            if (dispositivo.getDescripcionUbicacion() != null && dispositivo.getDescripcionUbicacion().length() > 100 || dispositivo.getDescripcionUbicacion() != null && dispositivo.getDescripcionUbicacion().length() == 0)
             {
                 throw new Exception("La descripcion de la ubicacion del dispositivo no puede tener mas de 100 caracteres o estar vacia.");
             }

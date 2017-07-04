@@ -338,17 +338,17 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo agregar el dispositivo correctamente!';
 	
     
-	INSERT INTO Dispositivos
-    VALUES(descripcion);
+	INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+    VALUES(descripcion, false);
     
-    SELECT idDispositivo = NumInventario
+    SET idDispositivo = (SELECT NumInventario
     FROM Dispositivos
-    ORDER BY NumInventario asc limit 1;
+    ORDER BY NumInventario desc limit 1);
     
 	SET mensajeError = 'No se pudo agregar la camara correctamente!.';
 	
 	INSERT INTO Camaras
-	VALUES(exterior, servicio, idDispositivo, tecnico);
+	VALUES(exterior, servicio, idDispositivo, tecnico, false);
 	
 	COMMIT;
     
@@ -357,7 +357,11 @@ cuerpo:BEGIN
 	
 END//
 
+
 DELIMITER ;
+
+#CALL AltaCamara(null, null, null, null, @salida);
+
 
 DELIMITER //
 
@@ -579,17 +583,17 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo agregar el dispositivo correctamente!';
 	
     
-	INSERT INTO Dispositivos
-    VALUES(descripcion);
+	INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
+    VALUES(descripcion, false);
     
-    SELECT idDispositivo = NumInventario
+    SET idDispositivo = (SELECT NumInventario
     FROM Dispositivos
-    ORDER BY NumInventario asc limit 1;
+    ORDER BY NumInventario desc limit 1);
     
 	SET mensajeError = 'No se pudo agregar la alarma correctamente!.';
 	
 	INSERT INTO Alarmas
-	VALUES(servicio, idDispositivo, tecnico);
+	VALUES(servicio, idDispositivo, tecnico, false);
 	
 	COMMIT;
     

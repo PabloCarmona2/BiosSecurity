@@ -111,7 +111,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(4);
+            String error = consulta.getString(5);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);
