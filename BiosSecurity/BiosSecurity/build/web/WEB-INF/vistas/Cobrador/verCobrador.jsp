@@ -13,7 +13,7 @@
 <t:PaginaMaestra titulo="Ver Empleado">
     <jsp:body>
         <c:if test="${!empty empleado}">
-            <jsp:useBean id="empleado" type="DataTypes.Tecnico" scope="request" />
+            <jsp:useBean id="empleado" type="DataTypes.Cobrador" scope="request" />
             
             <h3><jsp:getProperty name="empleado" property="nombre" /></h3>
             
@@ -27,7 +27,7 @@
             </ul>
         </c:if>
         
-        <p><a href="tecnicos">Volver...</a></p>
+        <p><a href="cobradores">Volver...</a></p>
         
         <t:Mensaje />
     </jsp:body>

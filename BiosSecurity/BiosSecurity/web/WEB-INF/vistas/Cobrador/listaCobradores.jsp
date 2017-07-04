@@ -10,7 +10,7 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:PaginaMaestra titulo="Empleados">
+<t:PaginaMaestra titulo="Cobradores">
     <jsp:body>
         <fmt:setLocale value="en-US" />
         
@@ -18,7 +18,7 @@
             <p><input type="text" name="buscar" value="${param.buscar}" id="buscar" /> <input type="submit" value="Buscar" /></p>
         </form>
         
-        <p><a href="cobradores?accion=agregar"><img src="imagenes/glyphicons-191-plus-sign.png" alt="Agregar" title="Agregar..." ></a></p>
+        <p><a href="cobradores?accion=agregar"><img src="imagenes/agregar.png" alt="Agregar" title="Agregar..." ></a></p>
         
         <table class="listado">
             <tr>
@@ -43,7 +43,7 @@
             </c:forEach>
         </table>
         
-        <p><a href="inicio">Volver...</a></p>
+        <p><a href="login?accion=login">Volver...</a></p>
         
         <t:Mensaje />
         

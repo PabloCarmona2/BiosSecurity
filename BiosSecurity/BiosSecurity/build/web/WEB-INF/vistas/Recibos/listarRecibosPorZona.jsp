@@ -3,39 +3,6 @@
     Created on : 2/07/2017, 04:29:02 PM
     Author     : matias
 --%>
-<%--
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
-<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
-
-<t:PaginaMaestra titulo="Administradores">
-    <jsp:body>
-        <fmt:setLocale value="en-US" />
-        
-        <form method="post">
-        <input list="barrios" name="barrios">
-            <datalist id="barrios">
-                <c:forEach items="${recibosGenerales}" var="recibo">
-                <option href="administrador?accion=RecibosaCobrar&barrio=${recibo.Cliente.barrio}">
-                </c:forEach>
-            </datalist>
-        <input type="submit">
-        </form>
-              
-        
-        <p><a href="login?accion=login">Volver...</a></p>
-     
-        <t:Mensaje />
-        
-        <script>
-            document.getElementById('barrios').focus();
-            document.getElementById('barrios').select();
-        </script>
-    </jsp:body>
-</t:PaginaMaestra>
-        --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
@@ -47,15 +14,18 @@
         <fmt:setLocale value="en-US" />
         <form method="post" accept-charset="ISO-8859-1">
             <select name="recibosacobrar">
+                <option selected>Seleccione un barrio</option>
                    <c:forEach items="${barrios}" var="barrio">
-                       <option>${barrio}</option>                                                
-                   </c:forEach>                              
+                       
+                      <option value="${barrio}">${barrio}</option>  
+                       
+                  </c:forEach>                              
             </select>
             <input type="submit" name="accion" value="recibosacobrar"/>
-        </form>
-        
-            
-      
+        </form>  
+        <c:if test="${! empty zona}">
+            <h3>${zona}</h3>
+        </c:if>
         <table class="listado">
             <tr>
                 <th>Numero de Recibo</th><th>NOMBRE</th><th>Total</th><th>FECHA</th><th></th>

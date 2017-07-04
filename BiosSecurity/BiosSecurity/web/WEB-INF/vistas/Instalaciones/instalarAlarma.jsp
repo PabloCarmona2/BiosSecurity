@@ -38,7 +38,7 @@
                 <tr>
                     <td>Instalador:</td>
                     <td>
-                        <input type="text" name="instalador" value="" id="empleado" />
+                        <input type="text" name="instalador" value="${empleadoLogueado.cedula}" readonly="readonly" id="empleado" />
                     </td>
                 </tr>
                 <tr>

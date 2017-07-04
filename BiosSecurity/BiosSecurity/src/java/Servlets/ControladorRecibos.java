@@ -206,8 +206,9 @@ public class ControladorRecibos extends Controlador {
                 }
                 
             barrios= (List<String>)request.getSession().getAttribute("barrios");
-            request.getSession().setAttribute("barrios", barrios);
+            request.setAttribute("barrios", barrios);
             request.setAttribute("recibos", recibos);
+            request.setAttribute("zona",barrio);
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los recibos.", request);
@@ -216,6 +217,7 @@ public class ControladorRecibos extends Controlador {
         mostrarVista("listarRecibosPorZona", request, response);
     }
     public void recibosacobrar_get(HttpServletRequest request, HttpServletResponse response){
+        request.setAttribute("zona", "");
      String barrio="";
         try {
             List<Recibo> recibos = new ArrayList<Recibo>();

@@ -163,18 +163,18 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL DesinstalarAlarma(?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL DesinstalarAlarma(?,?) }")) {
            //saque el parametro de salida
             consulta.setInt(1, alarma.getNumInventario());
-            //consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
+            consulta.registerOutParameter(2, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-//            String error = consulta.getString(2);
-//            
-//            if(error != null){
-//                throw new Exception("ERROR: " + error);
-//            }
+            String error = consulta.getString(2);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
             
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
