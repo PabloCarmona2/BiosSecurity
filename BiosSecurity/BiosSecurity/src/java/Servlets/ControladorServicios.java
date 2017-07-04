@@ -405,7 +405,7 @@ public class ControladorServicios extends Controlador {
             
             if (servicio != null) {
                 
-                request.getSession().setAttribute("dispositivo", servicio);
+                request.getSession().setAttribute("servicio", servicio);
                 
             } else {
                 

@@ -80,7 +80,7 @@
             
         </table>
             
-        <p><a href="instalaciones">Volver...</a></p>
+        <p><a href="servicios">Volver...</a></p>
         
         <t:Mensaje />
     </jsp:body>

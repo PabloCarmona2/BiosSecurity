@@ -102,7 +102,7 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM Clientes INNER JOIN Propiedades ON Clientes.Cedula = Propiedades.Cliente INNER JOIN Servicios ON Propiedades.IdProp = Servicios.Propiedad WHERE Servicios.NumServicio = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM Servicios INNER JOIN propiedades ON Servicios.Propiedad = Propiedades.IdProp AND Servicios.Cliente = Propiedades.Cliente WHERE Servicios.NumServicio = ?;");
             
             consulta.setInt(1, numServicio);
             
@@ -116,11 +116,11 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
             Cliente cliente;
             
             if(resultadoConsulta.next()){
-                id = resultadoConsulta.getInt("IdProp");
+                id = resultadoConsulta.getInt("Propiedad");
                 tipo = resultadoConsulta.getString("Tipo");
                 direccion = resultadoConsulta.getString("Direccion");
                 
-                cliente = PersistenciaCliente.GetInstancia().Buscar(resultadoConsulta.getInt("Cedula"));
+                cliente = PersistenciaCliente.GetInstancia().Buscar(resultadoConsulta.getInt("Cliente"));
                 
                 propiedad = new Propiedad(id, tipo, direccion, cliente);
             }
