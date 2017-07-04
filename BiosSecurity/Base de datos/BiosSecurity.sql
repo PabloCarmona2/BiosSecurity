@@ -231,9 +231,6 @@ VALUES(20161010, true, 2, 9);
 INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
 VALUES(1267533, 6);
 
-SELECT * FROM Servicios INNER JOIN propiedades ON Servicios.Propiedad = Propiedades.IdProp AND Servicios.Cliente = Propiedades.Cliente WHERE Servicios.NumServicio = 3;
-
-
 INSERT INTO Alarmas
 VALUES(3, 1, 2, false);
 INSERT INTO Alarmas
@@ -299,7 +296,9 @@ VALUES(10000, 4, 5);
 #call modificarAdministrador(2);
 #UPDATE Empleados SET Nombre = 'asas', Clave = 2121 , empleados.FIngreso=20101010 , empleados.Sueldo=1212 WHERE Cedula = 2;
 #call BajaTecnico (4, @Salida);
-#call DesinstalarCamara(5);
+
+#Set @salida="";
+#call eliminarServicioAlarma(3,@salida);
 #
 #
 #
@@ -319,7 +318,7 @@ DELIMITER //
 CREATE procedure AltaCamara(descripcion VARCHAR(100), exterior boolean, servicio bigint, tecnico bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
     DECLARE idDispositivo bigint;
 	
@@ -365,7 +364,7 @@ DELIMITER //
 CREATE procedure InstalarCamara(numeroInventario int, descripcion VARCHAR(100), exterior boolean, servicio bigint, tecnico bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -426,10 +425,10 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure DesinstalarCamara(pnumeroInventario bigint)#,pError varchar(500))
+CREATE procedure DesinstalarCamara(pnumeroInventario bigint, OUT pError varchar(500))
 cuerpo:BEGIN
 
-	#DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -438,12 +437,12 @@ cuerpo:BEGIN
 			ROLLBACK;
         END IF;
 		
-		#SET pError = mensajeError;
+		SET pError = mensajeError;
 	END;
     
     IF NOT EXISTS(SELECT * FROM Camaras WHERE NumInventario = pnumeroInventario) 
     THEN
-			#SET pError = 'No existe la camara que desea desinstalar!';
+			SET pError = 'No existe la camara que desea desinstalar!';
             
 			LEAVE cuerpo;
 	END IF;
@@ -454,13 +453,13 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
-	#SET pError = 'No se pudo desinstalar la camara correctamente!';
+	SET mensajeError = 'No se pudo desinstalar la camara correctamente!';
     
 	 UPDATE Dispositivos
     SET DescripcionUbicacion = null
     WHERE Dispositivos.NumInventario = pnumeroInventario;
 	
-    #SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
+    SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
     
     UPDATE Camaras
     SET Servicio = null, Tecnico = null, Exterior = null
@@ -482,7 +481,7 @@ DELIMITER //
 CREATE procedure BajaCamara(numeroInventario int, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -561,7 +560,7 @@ DELIMITER //
 CREATE procedure AltaAlarma(descripcion VARCHAR(100), servicio bigint, tecnico bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
     DECLARE idDispositivo bigint;
 	
@@ -607,7 +606,7 @@ DELIMITER //
 CREATE procedure InstalarAlarma(numeroInventario int, descripcion VARCHAR(100), servicio bigint, tecnico bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -668,10 +667,10 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure DesinstalarAlarma(numeroInventario int)#, OUT pError VARCHAR(500))
+CREATE procedure DesinstalarAlarma(numeroInventario int, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	#DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -680,12 +679,12 @@ cuerpo:BEGIN
 			ROLLBACK;
         END IF;
 		
-	#	SET pError = mensajeError;
+		SET pError = mensajeError;
 	END;
     
     IF NOT EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario) 
     THEN
-	#		SET pError = 'No existe la alarma que desea desinstalar!';
+			SET pError = 'No existe la alarma que desea desinstalar!';
             
 			LEAVE cuerpo;
 	END IF;
@@ -696,20 +695,15 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
-<<<<<<< HEAD
-	#SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
-	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
 
-
-	#SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
-	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+	SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
     
 	UPDATE Dispositivos
     SET DescripcionUbicacion = null
     WHERE NumInventario = numeroInventario;
     
-	#SET pError = 'No se pudo desinstalar la alarma correctamente!.';
-	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+	
+	SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
     
 	UPDATE Alarmas
     SET Servicio = null, Tecnico = null
@@ -1016,7 +1010,7 @@ DELIMITER //
 CREATE procedure CobrarRecibo(pNumRecibo bigint, pCobrador bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE sinErrores BIT;
     
 	
@@ -1063,7 +1057,7 @@ DELIMITER //
 CREATE procedure RegistrarLineaEnRecibo(IN _importe double,IN _servicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE sinErrores BIT;
     DECLARE pNumRecibo BIGINT;
 	
@@ -1107,7 +1101,7 @@ DELIMITER //
 CREATE procedure AltaServicioAlarma(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, codanulacion bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1147,10 +1141,10 @@ DELIMITER //
 CREATE procedure EditarServicioAlarma(pNumServicio bigint, pFecha datetime, pMonitoreo boolean, pPropiedad bigint, pCliente bigint, pCodAnulacion bigint, OUT pError varchar(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+    DECLARE EXIT HANDLER FOR SQLEXCEPTION 
 	BEGIN
 		IF transaccionActiva THEN
 			ROLLBACK;
@@ -1158,35 +1152,34 @@ cuerpo:BEGIN
 		
 		SET pError = mensajeError;
 	END;
- 
+    
     IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE NumServicio = pNumServicio)
     THEN
 		SET pError = 'No existe el servicio a modificar';
 		LEAVE cuerpo;
     END IF;
 	
-    
-    SET transaccionActiva = 1;
+     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
     
-	SET FOREIGN_KEY_CHECKS = 0;
+    SET FOREIGN_KEY_CHECKS = 0;
     
-    SET mensajeError = 'No se pudo modificar el servicio correctamente!';
-    
+	SET mensajeError = 'No se pudo modificar el servicio correctamente!';
+    	
 	UPDATE biossecurity.servicios
     SET Fecha = pFecha, Monitoreo = pMonitoreo, Propiedad = pPropiedad, Cliente = pCliente
     WHERE NumServicio = pNumServicio;
     
-    SET mensajeError = 'No se pudo modificar el servicio correctamente!';
+	SET mensajeError = 'No se pudo modificar el servicio de alarma correctamente!';
     
     UPDATE biossecurity.servicioalarmas
     SET CodAnulacion = pCodAnulacion
     WHERE NumServicio = pNumServicio;
     
-    SET FOREIGN_KEY_CHECKS = 1;
-    
-    COMMIT;
+     SET FOREIGN_KEY_CHECKS = 1;
+	
+	COMMIT;
     
     SET transaccionActiva = 0;
     
@@ -1200,7 +1193,7 @@ DELIMITER //
 CREATE procedure EliminarServicioAlarma(pNumservicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1224,13 +1217,6 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
-    SET FOREIGN_KEY_CHECKS = 0;
-    #SET pError = 'No se pudo desinstalar la alarma correctamente!.';
-	SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
-    
-	UPDATE Alarmas
-    SET Servicio = null, Tecnico = null
-    WHERE Alarmas.Servicio = pNumServicio;
 	
 	SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
 	
@@ -1242,8 +1228,6 @@ cuerpo:BEGIN
 	
 	DELETE FROM biossecurity.servicios
     WHERE servicios.NumServicio = pNumservicio;
-    
-    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -1254,8 +1238,6 @@ END//
 
 DELIMITER ;
 
-
-CALL EliminarServicioAlarma(5, @salida);
 
 DELIMITER //
 
@@ -1293,7 +1275,7 @@ DELIMITER //
 CREATE procedure AltaServicioVideo(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, terminal boolean, OUT pError VARCHAR(500)) 
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1336,7 +1318,7 @@ DELIMITER //
 CREATE procedure EliminarServicioVideo(pNumservicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1361,27 +1343,16 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
 	
-    SET FOREIGN_KEY_CHECKS = 0;
-    
-    #SET pError = 'No se pudo desinstalar la alarma correctamente!.';
-	SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
-    
-	UPDATE Camaras
-    SET Servicio = null, Tecnico = null, Exterior = null
-    WHERE Camaras.Servicio = pNumServicio;
-    
 	SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
 	
-    DELETE FROM serviciovideovigilancia
+    DELETE FROM biossecurity.serviciovideovigilancia
     WHERE serviciovideovigilancia.NumServicio = pNumservicio;
 	 
     
 	SET mensajeError = 'No se pudo eliminar el servicio de videovigilancia correctamente!.';
 	
-	DELETE FROM servicios
+	DELETE FROM biossecurity.servicios
     WHERE servicios.NumServicio = pNumservicio;
-    
-    SET FOREIGN_KEY_CHECKS = 1;
 	
 	COMMIT;
     
@@ -1397,45 +1368,25 @@ DELIMITER //
 CREATE procedure EditarServicioVideo(pNumServicio bigint, pFecha datetime, pMonitoreo boolean, pPropiedad bigint, pCliente bigint, pTerminal boolean, OUT pError varchar(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
-    DECLARE transaccionActiva BIT;
-	
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
-	BEGIN
-		IF transaccionActiva THEN
-			ROLLBACK;
-        END IF;
-		
-		SET pError = mensajeError;
-	END;
-    
+	DECLARE mensajeError VARCHAR(500);
+ 
     IF NOT EXISTS(SELECT * FROM biossecurity.servicios WHERE NumServicio = pNumServicio)
     THEN
 		SET pError = 'No existe el servicio a modificar';
 		LEAVE cuerpo;
     END IF;
-    
-	SET transaccionActiva = 1;
-    
-    START TRANSACTION;
-    
+	
 	SET mensajeError = 'No se pudo modificar el servicio correctamente!';
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
-	UPDATE servicios
+	UPDATE biossecurity.servicios
     SET Fecha = pFecha, Monitoreo = pMonitoreo, Propiedad = pPropiedad, Cliente = pCliente
     WHERE NumServicio = pNumServicio;
     
-    UPDATE serviciovideovigilancia
+    UPDATE biossecurity.serviciovideovigilancia
     SET Terminal = pTerminal
     WHERE NumServicio = pNumServicio;
-    
-    SET FOREIGN_KEY_CHECKS = 1;
-    
-    COMMIT;
-    
-    SET transaccionActiva = 0;
     
 END//
 
@@ -1452,7 +1403,7 @@ DELIMITER //
 CREATE procedure AgregarAdministrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double,OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1492,17 +1443,7 @@ DELIMITER //
 CREATE procedure ModificarAdministrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, OUT pError varchar(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
-    DECLARE sinErrores BIT;
- 
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
-	BEGIN
-		IF sinErrores THEN
-			ROLLBACK;
-        END IF;
-		
-		SET pError = mensajeError;
-	END;
+	DECLARE mensajeError VARCHAR(500);
  
     IF NOT EXISTS(SELECT * FROM administradores WHERE Cedula = pCedula)
     THEN
@@ -1513,17 +1454,11 @@ cuerpo:BEGIN
 	
 	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
     
-    SET sinErrores = 1;
-    
 	SET FOREIGN_KEY_CHECKS = 0;
     
 	UPDATE Empleados
     SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
     WHERE Cedula = pCedula;
-    
-    SET sinErrores = 0;
-    
-    SET FOREIGN_KEY_CHECKS = 1;
     
 END//
 
@@ -1533,7 +1468,7 @@ DELIMITER //
 CREATE procedure EliminarAdministrador(pCedula bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1587,7 +1522,7 @@ DELIMITER //
 CREATE procedure ModificarCliente(pCedula bigint, nombre VARCHAR(25), barrio VARCHAR(20),  dirCobro VARCHAR(25),  telefono VARCHAR(20), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE sinErrores BIT;
 	
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1625,7 +1560,7 @@ DELIMITER //
 CREATE PROCEDURE AltaCliente(pCedula bigint, nombre VARCHAR(25), barrio VARCHAR(20),  telefono VARCHAR(20),  dirCobro VARCHAR(25), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE sinErrores BIT;
 	
     DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1662,7 +1597,7 @@ DELIMITER //
 CREATE PROCEDURE AltaPropiedad(tipo VARCHAR(20), direccion VARCHAR(25),  pCliente bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
 	DECLARE pIdProp BIGINT;
     DECLARE sinErrores BIT;
 
@@ -1674,17 +1609,14 @@ cuerpo:BEGIN
 		
 		SET pError = mensajeError;
 	END;
-	
-    set sinErrores = 1;
-    
+
 	SET mensajeError = 'No se pudo dar de alta el cliente correctamente!';
 	
     SET pIdProp = (SELECT MAX(IdProp) FROM Propiedades WHERE Cliente = pCliente);
     
+    
 	INSERT INTO Propiedades (IdProp, Tipo, Direccion, Cliente)
     VALUES(pIdProp, tipo, direccion, pCliente);
-    
-    set sinErrores = 0;
 
 END//
 
@@ -1700,7 +1632,7 @@ DELIMITER //
 CREATE procedure AgregarCobrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, Transporte varchar(20), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1741,17 +1673,7 @@ DELIMITER //
 CREATE procedure ModificarCobrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, pTransporte varchar(20), OUT pError varchar(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
-    DECLARE transaccionActiva BIT;
-	
-	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
-	BEGIN
-		IF transaccionActiva THEN
-			ROLLBACK;
-        END IF;
-		
-		SET pError = mensajeError;
-	END;
+	DECLARE mensajeError VARCHAR(500);
  
     IF NOT EXISTS(SELECT * FROM biossecurity.empleados WHERE Cedula = pCedula)
     THEN
@@ -1759,30 +1681,18 @@ cuerpo:BEGIN
             
 		LEAVE cuerpo;
     END IF;
-    
-    SET transaccionActiva = 1;
-    
-	START TRANSACTION; 
 	
-    SET FOREIGN_KEY_CHECKS = 0;
+	SET mensajeError = 'No se pudo modificar el cobrador correctamente!';
     
-	SET mensajeError = 'No se pudo modificar el empleado correctamente!';
+	SET FOREIGN_KEY_CHECKS = 0;
     
 	UPDATE biossecurity.empleados
     SET Nombre = nombre, Clave = clave, FIngreso = fIngreso, Sueldo = sueldo
     WHERE Cedula = pCedula;
     
-    SET mensajeError = 'No se pudo modificar el cobrador correctamente!';
-    
     update biossecurity.cobradores
     set Transporte = pTransporte
     where Cedula = pCedula;
-    
-    SET FOREIGN_KEY_CHECKS = 1;
-    
-    COMMIT;
-    
-    SET transaccionActiva = 0;
     
 END//
 
@@ -1793,7 +1703,7 @@ DELIMITER //
 CREATE procedure EliminarCobrador(pCedula bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
-	DECLARE mensajeError VARCHAR(50);
+	DECLARE mensajeError VARCHAR(500);
     DECLARE transaccionActiva BIT;
 	
 	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
@@ -1838,5 +1748,3 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
-
-
