@@ -1,0 +1,9 @@
+diff a/BiosSecurity/Base de datos/BiosSecurity.sql b/BiosSecurity/Base de datos/BiosSecurity.sql	(rejected hunks)
+@@ -693,7 +693,6 @@
+     
+ 	SET FOREIGN_KEY_CHECKS = 0;
+     
+-<<<<<<< HEAD
+ 	#SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
+ 	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
+ 

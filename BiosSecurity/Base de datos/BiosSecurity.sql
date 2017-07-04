@@ -693,6 +693,7 @@ cuerpo:BEGIN
     
 	SET FOREIGN_KEY_CHECKS = 0;
     
+<<<<<<< HEAD
 	#SET pError = 'No se pudo desinstalar el dispositivo correctamente!';
 	#SET mensajeError = 'No se pudo desinstalar el dispositivo correctamente!';
 
