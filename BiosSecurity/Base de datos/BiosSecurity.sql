@@ -1086,10 +1086,67 @@ END//
 DELIMITER ;
 
 
+DELIMITER //
 
+CREATE PROCEDURE AltaReciboConLineas(pFecha datetime, total double, pCliente bigint, cobrador bigint, cobrado boolean, pImporte double, pServicio bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(500);
+    DECLARE transaccionActiva BIT;
+    DECLARE pNumRecibo BIGINT;
+	
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF transaccionActiva THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+	
+    SET transaccionActiva = 1;
+    
+    START TRANSACTION;
+    
+    
+    IF NOT EXISTS(SELECT * FROM CabezalRecibo WHERE Cliente = pCliente AND (SELECT DATE_FORMAT(CabezalRecibo.Fecha, '%M')) = (SELECT DATE_FORMAT(pFecha, '%M')))
+    THEN
+    
+		SET mensajeError = 'Error al dar de alta el recibo';
+		
+        CALL GenerarCabezalRecibo(pFecha, total, pCliente, null, false, pError);
+        
+        SET mensajeError = 'Error al dar de alta la linea de recibo';
+        
+        CALL RegistrarLineaEnRecibo(pImporte, pServicio, pError);
+        
+		LEAVE cuerpo;
+        
+    END IF;
+    IF EXISTS(SELECT * FROM CabezalRecibo WHERE Cliente = pCliente AND (SELECT DATE_FORMAT(CabezalRecibo.Fecha, '%M')) = (SELECT DATE_FORMAT(pFecha, '%M')))
+    THEN
+		
+        SET mensajeError = 'Error al dar de alta la linea de recibo';
+        
+        CALL RegistrarLineaEnRecibo(pImporte, pServicio, pError);
+        
+		LEAVE cuerpo;
+        
+    END IF;
+
+	COMMIT;
+    
+    SET transaccionActiva = 0;
+
+END//
+
+DELIMITER;
 #-------------------------------------SP SERVICIOS------------------------------------
 /*set@salida="";
 CALL AltaServicioAlarma(null, null, null, null, @salida);*/
+#CALL AltaReciboConLineas('20170630', 500, 9, null, false, 500, 4, @salida);
+/*CALL GenerarCabezalRecibo('20170630', 500, 8, null, false, @salida);
+CALL RegistrarLineaEnRecibo(500, 2, @salida);*/
 
 #-------------------------------------SP SERVICIOS ALARMA-----------------------------
 

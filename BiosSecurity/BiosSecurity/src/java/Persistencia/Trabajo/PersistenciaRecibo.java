@@ -251,16 +251,14 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
         
             try {
                 conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-            
-                consulta = conexion.prepareCall("{ CALL GenerarCabezalRecibo(?, ?, ?, ?, ?, ?) }");
-            
-                conexion.setAutoCommit(false);
+                //conexion.setAutoCommit(false);
                 
+                consulta = conexion.prepareCall("{ CALL AltaReciboConLineas(?, ?, ?, ?, ?, ?, ?, ?) }");
+            
                 String error = null;
                 
                 for(Recibo r : lista){
                 
-                    int numeroRecibo;
                     Date fechaJava = r.getFecha();
                     java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
 
@@ -269,32 +267,41 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     consulta.setInt(3, r.getCliente().getCedula());
                     consulta.setNull(4, java.sql.Types.INTEGER);
                     consulta.setBoolean(5, false);
-                    consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+                    consulta.registerOutParameter(8, java.sql.Types.VARCHAR);
                     
-                    consulta.executeUpdate();
-
-                    error = consulta.getString(6);
+                    conexion.setAutoCommit(false);
+                    
+                    for(LineaRecibo l : r.getLineas()){
+                        
+                        consulta.setDouble(6, l.getImporte());
+                        consulta.setInt(7, l.getServicio().getNumServicio());
+                        
+                        consulta.executeUpdate();
+                    }
+                    
+                    error = consulta.getString(8);
 
                     if(error != null){
                         throw new Exception("ERROR: " + error);
                     }
-
-                    
-                    for(LineaRecibo l : r.getLineas()){
-
-                        PersistenciaLineaRecibo.GetInstancia().RegitrarEnRecibo(l);
-                    }
-            }
+                }
             
-            conexion.commit();
             
             if(error != null){
                 throw new Exception("ERROR: " + error);
             }
+            
+            conexion.commit();
 
             }catch(Exception ex){
-
-                conexion.rollback();
+                try {
+                    if (conexion != null) {
+                        conexion.rollback();
+                    }
+                } catch (Exception exR) {
+                    throw new Exception(exR.getMessage());
+                }
+                
                 throw new Exception(ex.getMessage());
 
             }finally {
@@ -305,7 +312,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     }
 
                     if (conexion != null) {
-                        conexion.setAutoCommit(true);
+                        //conexion.setAutoCommit(true);
                         conexion.close();
                     }
                 } catch (Exception ex) {
