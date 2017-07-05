@@ -359,8 +359,8 @@ END//
 
 
 DELIMITER ;
-
-#CALL AltaCamara(null, null, null, null, @salida);
+set@salida="";
+CALL AltaCamara(null, null, null, null, @salida);
 
 
 DELIMITER //
@@ -478,7 +478,8 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
-
+set@salida="";
+CALL bajaCamara(18, @salida);
 DELIMITER //
 
 CREATE procedure BajaCamara(numeroInventario int, OUT pError VARCHAR(500))
@@ -1084,7 +1085,8 @@ DELIMITER ;
 
 
 #-------------------------------------SP SERVICIOS------------------------------------
-
+set@salida="";
+CALL AltaServicioAlarma(null, null, null, null, @salida);
 
 #-------------------------------------SP SERVICIOS ALARMA-----------------------------
 

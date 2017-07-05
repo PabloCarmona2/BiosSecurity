@@ -106,7 +106,7 @@ public class PersistenciaCamara implements IPersistenciaCamara{
             consulta.setNull(1, java.sql.Types.VARCHAR);
             consulta.setNull(2, java.sql.Types.BOOLEAN);
             consulta.setNull(3, java.sql.Types.INTEGER);
-            consulta.setInt(4, java.sql.Types.INTEGER);
+            consulta.setNull(4, java.sql.Types.INTEGER);
             consulta.registerOutParameter(5, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();

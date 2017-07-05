@@ -108,7 +108,7 @@ public class PersistenciaAlarma implements IPersistenciaAlarma {
            
             consulta.setNull(1, java.sql.Types.VARCHAR);
             consulta.setNull(2, java.sql.Types.INTEGER);
-            consulta.setInt(3, java.sql.Types.INTEGER);
+            consulta.setNull(3, java.sql.Types.INTEGER);
             consulta.registerOutParameter(4, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
