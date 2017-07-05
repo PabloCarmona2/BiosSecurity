@@ -260,7 +260,7 @@ VALUES(NULL, NULL, 13, NULL, false);
 INSERT INTO Camaras
 VALUES(NULL, NULL, 14, NULL, false);
 
-INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+/*INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20170630, 10000, 7, 5, false);
 
 INSERT INTO LineaRecibo
@@ -286,7 +286,7 @@ INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20170630, 10000, 10, 5, false);
 
 INSERT INTO LineaRecibo
-VALUES(10000, 4, 5);
+VALUES(10000, 4, 5);*/
 
 #
 
@@ -359,8 +359,6 @@ END//
 
 
 DELIMITER ;
-set@salida="";
-CALL AltaCamara(null, null, null, null, @salida);
 
 
 DELIMITER //
@@ -478,8 +476,6 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
-set@salida="";
-CALL bajaCamara(18, @salida);
 DELIMITER //
 
 CREATE procedure BajaCamara(numeroInventario int, OUT pError VARCHAR(500))
@@ -970,7 +966,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure GenerarCabezalRecibo(fecha datetime, total double, cliente bigint, cobrador bigint, cobrado boolean, OUT pError VARCHAR(500), OUT pNumRecibo bigint)
+CREATE procedure GenerarCabezalRecibo(fecha datetime, total double, cliente bigint, cobrador bigint, cobrado boolean, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -1043,13 +1039,16 @@ DELIMITER ;
 #-----------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------
 
+/*CALL GenerarCabezalRecibo('20170630', 500, 8, null, false, @salida);
+CALL RegistrarLineaEnRecibo(500, 2, @salida);*/
+
 
 #-------------------------------SP LineaRecibo--------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------
 
 DELIMITER //
 
-CREATE procedure RegistrarLineaEnRecibo(IN _importe double,IN _servicio bigint, OUT pError VARCHAR(500))
+CREATE procedure RegistrarLineaEnRecibo(pImporte double,pServicio bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -1069,11 +1068,15 @@ cuerpo:BEGIN
     
 	SET mensajeError = 'No se pudo agregar la linea al recibo correctamente!';
     
-    SET pNumRecibo = (SELECT MAX(NumRecibo) FROM CabezalRecibo);
+    SET pNumRecibo = (SELECT MAX(NumRecibo) FROM cabezalrecibo);
+    
+    /*SET pNumRecibo = (SELECT NumRecibo
+    FROM CabezalRecibo
+    ORDER BY NumRecibo desc limit 1);*/
     
     
 	INSERT INTO LineaRecibo(Importe, NumRecibo, Servicio)
-    VALUES(_importe, pNumRecibo, _servicio);
+    VALUES(pImporte, pNumRecibo, pServicio);
     
     
     SET sinErrores = 0;
@@ -1085,8 +1088,8 @@ DELIMITER ;
 
 
 #-------------------------------------SP SERVICIOS------------------------------------
-set@salida="";
-CALL AltaServicioAlarma(null, null, null, null, @salida);
+/*set@salida="";
+CALL AltaServicioAlarma(null, null, null, null, @salida);*/
 
 #-------------------------------------SP SERVICIOS ALARMA-----------------------------
 

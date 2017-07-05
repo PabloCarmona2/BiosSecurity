@@ -129,8 +129,7 @@ public class ControladorRecibos extends Controlador {
                         
                         linea.setImporte(0);
                         
-                        String rutaRelativa = "/Precios.txt";
-                        String rutaAbsoluta = getServletContext().getRealPath(rutaRelativa);
+                        String rutaAbsoluta = getServletContext().getRealPath("/WEB-INF/precio/Precios.txt");
                         
                         Precios precios = FabricaLogica.GetLogicaPrecio().Obtener(rutaAbsoluta);
                         

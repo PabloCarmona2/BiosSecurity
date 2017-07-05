@@ -252,7 +252,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             try {
                 conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
             
-                consulta = conexion.prepareCall("{ CALL GenerarCabezalRecibo(?, ?, ?, ?, ?, ?, ?) }");
+                consulta = conexion.prepareCall("{ CALL GenerarCabezalRecibo(?, ?, ?, ?, ?, ?) }");
             
                 conexion.setAutoCommit(false);
                 
@@ -270,7 +270,6 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     consulta.setNull(4, java.sql.Types.INTEGER);
                     consulta.setBoolean(5, false);
                     consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
-                    consulta.registerOutParameter(7, java.sql.Types.BIGINT);
                     
                     consulta.executeUpdate();
 
@@ -280,7 +279,6 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                         throw new Exception("ERROR: " + error);
                     }
 
-                    numeroRecibo = consulta.getInt(7);
                     
                     for(LineaRecibo l : r.getLineas()){
 
