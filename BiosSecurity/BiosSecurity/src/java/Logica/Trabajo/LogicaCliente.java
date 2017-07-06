@@ -67,7 +67,13 @@ public class LogicaCliente implements ILogicaCliente{
     }
     
     public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
-        return FabricaPersistencia.getPersistenciaCliente().ClientesYServiciosOrdenados();
+       try{
+         
+             return FabricaPersistencia.getPersistenciaCliente().ClientesYServiciosOrdenados();
+        
+       }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
     }
     
     public void Modificar(Cliente cliente) throws Exception{

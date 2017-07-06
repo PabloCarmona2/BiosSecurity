@@ -158,9 +158,6 @@ public class LogicaRecibo implements ILogicaRecibo{
             throw new Exception(ex.getMessage());
         }
     }
-    public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
-        return null;
-    }
     public List<Recibo> RecibosaCobrar(String zona) throws Exception{
         
         try {
