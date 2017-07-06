@@ -213,9 +213,12 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AltaServicioVideo(?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaServicioVideo(?, ?, ?, ?, ?, ?) }")) {
            
-            consulta.setDate(1, (java.sql.Date)servicio.getFecha());
+            Date fechaJava = servicio.getFecha();
+            java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
+            
+            consulta.setDate(1, fecha);
             consulta.setBoolean(2, servicio.isMonitoreo());
             consulta.setInt(3, servicio.getPropiedadCliente().getIdProp());
             consulta.setInt(4, servicio.getPropiedadCliente().getDueño().getCedula());
@@ -223,7 +226,7 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
      
             consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
             consulta.executeUpdate();
-            String error = consulta.getString(7);
+            String error = consulta.getString(6);
             if(error != null){
                 throw new Exception("ERROR: " + error);
             }

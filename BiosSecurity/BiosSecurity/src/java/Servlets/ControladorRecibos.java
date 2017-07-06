@@ -88,88 +88,21 @@ public class ControladorRecibos extends Controlador {
     }
     
     public void generar_post(HttpServletRequest request, HttpServletResponse response) {
-        
         try{
+
+            String rutaAbsoluta = getServletContext().getRealPath("/WEB-INF/precio/Precios.txt");
             
-            HashMap<Cliente, List<Servicio>> coleccion = FabricaLogica.GetLogicaCliente().ClientesYServiciosOrdenados();
+            FabricaLogica.GetLogicaRecibo().GenerarRecibos(rutaAbsoluta);
+        
+            cargarMensaje("¡Recibos generados con éxito!", request.getSession());
+
+            response.sendRedirect("recibos");
             
-            List<Recibo> recibos = new ArrayList<Recibo>();
-            
-            Date hoy = new Date();
-            
-            if(coleccion != null){
-                
-                Iterator<HashMap.Entry<Cliente, List<Servicio>>> registros = coleccion.entrySet().iterator();
-                
-                while (registros.hasNext()) {
+           } catch(Exception ex){
+               cargarMensaje("¡ERROR! se produjo un error al realizar la accion.", request);
 
-
-                    HashMap.Entry<Cliente, List<Servicio>> registro = registros.next();
-                    
-                    double total = 0;
-                    
-                    Recibo cabezal = new Recibo();
-                    
-                    cabezal.setCliente(registro.getKey());
-                    cabezal.setCobrado(false);
-                    cabezal.setCobrador(null);
-                    cabezal.setFecha(hoy);
-                    cabezal.setNumRecibo(null);
-                    cabezal.setTotal(0);
-                    cabezal.setLineas(new ArrayList<LineaRecibo>());
-                    
-                    
-                    List<LineaRecibo> lineas = new ArrayList<LineaRecibo>();
-                    
-                    
-                    for(Servicio s : registro.getValue()){
-                        double importe = 0;
-                        
-                        LineaRecibo linea = new LineaRecibo();
-                        
-                        linea.setImporte(0);
-                        
-                        String rutaAbsoluta = getServletContext().getRealPath("/WEB-INF/precio/Precios.txt");
-                        
-                        Precios precios = FabricaLogica.GetLogicaPrecio().Obtener(rutaAbsoluta);
-                        
-                        importe += (s instanceof ServicioAlarma? precios.getBaseAlarmas() : precios.getBaseCamaras());
-                        
-                        int cantidadDispositivos = (s instanceof ServicioAlarma? ((ServicioAlarma)s).getAlarmas().size() : ((ServicioVideoVigilancia)s).getCamaras().size());
-                        
-                        importe += (s instanceof ServicioAlarma? (cantidadDispositivos * precios.getAdicionalAlarma()) : (cantidadDispositivos * precios.getAdicionalCamara()));
-                        
-                        importe += (s instanceof ServicioAlarma? (importe * Double.parseDouble("0." + precios.getTasaAlarmas())) : (importe * Double.parseDouble("0." + precios.getTasaCamaras())));
-                        
-                        total += importe;
-                        
-                        linea.setImporte(importe);
-                        linea.setServicio(s);
-                        
-                        lineas.add(linea);
-                        
-                    }
-                    
-                    cabezal.setTotal(total);
-                    cabezal.setLineas(lineas);
-
-                    recibos.add(cabezal);
-                }
-                
-                FabricaLogica.GetLogicaRecibo().GenerarRecibos(recibos);
-
-                cargarMensaje("¡Recibos generados con éxito!", request.getSession());
-
-                response.sendRedirect("recibos");
-            }else {
-                
-                cargarMensaje("No hay servicios contratados, por lo tanto no se pueden generar los recibos!.", request);
-                return;
-                
-            }
-        }catch(Exception ex){
-            cargarMensaje("¡ERROR! Se produjo un error al intentar generar los recibos.", request);
-        }
+               mostrarVista("index", request, response);
+           }
     }
     public void cobrar_get(HttpServletRequest request, HttpServletResponse response) {
         

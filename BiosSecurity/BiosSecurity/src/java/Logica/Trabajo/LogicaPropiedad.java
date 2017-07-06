@@ -57,6 +57,16 @@ public class LogicaPropiedad implements ILogicaPropiedad{
         } 
     }
     
+    public Propiedad BuscarUltimaXCliente(int pCliente) throws Exception{
+        try{
+            
+            return Persistencia.FabricaPersistencia.getPersistenciaPropiedad().BuscarUltimaXCliente(pCliente);
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        } 
+    }
+    
     public void Alta(Propiedad casa) throws Exception{
         try{
          

@@ -28,7 +28,7 @@ public class LogicaCliente implements ILogicaCliente{
     }
     private static boolean comprobarTel(String cadena){
 	try {
-		Integer.parseInt(cadena);
+		Integer.parseInt(cadena.trim());
 		return true;
 	} catch (NumberFormatException ex){
 		return false;
@@ -50,7 +50,7 @@ public class LogicaCliente implements ILogicaCliente{
             if(cliente.getDirCobro().length() > 30 || cliente.getNombre().length() == 0){
                 throw new Exception("El campo direccion de cobro del cliente no puede tener mas de 30 caracteres o estar vacío!");
             }
-            if(Logica.Trabajo.LogicaCliente.comprobarTel(cliente.getTelefono())){
+            if(!(Logica.Trabajo.LogicaCliente.comprobarTel(cliente.getTelefono()))){
                 throw new Exception("No se puede validar este numero de telefono!");
             }           
         }catch(Exception ex){

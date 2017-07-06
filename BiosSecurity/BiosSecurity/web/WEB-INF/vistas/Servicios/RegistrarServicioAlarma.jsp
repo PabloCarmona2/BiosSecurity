@@ -66,7 +66,7 @@
                 <tr>
                     <td>(*)Numero de propiedad :</td>
                     <td>
-                        <input type="text" name="cedulaCliente" value="${param.cedulaCliente}" id="cedulaCliente" />
+                        <input type="text" name="numPropiedad" value="${param.numPropiedad}" id="numPropiedad" />
                     </td>
                 </tr>
                 <tr>

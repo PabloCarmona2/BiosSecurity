@@ -1152,7 +1152,7 @@ CALL RegistrarLineaEnRecibo(500, 2, @salida);*/
 
 DELIMITER //
 
-CREATE procedure AltaServicioAlarma(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, codanulacion bigint, OUT pError VARCHAR(500))
+CREATE procedure AltaServicioAlarma(pFecha datetime, pMonitoreo boolean, idprop bigint, pCliente bigint, codanulacion bigint, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -1175,11 +1175,11 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo dar de alta el servicio correctamente!';
 	
     
-	INSERT INTO biossecurity.servicios VALUES(fecha, monitoreo, idprop, cliente);
+	INSERT INTO Servicios (Fecha, Monitoreo, Propiedad, Cliente) VALUES(pFecha, pMonitoreo, idprop, pCliente);
     
 	SET mensajeError = 'No se pudo dar de alta el servicio de alarma correctamente!.';
 	
-	INSERT INTO biossecurity.servicioalarmas VALUES(codanulacion, (select NumServicio from biossecurity.servicios order by NumServicio desc limit 1));
+	INSERT INTO servicioalarmas VALUES(codanulacion, (select NumServicio from biossecurity.servicios order by NumServicio desc limit 1));
 	
 	COMMIT;
     
@@ -1189,6 +1189,10 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
+
+#CALL AltaServicioAlarma(20161010, true, 1, 7, true, @salida);
+
 
 DELIMITER //
 
@@ -1328,7 +1332,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AltaServicioVideo(fecha datetime, monitoreo boolean, idprop bigint, cliente bigint, terminal boolean, OUT pError VARCHAR(500)) 
+CREATE procedure AltaServicioVideo(pFecha datetime, pMonitoreo boolean, idprop bigint, pCliente bigint, terminal boolean, OUT pError VARCHAR(500)) 
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -1351,11 +1355,11 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo dar de alta el servicio correctamente!';
 	
     
-	INSERT INTO biossecurity.servicios VALUES(fecha, monitoreo, idprop, cliente);
+	INSERT INTO Servicios (Fecha, Monitoreo, Propiedad, Cliente) VALUES(pFecha, pMonitoreo, idprop, pCliente);
     
 	SET mensajeError = 'No se pudo dar de alta el servicio de alarma correctamente!.';
 	
-	INSERT INTO biossecurity.servicioalarmas VALUES(terminal, (select NumServicio from biossecurity.servicios order by NumServicio desc limit 1));
+	INSERT INTO serviciovideovigilancia VALUES(terminal, (select NumServicio from biossecurity.servicios order by NumServicio desc limit 1));
 	
 	COMMIT;
     
@@ -1366,7 +1370,7 @@ END//
 
 DELIMITER ;
 
-
+#CALL AltaServicioVideo(20161010, true, 1, 7, true, @salida);
 
 
 DELIMITER //
@@ -1707,10 +1711,20 @@ cuerpo:BEGIN
     
     SET sinErrores = 1;
 
-	SET mensajeError = 'No se pudo dar de alta el cliente correctamente!';
-	
-    SET pIdProp = (SELECT MAX(IdProp) FROM Propiedades WHERE Cliente = pCliente);
+	SET mensajeError = 'No se pudo dar de alta la propiedad correctamente!';
     
+    IF NOT EXISTS(SELECT * FROM Propiedades WHERE Cliente = pCliente)
+    THEN
+		
+        SET pIdProp = 1;
+    
+    END IF;
+    IF EXISTS(SELECT * FROM Propiedades WHERE Cliente = pCliente)
+    THEN
+		
+        SET pIdProp = ((SELECT IdProp FROM Propiedades  WHERE Cliente = pCliente order by IdProp desc limit 1) + 1);
+    
+    END IF;
     
 	INSERT INTO Propiedades (IdProp, Tipo, Direccion, Cliente)
     VALUES(pIdProp, tipo, direccion, pCliente);
@@ -1720,6 +1734,8 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
+#CALL AltaPropiedad('casa', 'Calle 12456', 10, @salida);
 
 
 

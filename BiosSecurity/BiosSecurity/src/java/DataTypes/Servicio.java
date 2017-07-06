@@ -39,7 +39,7 @@ public abstract class Servicio {
         return monitoreo;
     }
 
-    public void setMonitoreo(boolean monitoreo) {
+    public void setMonitoreo(Boolean monitoreo) {
         this.monitoreo = monitoreo;
     }
 

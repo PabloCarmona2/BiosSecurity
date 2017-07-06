@@ -167,9 +167,11 @@ public class ControladorServicios extends Controlador {
             
             if(request.getParameter("tipo").equalsIgnoreCase("alarma")){
                 mostrarVista("RegistrarServicioAlarma", request, response);
+                request.getSession().setAttribute("tipo", "alarma");
             }
             else if(request.getParameter("tipo").equalsIgnoreCase("camara")){
                 mostrarVista("RegistrarServicioVideo", request, response);
+                request.getSession().setAttribute("tipo", "camara");
             }else{
                 cargarMensaje("¡ERROR! Tipo de servicio invalido.", request);
                 return;
@@ -212,11 +214,11 @@ public class ControladorServicios extends Controlador {
 
             }
             
-            if(!(request.getParameter("clienteInexistente").isEmpty())){
+            if(request.getParameter("clienteInexistente") != null){
                 
                 String nombre = request.getParameter("nombreCliente");
 
-                String barrio = request.getParameter("barrio");
+                String barrio = request.getParameter("barrioCliente");
                 
                 String direccionCobro = request.getParameter("dirCobro");
                 
@@ -253,7 +255,7 @@ public class ControladorServicios extends Controlador {
 
                 numeroPropiedad = Integer.parseInt(request.getParameter("numPropiedad"));
 
-                if(cedula == 0)
+                if(numeroPropiedad == 0)
                 {
                     cargarMensaje("¡ERROR! El numero de propiedad no es válida.", request);
 
@@ -272,7 +274,7 @@ public class ControladorServicios extends Controlador {
 
             }
             
-            if(!(request.getParameter("propiedadInexistente").isEmpty())){
+            if(request.getParameter("propiedadInexistente") != null){
                 
                 String tipo = request.getParameter("tipoPropiedad");
 
@@ -302,20 +304,20 @@ public class ControladorServicios extends Controlador {
 
             Boolean monitoreo = true;
             
-            if(request.getParameter("monitoreo").isEmpty()){
+            if(request.getParameter("monitoreo") == null){
                 monitoreo = false;
             }
             
             Boolean terminal = true;
             Integer codigoAnulacion;
             
-            if(request.getParameter("tipo") == "camara"){
+            if(request.getSession().getAttribute("tipo") == "camara"){
                 
-                if(request.getParameter("terminal").isEmpty()){
+                if(request.getParameter("terminal") == null){
                     terminal = false;
                 }
                 
-                if(!(request.getParameter("clienteInexistente").isEmpty())){
+                if(request.getParameter("clienteInexistente") != null){
                     
                     try{
                         
@@ -327,10 +329,11 @@ public class ControladorServicios extends Controlador {
                     
                 }
                 
-                if(!(request.getParameter("propiedadInexistente").isEmpty())){
+                if(request.getParameter("propiedadInexistente") != null){
                     try{
                         
                         FabricaLogica.GetLogicaPropiedad().Alta(propiedad);
+                        propiedad = FabricaLogica.GetLogicaPropiedad().BuscarUltimaXCliente(cliente.getCedula());
                         
                     }catch(Exception ex){
                         throw new Exception("¡ERROR! al dar de alta la propiedad!.");
@@ -361,7 +364,7 @@ public class ControladorServicios extends Controlador {
 
                     codigoAnulacion = Integer.parseInt(request.getParameter("codAnulacion"));
 
-                    if(cedula == 0)
+                    if(codigoAnulacion == 0)
                     {
                         cargarMensaje("¡ERROR! El codigo de anulacion no es válid0.", request);
 
@@ -380,7 +383,7 @@ public class ControladorServicios extends Controlador {
 
                 }
                 
-                if(!(request.getParameter("clienteInexistente").isEmpty())){
+                if(request.getParameter("clienteInexistente") != null){
                     
                     try{
                         
@@ -392,7 +395,7 @@ public class ControladorServicios extends Controlador {
                     
                 }
                 
-                if(!(request.getParameter("propiedadInexistente").isEmpty())){
+                if(request.getParameter("propiedadInexistente") != null){
                     try{
                         
                         FabricaLogica.GetLogicaPropiedad().Alta(propiedad);
@@ -420,6 +423,10 @@ public class ControladorServicios extends Controlador {
                     
                 }
             }
+            
+            cargarMensaje("¡Servicio registrado con éxito!", request.getSession());
+
+            response.sendRedirect("servicios");
         }catch(Exception ex){
             cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo.", request);
             mostrarVista("index", request, response);

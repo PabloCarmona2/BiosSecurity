@@ -15,4 +15,5 @@ public interface ILogicaPropiedad {
      void Modificar(Propiedad propiedad) throws Exception;
      void Alta(Propiedad casa) throws Exception;
      Propiedad Buscar(int numero, int cliente) throws Exception;
+     Propiedad BuscarUltimaXCliente(int pCliente) throws Exception;
 }

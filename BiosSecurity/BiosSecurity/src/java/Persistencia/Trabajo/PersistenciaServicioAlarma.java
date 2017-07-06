@@ -47,9 +47,11 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AltaServicioAlarma(?, ?, ?, ?, ?) }")) {
-           
-            consulta.setDate(1, (java.sql.Date)servicio.getFecha());
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaServicioAlarma(?, ?, ?, ?, ?, ?) }")) {
+            Date fechaJava = servicio.getFecha();
+            java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
+            
+            consulta.setDate(1, fecha);
             consulta.setBoolean(2, servicio.isMonitoreo());
             consulta.setInt(3, servicio.getPropiedadCliente().getIdProp());
             consulta.setInt(4, servicio.getPropiedadCliente().getDueño().getCedula());
@@ -59,7 +61,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(7);
+            String error = consulta.getString(6);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);
