@@ -5,6 +5,8 @@
  */
 package Logica.Trabajo;
 
+import DataTypes.Cliente;
+import DataTypes.Propiedad;
 import DataTypes.Servicio;
 import DataTypes.ServicioAlarma;
 import DataTypes.ServicioVideoVigilancia;
@@ -118,13 +120,13 @@ public class LogicaServicio implements ILogicaServicio{
         
     }
     
-    public void altaServicio(Servicio unServicio) throws Exception{
+    public void altaServicio(Servicio unServicio, Boolean clienteI, Boolean propiedadI) throws Exception{
         
         if(unServicio instanceof ServicioAlarma){
             
             try{
                 
-                FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma((ServicioAlarma)unServicio);
+                FabricaPersistencia.getPersistenciaServicioAlarma().altaServicioAlarma((ServicioAlarma)unServicio, clienteI, propiedadI);
                 
             }catch (Exception ex){
                 
@@ -136,7 +138,7 @@ public class LogicaServicio implements ILogicaServicio{
             
             try{
                 
-                FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia((ServicioVideoVigilancia)unServicio);
+                FabricaPersistencia.getPersistenciaVideoVigilancia().altaServicioVigilancia((ServicioVideoVigilancia)unServicio, clienteI, propiedadI);
                 
             }catch (Exception ex){
                 

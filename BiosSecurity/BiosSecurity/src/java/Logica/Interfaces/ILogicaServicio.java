@@ -5,6 +5,8 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Cliente;
+import DataTypes.Propiedad;
 import DataTypes.Servicio;
 import DataTypes.ServicioAlarma;
 import DataTypes.ServicioVideoVigilancia;
@@ -18,7 +20,7 @@ public interface ILogicaServicio {
     void InstalarDispositivo(Servicio servicio) throws Exception;
     List<Servicio> Listar(String criterio) throws Exception;
     Servicio Buscar(int numServicio) throws Exception;
-    void altaServicio(Servicio unServicio)throws Exception;
+    void altaServicio(Servicio unServicio, Boolean clienteI, Boolean propiedadI)throws Exception;
     void EliminarServicio(Servicio unServicio)throws Exception;
     void EditarServicio(Servicio unServicio)throws Exception;
     void DesinstalarDispositivo(Servicio servicio) throws Exception;

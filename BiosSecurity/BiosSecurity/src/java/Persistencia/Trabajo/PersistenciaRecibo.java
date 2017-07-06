@@ -312,7 +312,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     }
 
                     if (conexion != null) {
-                        //conexion.setAutoCommit(true);
+                        conexion.setAutoCommit(true);
                         conexion.close();
                     }
                 } catch (Exception ex) {

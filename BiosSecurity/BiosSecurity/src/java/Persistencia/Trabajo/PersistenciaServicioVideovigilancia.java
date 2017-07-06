@@ -204,35 +204,81 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
         }
     }
     
-    public void altaServicioVigilancia(ServicioVideoVigilancia servicio) throws Exception{
+    public void altaServicioVigilancia(ServicioVideoVigilancia servicio, Boolean clienteI, Boolean propiedadI) throws Exception{
         
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
             System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
+        Connection conexion = null;
+        CallableStatement consulta = null;
         
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AltaServicioVideo(?, ?, ?, ?, ?, ?) }")) {
+        try{
+            conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
+            
+            consulta = conexion.prepareCall("{ CALL AltaServicioVideo(?, ?, ?, ?, ?, ?) }");
            
+            int numPropiedad = 0;
+            
             Date fechaJava = servicio.getFecha();
             java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
             
+            conexion.setAutoCommit(false);
+            
+            if(clienteI){
+                PersistenciaCliente.GetInstancia().Alta(servicio.getPropiedadCliente().getDueño(), conexion);
+            }
+            
+            if(propiedadI){
+                numPropiedad = PersistenciaPropiedad.GetInstancia().Alta(servicio.getPropiedadCliente(), conexion);
+            }
+            
             consulta.setDate(1, fecha);
             consulta.setBoolean(2, servicio.isMonitoreo());
-            consulta.setInt(3, servicio.getPropiedadCliente().getIdProp());
+            if(propiedadI){
+                consulta.setInt(3, numPropiedad);
+            }else{
+                consulta.setInt(3, servicio.getPropiedadCliente().getIdProp());
+            }
             consulta.setInt(4, servicio.getPropiedadCliente().getDueño().getCedula());
             consulta.setBoolean(5, servicio.isTerminal());
      
             consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
+            
             consulta.executeUpdate();
+            
             String error = consulta.getString(6);
+            
             if(error != null){
                 throw new Exception("ERROR: " + error);
             }
             
         }catch(Exception ex){
+            try {
+                if (conexion != null) {
+                    conexion.rollback();
+                }
+            } catch (Exception exR) {
+                throw new Exception(exR.getMessage());
+            }
+
             throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                }
+
+                if (conexion != null) {
+                    conexion.setAutoCommit(true);
+                    conexion.close();
+                }
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
         
     }

@@ -222,17 +222,15 @@ public class PersistenciaCliente implements IPersistenciaCliente{
         }
     }
     
-    public void Alta(Cliente cliente) throws Exception{
+    public void Alta(Cliente cliente, Connection pconexion) throws Exception{
         
-        try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
-        } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
-        }
-        
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AltaCliente(?, ?, ?, ?, ?,?) }")) {
+        Connection conexion = null;
+        CallableStatement consulta = null;
+        try{
            
+            conexion = pconexion;
+            consulta = conexion.prepareCall("{ CALL AltaCliente(?, ?, ?, ?, ?,?) }");
+            
             consulta.setInt(1, cliente.getCedula());
             consulta.setString(2, cliente.getNombre());
             consulta.setString(3, cliente.getBarrio());
@@ -249,7 +247,25 @@ public class PersistenciaCliente implements IPersistenciaCliente{
             }
             
         }catch(Exception ex){
+            try {
+                if (conexion != null) {
+                    conexion.rollback();
+                }
+            } catch (Exception exR) {
+                throw new Exception(exR.getMessage());
+            }
+
             throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                } 
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
     }
 }

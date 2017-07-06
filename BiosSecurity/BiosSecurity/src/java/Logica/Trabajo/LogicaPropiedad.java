@@ -66,16 +66,4 @@ public class LogicaPropiedad implements ILogicaPropiedad{
             throw new Exception(ex.getMessage());
         } 
     }
-    
-    public void Alta(Propiedad casa) throws Exception{
-        try{
-         
-            Validar(casa);
-        
-            Persistencia.FabricaPersistencia.getPersistenciaPropiedad().Alta(casa);
-            
-        }catch(Exception ex){
-            throw new Exception(ex.getMessage());
-        } 
-    }
 }

@@ -233,32 +233,52 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
         }
     }
     
-    public void Alta(Propiedad casa) throws Exception{
-        
-        try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
-        } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
-        }
-        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AltaPropiedad(?, ?, ?, ?) }")) {
+    public int Alta(Propiedad casa, Connection pconexion) throws Exception{
+        Connection conexion = null;
+        CallableStatement consulta = null;
+        try{
+            
+            Integer numPropiedad = 0;
            
+            conexion = pconexion;
+            consulta = conexion.prepareCall("{ CALL AltaPropiedad(?, ?, ?, ?, ?) }");
             
             consulta.setString(1, casa.getTipo());
             consulta.setString(2, casa.getDireccion());
             consulta.setInt(3, casa.getDueño().getCedula());
             consulta.registerOutParameter(4, java.sql.Types.VARCHAR);
+            consulta.registerOutParameter(5, java.sql.Types.BIGINT);
             
             consulta.executeUpdate();
             
             String error = consulta.getString(4);
-            
+            numPropiedad = consulta.getInt(5);
             if(error != null){
                 throw new Exception("ERROR: " + error);
             }
             
+            return numPropiedad;
+            
         }catch(Exception ex){
+            try {
+                if (conexion != null) {
+                    conexion.rollback();
+                }
+            } catch (Exception exR) {
+                throw new Exception(exR.getMessage());
+            }
+
             throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                } 
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
         }
     }
 }

@@ -10,7 +10,7 @@
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
 <fmt:setLocale value="en-US" />
-<t:PaginaMaestra titulo="Agregar Servicio">
+<t:PaginaMaestra titulo="Registrar Servicio">
     <jsp:body>
         
         <fmt:setLocale value="en-US" />
@@ -19,76 +19,6 @@
         
         <form method="post" accept-charset="ISO-8859-1">
             <table>
-                <tr>
-                    <td>(*)Numero de documento del Cliente:</td>
-                    <td>
-                        <input type="text" name="cedulaCliente" value="${param.cedulaCliente}" id="cedulaCliente" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Cliente inexistente?:(rellene los campos de cliente (Rojos) en caso de marcar esta casilla)</td>
-                    <td>
-                        <input type="checkbox" name="clienteInexistente" value="${param.clienteInexistente}" id="clienteInexistente" />
-                    </td>
-                </tr>
-                <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
-                <tr>
-                    <td style="color:red">(cliente)Nombre:</td>
-                    <td>
-                        <input type="text" name="nombreCliente" value="${param.nombreCliente}" id="nombreCliente" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="color:red">(cliente)Barrio:</td>
-                    <td>
-                        <input type="text" name="barrioCliente" value="${param.barrioCliente}" id="barrioCliente" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="color:red">(cliente)Direccion de cobro:</td>
-                    <td>
-                        <input type="text" name="dirCobro" value="${param.dirCobro}" id="dirCobro" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="color:red">(cliente)Telefono:</td>
-                    <td>
-                        <input type="text" name="telefonoCliente" value="${param.telefonoCliente}" id="telefonoCliente" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="color:red">(cliente)Telefono:</td>
-                    <td>
-                        <input type="text" name="telefonoCliente" value="${param.telefonoCliente}" id="telefonoCliente" />
-                    </td>
-                </tr>
-                <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
-                <tr>
-                    <td>(*)Numero de propiedad :</td>
-                    <td>
-                        <input type="text" name="numPropiedad" value="${param.numPropiedad}" id="numPropiedad" />
-                    </td>
-                </tr>
-                <tr>
-                    <td>Propiedad inexistente?:(rellene los campos de propiedad (Verde) en caso de marcar esta casilla)</td>
-                    <td>
-                        <input type="checkbox" name="propiedadInexistente" value="${param.propiedadInexistente}" id="propiedadInexistente" />
-                    </td>
-                </tr>
-                <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
-                <tr>
-                    <td style="color:green">(propiedad)Tipo:</td>
-                    <td>
-                        <input type="text" name="tipoPropiedad" value="${param.tipoPropiedad}" id="tipoPropiedad" />
-                    </td>
-                </tr>
-                <tr>
-                    <td style="color:green">(propiedad)Direccion:</td>
-                    <td>
-                        <input type="text" name="direccionPropiedad" value="${param.direccionPropiedad}" id="direccionPropiedad" />
-                    </td>
-                </tr>
-                <tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr><tr></tr>
                 <tr>
                     <td>(*)Monitoreo:</td>
                     <td>
@@ -106,7 +36,7 @@
                 <tr>
                     <td></td>
                     <td>
-                        <input type="submit" name="accion" value="Registrar" />
+                        <input type="submit" name="accion" value="registrarservicio" />
                     </td>
                 </tr>
             </table>

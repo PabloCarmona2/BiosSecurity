@@ -81,16 +81,4 @@ public class LogicaCliente implements ILogicaCliente{
             throw new Exception(ex.getMessage());
         }
     }
-    
-    public void Alta(Cliente cliente) throws Exception{
-        try{
-         
-            Validar(cliente);
-        
-            Persistencia.FabricaPersistencia.getPersistenciaCliente().Alta(cliente);
-            
-        }catch(Exception ex){
-            throw new Exception(ex.getMessage());
-        }
-    }
 }

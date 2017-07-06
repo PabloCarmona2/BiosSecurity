@@ -20,8 +20,8 @@
         </form>
         
         <p>
-            <a href="servicios?accion=registrar&tipo=camara"><img src="imagenes/instalarcamara.png" alt="Registrar Servicio VideoVigilancia" title="Registrar Servicio VideoVigilancia..." ></a>
-            <a href="servicios?accion=registrar&tipo=alarma"><img src="imagenes/instalaralarma.png" alt="Registrar Servicio Alarmas" title="Registrar Servicio Alarma..." ></a>
+            <a href="servicios?accion=procesarCliente&tipo=camara"><img src="imagenes/instalarcamara.png" alt="Registrar Servicio VideoVigilancia" title="Registrar Servicio VideoVigilancia..." ></a>
+            <a href="servicios?accion=procesarCliente&tipo=alarma"><img src="imagenes/instalaralarma.png" alt="Registrar Servicio Alarmas" title="Registrar Servicio Alarma..." ></a>
         </p>
         
         <table class="listado">

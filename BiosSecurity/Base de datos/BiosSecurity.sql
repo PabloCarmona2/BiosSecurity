@@ -1693,7 +1693,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE AltaPropiedad(tipo VARCHAR(20), direccion VARCHAR(25),  pCliente bigint, OUT pError VARCHAR(500))
+CREATE PROCEDURE AltaPropiedad(tipo VARCHAR(20), direccion VARCHAR(25),  pCliente bigint, OUT pError VARCHAR(500), OUT pNumPropiedad BIGINT)
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -1717,17 +1717,21 @@ cuerpo:BEGIN
     THEN
 		
         SET pIdProp = 1;
+        SET pNumPropiedad = 1;
     
     END IF;
     IF EXISTS(SELECT * FROM Propiedades WHERE Cliente = pCliente)
     THEN
 		
         SET pIdProp = ((SELECT IdProp FROM Propiedades  WHERE Cliente = pCliente order by IdProp desc limit 1) + 1);
+        
+        SET pNumPropiedad = ((SELECT IdProp FROM Propiedades  WHERE Cliente = pCliente order by IdProp desc limit 1) + 1);
     
     END IF;
     
 	INSERT INTO Propiedades (IdProp, Tipo, Direccion, Cliente)
     VALUES(pIdProp, tipo, direccion, pCliente);
+    
 
 	Set sinErrores = 0;
 
