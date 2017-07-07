@@ -6,6 +6,7 @@
 package Persistencia.Interfaces;
 
 import DataTypes.Cliente;
+import DataTypes.Propiedad;
 import DataTypes.Servicio;
 import java.util.HashMap;
 import java.util.List;
@@ -19,4 +20,5 @@ public interface IPersistenciaCliente {
       HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception;
       List<Cliente> Listar()throws Exception;
       void Modificar(Cliente cliente) throws Exception;
+      
 }

@@ -5,8 +5,10 @@
  */
 package Logica.Trabajo;
 
+import DataTypes.Cliente;
 import DataTypes.Propiedad;
 import Logica.Interfaces.ILogicaPropiedad;
+import java.util.List;
 
 /**
  *
@@ -65,5 +67,15 @@ public class LogicaPropiedad implements ILogicaPropiedad{
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
         } 
+    }
+    
+    public List<Propiedad> ListarXCliente(Cliente cliente) throws Exception{
+        try{
+            
+            return Persistencia.FabricaPersistencia.getPersistenciaPropiedad().ListarXCliente(cliente);
+            
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
     }
 }

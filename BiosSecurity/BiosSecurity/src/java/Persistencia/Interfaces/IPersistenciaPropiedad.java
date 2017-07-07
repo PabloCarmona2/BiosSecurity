@@ -5,7 +5,9 @@
  */
 package Persistencia.Interfaces;
 
+import DataTypes.Cliente;
 import DataTypes.Propiedad;
+import java.util.List;
 
 /**
  *
@@ -16,4 +18,5 @@ public interface IPersistenciaPropiedad {
     Propiedad Buscar(int id, int cliente) throws Exception;
     void Modificar(Propiedad casa) throws Exception;
     Propiedad BuscarUltimaXCliente(int pCliente) throws Exception;
+    List<Propiedad> ListarXCliente(Cliente cliente) throws Exception;
 }

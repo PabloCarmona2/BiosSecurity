@@ -57,13 +57,6 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="color:red">(cliente)Telefono:</td>
-                    <td>
-                        <input type="text" name="telefonoCliente" value="${param.telefonoCliente}" id="telefonoCliente" />
-                    </td>
-                </tr>
-                
-                <tr>
                     <td></td>
                     <td>
                         <input type="submit" name="accion" value="procesarcliente" />

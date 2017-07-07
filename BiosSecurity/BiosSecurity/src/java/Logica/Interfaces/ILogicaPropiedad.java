@@ -5,7 +5,9 @@
  */
 package Logica.Interfaces;
 
+import DataTypes.Cliente;
 import DataTypes.Propiedad;
+import java.util.List;
 
 /**
  *
@@ -15,4 +17,5 @@ public interface ILogicaPropiedad {
      void Modificar(Propiedad propiedad) throws Exception;
      Propiedad Buscar(int numero, int cliente) throws Exception;
      Propiedad BuscarUltimaXCliente(int pCliente) throws Exception;
+     List<Propiedad> ListarXCliente(Cliente cliente) throws Exception;
 }

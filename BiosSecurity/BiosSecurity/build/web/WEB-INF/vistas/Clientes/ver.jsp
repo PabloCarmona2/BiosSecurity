@@ -5,13 +5,44 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
-    </head>
-    <body>
-        <h1>Hello World!</h1>
-    </body>
-</html>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
+
+<t:PaginaMaestra titulo="Ver Administrador">
+    <jsp:body>
+        <c:if test="${!empty cliente}">
+            
+            <c:if test="${!empty propiedades}">
+                
+                <jsp:useBean id="cliente" type="DataTypes.Cliente" scope="request" />
+            
+                <h3><jsp:getProperty name="cliente" property="nombre" /></h3>
+                <h4><jsp:getProperty name="cliente" property="cedula" /></h4>
+                
+                <table class="listado">
+                    <tr>
+                        <th>ID</th><th>TIPO</th><th>DIRECCION</th><th></th>
+                    </tr>
+
+                    <c:forEach items="${propiedades}" var="propiedad">
+                        <tr>
+                            <td class="texto-centro">${propiedad.idProp}</td>
+                            <td>${propiedad.tipo}</td>
+                            <td class="texto-derecha">${propiedad.direccion}</td>
+                            <td>
+                                <a href="clientes?accion=modificarPropiedad&idProp=${propiedad.idProp}&cedulaCliente=${cliente.cedula}"><img src="imagenes/modificar.png" alt="Modificar" title="Modificar..." ></a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </table>
+                
+            </c:if>
+            
+        </c:if>
+        
+        <p><a href="administrador">Volver...</a></p>
+        
+        <t:Mensaje />
+    </jsp:body>
+</t:PaginaMaestra>

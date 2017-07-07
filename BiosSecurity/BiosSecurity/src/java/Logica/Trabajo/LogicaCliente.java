@@ -10,6 +10,7 @@ import DataTypes.Servicio;
 import Logica.Interfaces.ILogicaCliente;
 import static Logica.Trabajo.LogicaPropiedad.Validar;
 import Persistencia.FabricaPersistencia;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,6 +62,29 @@ public class LogicaCliente implements ILogicaCliente{
     public Cliente Buscar(int cedula) throws Exception{
         try{
             return FabricaPersistencia.getPersistenciaCliente().Buscar(cedula);
+        }catch(Exception ex){
+            throw new Exception(ex.getMessage());
+        }
+    }
+    
+    public List<Cliente> Listar(String criterio) throws Exception{
+        
+        List<Cliente> clientes = new ArrayList<Cliente>();
+            
+        try{
+            
+            if(criterio == null || criterio.length() == 0){
+                
+                return FabricaPersistencia.getPersistenciaCliente().Listar();
+                
+            }else{
+                
+                Cliente cliente = (Cliente)this.Buscar(Integer.parseInt(criterio));
+                clientes.add(cliente);
+                
+                return clientes;
+            }
+            
         }catch(Exception ex){
             throw new Exception(ex.getMessage());
         }

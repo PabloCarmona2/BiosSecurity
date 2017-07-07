@@ -1739,6 +1739,44 @@ END//
 
 DELIMITER ;
 
+DELIMITER //
+CREATE PROCEDURE ModificarPropiedad(pIdProp BIGINT, pTipo VARCHAR(20), pDireccion VARCHAR(25),  pCliente bigint, OUT pError VARCHAR(500))
+cuerpo:BEGIN
+
+	DECLARE mensajeError VARCHAR(500);
+    DECLARE sinErrores BIT;
+
+	DECLARE EXIT HANDLER FOR SQLEXCEPTION 
+	BEGIN
+		IF sinErrores THEN
+			ROLLBACK;
+        END IF;
+		
+		SET pError = mensajeError;
+	END;
+    
+    SET sinErrores = 1;
+
+    
+    IF NOT EXISTS(SELECT * FROM Propiedades WHERE IdProp = pIdProp AND Cliente = pCliente)
+    THEN
+		
+        SET pError = 'No existe la propiedad que desea modificar';
+    
+    END IF;
+    
+    SET mensajeError = 'No se pudo dar de alta la propiedad correctamente!';
+    
+	UPDATE Propiedades
+    SET Tipo = pTipo, Direccion = pDireccion
+    WHERE IdProp = pIdProp AND Cliente = pCliente;
+
+	Set sinErrores = 0;
+
+END//
+
+DELIMITER ;
+
 #CALL AltaPropiedad('casa', 'Calle 12456', 10, @salida);
 
 

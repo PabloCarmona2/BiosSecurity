@@ -18,4 +18,5 @@ public interface ILogicaCliente {
     Cliente Buscar(int cedula) throws Exception;
     void Modificar(Cliente cliente) throws Exception;
     HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception;
+    List<Cliente> Listar(String criterio) throws Exception;
 }

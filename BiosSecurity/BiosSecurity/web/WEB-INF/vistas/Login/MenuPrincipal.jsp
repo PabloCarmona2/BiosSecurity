@@ -19,6 +19,7 @@
                 <li><a href="administrador">Control de Administradores</a></li>
                 <li><a href="tecnicos">Control de Tecnicos</a></li>
                 <li><a href="cobradores">Control de Cobradores</a></li>
+                <li><a href="clientes">Control de Clientes y Propiedades</a></li>
                 <li><a href="servicios">Control de Servicios</a></li>
                 <li><a href="dispositivos">Control de Dispositivos</a></li>
                 <li><a href="precios">Declaracion de Precios</a></li>
