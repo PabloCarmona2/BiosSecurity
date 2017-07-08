@@ -50,7 +50,7 @@
                 </td>
             </tr>
             <tr>
-                <td>Fecha de Ingreso:</td>
+                <td>Fecha de Ingreso (aaaa/mm/dd):</td>
                 <td>
                     <input type="text" name="fIngreso" value="${!empty empleado ? empleado.fIngreso : param.fIngreso}" />
                 </td>

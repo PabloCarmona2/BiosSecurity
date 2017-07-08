@@ -12,7 +12,9 @@ import DataTypes.Tecnico;
 import Logica.FabricaLogica;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.servlet.ServletException;
@@ -48,7 +50,7 @@ public class ControladorCobrador extends Controlador {
             
             List<Empleado> empleados = new ArrayList<Empleado>();
             
-            if(request.getParameter("buscar") != null){
+            if(request.getParameter("buscar") != null && request.getParameter("buscar") != ""){
                 try {
             
                     Integer.parseInt(request.getParameter("buscar"));
@@ -57,7 +59,7 @@ public class ControladorCobrador extends Controlador {
 
                     cargarMensaje("¡ERROR! El numero de documento ingresado no es válido.", request);
 
-                    mostrarVista("index", request, response);
+                    mostrarVista("listaCobradores", request, response);
 
                     return;
 
@@ -154,7 +156,26 @@ public class ControladorCobrador extends Controlador {
         
         String clave = request.getParameter("clave");
         
+        
+            
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy/MM/dd");
+
         Date fIngreso = new Date();
+        
+        String fechaIngresada = request.getParameter("fIngreso");
+
+        try {
+
+            fIngreso = formatoDelTexto.parse(fechaIngresada);
+
+        } catch (Exception ex) {
+
+            cargarMensaje("¡ERROR! La fecha ingresada no tiene el formato correcto.", request);
+            
+            mostrarVista("agregarCobrador", request, response);
+            
+            return;
+        }
         
         String transporte = request.getParameter("transporte");
         
@@ -324,7 +345,24 @@ public class ControladorCobrador extends Controlador {
         
         String clave = request.getParameter("clave");
         
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy/MM/dd");
+
         Date fIngreso = new Date();
+        
+        String fechaIngresada = request.getParameter("fIngreso");
+
+        try {
+
+            fIngreso = formatoDelTexto.parse(fechaIngresada);
+
+        } catch (Exception ex) {
+
+            cargarMensaje("¡ERROR! La fecha ingresada no tiene el formato correcto.", request);
+            
+            mostrarVista("agregarCobrador", request, response);
+            
+            return;
+        }
         
         String Transporte = request.getParameter("transporte");
         
