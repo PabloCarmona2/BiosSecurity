@@ -33,7 +33,18 @@
                         <fmt:formatNumber type="number" pattern="0.00" value="${empleado.sueldo}" />
                     </td>
                     <td class="texto-derecha">${empleado.fIngreso}</td>
-                    <td class="texto-derecha">${empleado.especializacion}</td>
+                    <c:if test="${empleado.eAlarmas == true && empleado.eCamaras == true}">
+                        <td class="texto-derecha">Ambas</td>
+                    </c:if>
+                    <c:if test="${empleado.eAlarmas == true && empleado.eCamaras == false}">
+                        <td class="texto-derecha">Alarmas</td>
+                    </c:if>
+                    <c:if test="${empleado.eAlarmas == false && empleado.eCamaras == true}">
+                        <td class="texto-derecha">Camaras</td>
+                    </c:if>
+                    <c:if test="${empleado.eAlarmas == false && empleado.eCamaras == false}">
+                        <td class="texto-derecha">Ninguna</td>
+                    </c:if>
                     <td>
                         <a href="tecnicos?accion=ver&cedula=${empleado.cedula}"><img src="imagenes/ver.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
                         <a href="tecnicos?accion=modificar&cedula=${empleado.cedula}"><img src="imagenes/modificar.png" alt="Modificar" title="Modificar..." ></a>&nbsp;&nbsp;

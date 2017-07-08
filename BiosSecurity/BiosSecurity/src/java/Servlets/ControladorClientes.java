@@ -47,7 +47,7 @@ public class ControladorClientes extends Controlador {
             
             List<Cliente> clientes = new ArrayList<Cliente>();
             
-            if(request.getParameter("buscar") != null){
+            if(request.getParameter("buscar") != null && request.getParameter("buscar") != ""){
                 try {
             
                     Integer.parseInt(request.getParameter("buscar"));
@@ -65,12 +65,13 @@ public class ControladorClientes extends Controlador {
             clientes = FabricaLogica.GetLogicaCliente().Listar(request.getParameter("buscar"));
             
             if(clientes.isEmpty()){
-                
+                cargarMensaje("No se encontro ningun cliente con la cedula" + (request.getParameter("buscar")) + ".", request);
                 clientes = FabricaLogica.GetLogicaCliente().Listar("");
+            }else{
+                cargarMensaje("Cantidad de clientes: " + clientes.size(), request);
             }
             
             request.setAttribute("clientes", clientes);
-            cargarMensaje("Cantidad de clientes: " + clientes.size(), request);
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los clientes.", request);
@@ -221,7 +222,7 @@ public class ControladorClientes extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al agregar el cliente.", request);
+            cargarMensaje(ex.getMessage(), request);
             
             mostrarVista("modificarCliente", request, response);
             

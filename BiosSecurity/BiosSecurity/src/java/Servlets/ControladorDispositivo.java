@@ -49,7 +49,7 @@ public class ControladorDispositivo extends Controlador {
             
             List<Dispositivo> dispositivos = new ArrayList<Dispositivo>();
             
-            if(request.getParameter("buscar") != null){
+            if(request.getParameter("buscar") != null && request.getParameter("buscar") != ""){
                 try {
             
                     Integer.parseInt(request.getParameter("buscar"));

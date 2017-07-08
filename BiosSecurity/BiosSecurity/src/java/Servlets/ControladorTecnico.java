@@ -189,10 +189,17 @@ public class ControladorTecnico extends Controlador {
             
             return;
         }
+        Boolean eCamaras = false;
+        Boolean eAlarmas = false;
         
-        String especializacion = request.getParameter("especializacion");
+        if(request.getParameter("eCamaras") != null){
+            eCamaras = true;
+        }
+        if(request.getParameter("eAlarmas") != null){
+            eAlarmas = true;
+        }
         
-        Tecnico tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, especializacion);
+        Tecnico tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, eCamaras, eAlarmas);
         
         try {
             
@@ -401,9 +408,17 @@ public class ControladorTecnico extends Controlador {
             return;
         }
         
-        String especializacion = request.getParameter("especializacion");
+        Boolean eCamaras = false;
+        Boolean eAlarmas = false;
         
-        Tecnico tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, especializacion);
+        if(request.getParameter("eCamaras") != null){
+            eCamaras = true;
+        }
+        if(request.getParameter("eAlarmas") != null){
+            eAlarmas = true;
+        }
+        
+        Tecnico tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, eCamaras, eAlarmas);
         
         try {
             

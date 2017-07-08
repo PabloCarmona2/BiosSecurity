@@ -52,11 +52,7 @@ public class LogicaEmpleado implements ILogicaEmpleado{
                 throw new Exception("El sueldo del empleado no puede ser menor o igual a 0!");
             }
             
-            if(empleado instanceof Tecnico){
-                if(((Tecnico) empleado).getEspecializacion().length() != 7){
-                    throw new Exception("La longitud del texto ingresado no coincide con las especializaciones disponibles!");
-                }
-            }else if(empleado instanceof Cobrador){
+            if(empleado instanceof Cobrador){
                 if(((Cobrador)empleado).getTransporte().length() > 20){
                     throw new Exception("La longitud del texto referido al transporte no puede superar los 20 caracteres");
                 }

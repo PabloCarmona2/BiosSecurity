@@ -50,7 +50,7 @@ public class ControladorInstalaciones extends Controlador {
             
             List<Servicio> servicios = new ArrayList<Servicio>();
             
-            if(request.getParameter("buscar") != null){
+            if(request.getParameter("buscar") != null && request.getParameter("buscar") != ""){
                 try {
             
                     Integer.parseInt(request.getParameter("buscar"));

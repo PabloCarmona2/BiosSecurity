@@ -57,10 +57,15 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Especializacion:</td>
-                    <td>
-                        <input type="text" name="especializacion" value="${!empty empleado ? empleado.especializacion : param.especializacion}" />
-                    </td>
+                    <td>Especializacion(es):</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Especializado en Camaras<input type="checkbox" name="eCamaras" value="Camaras"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>Especializado en Alarmas<input type="checkbox" name="eAlarmas" value="Alarmas"></td>
                 </tr>
                 <tr>
                     <td></td>

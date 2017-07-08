@@ -55,10 +55,26 @@
                     </td>
                 </tr>
                 <tr>
-                    <td>Especializacion:</td>
-                    <td>
-                        <input type="text" name="especializacion" value="${!empty empleado ? empleado.especializacion : param.especializacion}" />
-                    </td>
+                    <td>Especializacion(es):</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <c:if test="${empleado.eCamaras == true}">
+                        <td>Especializado en Camaras<input type="checkbox" name="eCamaras" checked="true" value="Camaras"></td>
+                    </c:if>
+                    <c:if test="${empleado.eCamaras == false}">
+                        <td>Especializado en Camaras<input type="checkbox" name="eCamaras" value="Camaras"></td>
+                    </c:if>
+                    
+                </tr>
+                <tr>
+                    <td></td>
+                    <c:if test="${empleado.eAlarmas == true}">
+                        <td>Especializado en Camaras<input type="checkbox" name="eAlarmas" checked="true" value="Alarmas"></td>
+                    </c:if>
+                    <c:if test="${empleado.eAlarmas == false}">
+                        <td>Especializado en Camaras<input type="checkbox" name="eAlarmas" value="Alarmas"></td>
+                    </c:if>
                 </tr>
                 <tr>
                     <td></td>

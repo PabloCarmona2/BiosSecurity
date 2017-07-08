@@ -13,23 +13,34 @@ import java.util.Date;
  */
 public class Tecnico extends Empleado{
     
-    private String especializacion;
+    private Boolean eCamaras;
+    private Boolean eAlarmas;
 
-    public String getEspecializacion() {
-        return especializacion;
+    public Boolean geteCamaras() {
+        return eCamaras;
     }
 
-    public void setEspecializacion(String especializacion) {
-        this.especializacion = especializacion;
+    public void seteCamaras(Boolean eCamaras) {
+        this.eCamaras = eCamaras;
     }
+
+    public Boolean geteAlarmas() {
+        return eAlarmas;
+    }
+
+    public void seteAlarmas(Boolean eAlarmas) {
+        this.eAlarmas = eAlarmas;
+    }
+
     
     public Tecnico() {
-        this(0,null,null,new Date(),0,null);
+        this(0,null,null,new Date(),0,false, false);
     }
     
-    public Tecnico(int cedula, String nombre, String clave, Date fIngreso, double sueldo, String especializacion) {
+    public Tecnico(int cedula, String nombre, String clave, Date fIngreso, double sueldo, Boolean eCamaras, Boolean eAlarmas) {
         super(cedula, nombre, clave, fIngreso, sueldo);
         
-        setEspecializacion(especializacion);
+        this.seteAlarmas(eAlarmas);
+        this.seteCamaras(eCamaras);
     }
 }

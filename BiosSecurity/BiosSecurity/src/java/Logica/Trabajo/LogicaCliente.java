@@ -80,8 +80,11 @@ public class LogicaCliente implements ILogicaCliente{
                 
             }else{
                 
-                Cliente cliente = (Cliente)this.Buscar(Integer.parseInt(criterio));
-                clientes.add(cliente);
+                Cliente cliente = this.Buscar(Integer.parseInt(criterio));
+                if(cliente != null)
+                {
+                    clientes.add(cliente);
+                }
                 
                 return clientes;
             }

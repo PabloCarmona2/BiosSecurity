@@ -9,7 +9,7 @@
 
 <%@taglib prefix="t" tagdir="/WEB-INF/tags" %>
 
-<t:PaginaMaestra titulo="Ver Administrador">
+<t:PaginaMaestra titulo="Ver Propiedades del cliente">
     <jsp:body>
         <c:if test="${!empty cliente}">
             
@@ -17,8 +17,8 @@
                 
                 <jsp:useBean id="cliente" type="DataTypes.Cliente" scope="request" />
             
-                <h3><jsp:getProperty name="cliente" property="nombre" /></h3>
-                <h4><jsp:getProperty name="cliente" property="cedula" /></h4>
+                <h3>De nombre: <jsp:getProperty name="cliente" property="nombre" /></h3>
+                <h4>Con el numero de documento: <jsp:getProperty name="cliente" property="cedula" /></h4>
                 
                 <table class="listado">
                     <tr>
@@ -41,7 +41,7 @@
             
         </c:if>
         
-        <p><a href="administrador">Volver...</a></p>
+        <p><a href="clientes">Volver...</a></p>
         
         <t:Mensaje />
     </jsp:body>

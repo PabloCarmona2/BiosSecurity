@@ -62,16 +62,18 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             String clave;
             Date fIngreso;
             double sueldo;
-            String especializacion;
+            Boolean eAlarmas;
+            Boolean eCamaras;
             
             if(resultadoConsulta.next()){
                 nombre = resultadoConsulta.getString("Nombre");
                 clave = resultadoConsulta.getString("Clave");
                 fIngreso = resultadoConsulta.getDate("FIngreso");
                 sueldo = resultadoConsulta.getDouble("Sueldo");
-                especializacion = resultadoConsulta.getString("Especializacion");
+                eAlarmas = resultadoConsulta.getBoolean("Ealarmas");
+                eCamaras = resultadoConsulta.getBoolean("Ecamaras");
                 
-                tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, especializacion);
+                tecnico = new Tecnico(cedula, nombre, clave, fIngreso, sueldo, eCamaras, eAlarmas);
             }
             
             return tecnico;
@@ -104,7 +106,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL AltaTecnico(?, ?, ?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL AltaTecnico(?, ?, ?, ?, ?, ?, ?, ?) }")) {
            
             java.util.Date fecha = tecnico.getfIngreso();
             java.sql.Date fechaIngreso = new java.sql.Date(fecha.getTime());
@@ -114,12 +116,13 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             consulta.setString(3, tecnico.getClave());
             consulta.setDate(4, fechaIngreso);
             consulta.setDouble(5, tecnico.getSueldo());
-            consulta.setString(6, tecnico.getEspecializacion());
-            consulta.registerOutParameter(7, java.sql.Types.VARCHAR);
+            consulta.setBoolean(6, tecnico.geteAlarmas());
+            consulta.setBoolean(7, tecnico.geteCamaras());
+            consulta.registerOutParameter(8, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(7);
+            String error = consulta.getString(8);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);
@@ -139,7 +142,7 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-                CallableStatement consulta = conexion.prepareCall("{ CALL ModificarTecnico(?, ?, ?, ?, ?, ?, ?) }")) {
+                CallableStatement consulta = conexion.prepareCall("{ CALL ModificarTecnico(?, ?, ?, ?, ?, ?, ?, ?) }")) {
            
             java.util.Date fecha = tecnico.getfIngreso();
             java.sql.Date fechaIngreso = new java.sql.Date(fecha.getTime());
@@ -149,12 +152,13 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             consulta.setString(3, tecnico.getClave());
             consulta.setDate(4, fechaIngreso);
             consulta.setDouble(5, tecnico.getSueldo());
-            consulta.setString(6, tecnico.getEspecializacion());
-            consulta.registerOutParameter(7, java.sql.Types.VARCHAR);
+            consulta.setBoolean(6, tecnico.geteAlarmas());
+            consulta.setBoolean(7, tecnico.geteCamaras());
+            consulta.registerOutParameter(8, java.sql.Types.VARCHAR);
             
             consulta.executeUpdate();
             
-            String error = consulta.getString(7);
+            String error = consulta.getString(8);
             
             if(error != null){
                 throw new Exception("ERROR: " + error);
@@ -213,7 +217,8 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
             String clave;
             Date fIngreso;
             double sueldo;
-            String especializacion;
+            Boolean eAlarmas;
+            Boolean eCamaras;
             
             while(resultadoConsulta.next()){
                 _cedula = resultadoConsulta.getInt("Cedula");
@@ -221,9 +226,10 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
                 clave = resultadoConsulta.getString("Clave");
                 fIngreso = resultadoConsulta.getDate("FIngreso");
                 sueldo = resultadoConsulta.getDouble("Sueldo");
-                especializacion = resultadoConsulta.getString("Especializacion");
+                eAlarmas = resultadoConsulta.getBoolean("Ealarmas");
+                eCamaras = resultadoConsulta.getBoolean("Ecamaras");
                 
-                tecnico = new Tecnico(_cedula, nombre, clave, fIngreso, sueldo, especializacion);
+                tecnico = new Tecnico(_cedula, nombre, clave, fIngreso, sueldo, eCamaras, eAlarmas);
                 
                 tecnicos.add(tecnico);
             }
@@ -262,16 +268,18 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         String claveAdmin;
         Date fIngreso;
         double sueldo;
-        String especializacion;
+        Boolean eAlarmas;
+        Boolean eCamaras;
             
         if(resultado.next()){
            nombre = resultado.getString("Nombre");
            claveAdmin = resultado.getString("Clave");
            fIngreso = resultado.getDate("FIngreso");
            sueldo = resultado.getDouble("Sueldo");
-           especializacion = resultado.getString("Especializacion");
+           eAlarmas = resultado.getBoolean("Ealarmas");
+           eCamaras = resultado.getBoolean("Ecamaras");
                     
-           tecnico = new Tecnico(cedula, nombre, claveAdmin, fIngreso, sueldo, especializacion);
+           tecnico = new Tecnico(cedula, nombre, claveAdmin, fIngreso, sueldo, eCamaras, eAlarmas);
         }
         } catch (Exception ex) {
             throw new Exception(ex.getMessage());

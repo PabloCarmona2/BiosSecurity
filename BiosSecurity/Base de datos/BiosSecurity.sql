@@ -13,7 +13,8 @@ create table Empleados (
 );
 
 create table Tecnicos (
-	Especializacion varchar(7) not null,
+	Ecamaras boolean not null,
+    Ealarmas boolean not null,
     Cedula bigint not null,
     foreign key (Cedula) references Empleados(Cedula),
     primary key (Cedula)
@@ -139,11 +140,11 @@ VALUES (4);
 INSERT INTO Empleados
 VALUES (2, 'aaaaaben', 1111,20101010, 1000);
 INSERT INTO Tecnicos
-VALUES ('camaras',2);
+VALUES (false, true,2);
 INSERT INTO Empleados
 VALUES (3, 'roberto', 1111,20101010, 1000);
 INSERT INTO Tecnicos
-VALUES ('alarmas',3);
+VALUES (true, false,3);
 INSERT INTO Empleados
 VALUES (5, 'jose', 1111,20101010, 1000);
 INSERT INTO Cobradores
@@ -808,7 +809,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AltaTecnico(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, especializacion VARCHAR(7), OUT pError VARCHAR(500))
+CREATE procedure AltaTecnico(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, peAlarmas boolean, peCamaras boolean, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -845,7 +846,7 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo agregar el tecnico correctamente!.';
 	
 	INSERT INTO Tecnicos
-	VALUES(especializacion, pCedula);
+	VALUES(peCamaras, peAlarmas, pCedula);
 	
 	COMMIT;
     
@@ -859,7 +860,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure ModificarTecnico(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, especializacion VARCHAR(7), OUT pError VARCHAR(500))
+CREATE procedure ModificarTecnico(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, peAlarmas boolean, peCamaras boolean, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -898,7 +899,7 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo modificar el tecnico correctamente!.';
 	
 	UPDATE Tecnicos
-	SET Especializacion = especializacion
+	SET Ecamaras = peCamaras, Ealarmas = peAlarmas
     WHERE Cedula = pCedula;
     
 	

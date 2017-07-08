@@ -475,6 +475,17 @@ public class ControladorAdministrador extends Controlador {
             
         }
         
+        Administrador adminLogueado = (Administrador)request.getSession().getAttribute("empleadoLogueado");
+        
+        if(cedula == adminLogueado.getCedula()){
+            
+            cargarMensaje("¡ERROR! No puede autoeliminarse del sistema.", request);
+            
+            mostrarVista("listaAdministradores", request, response);
+            
+            return;
+        }
+        
         try {
             Empleado emp = FabricaLogica.GetLogicaEmpleado().Buscar(cedula);
             FabricaLogica.GetLogicaEmpleado().Eliminar(emp);

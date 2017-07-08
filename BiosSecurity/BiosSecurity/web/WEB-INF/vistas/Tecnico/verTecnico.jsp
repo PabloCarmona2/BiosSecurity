@@ -23,6 +23,18 @@
                 <li><strong>Clave:</strong> <jsp:getProperty name="empleado" property="clave" /></li>
                 <li><strong>Fecha de ingreso:</strong> <jsp:getProperty name="empleado" property="fIngreso" /></li>
                 <li><strong>Sueldo:</strong> <jsp:getProperty name="empleado" property="sueldo" /></li>
+                <c:if test="${empleado.eAlarmas == true && empleado.eCamaras == true}">
+                    <li><strong>Especializacion:</strong> Ambas</li>
+                </c:if>
+                <c:if test="${empleado.eAlarmas == true && empleado.eCamaras == false}">
+                    <li><strong>Especializacion:</strong> Alarmas</li>
+                </c:if>
+                <c:if test="${empleado.eAlarmas == false && empleado.eCamaras == true}">
+                    <li><strong>Especializacion:</strong> Camaras</li>
+                </c:if>
+                <c:if test="${empleado.eAlarmas == false && empleado.eCamaras == false}">
+                    <li><strong>Especializacion:</strong> Ninguna</li>
+                </c:if>
                 <li><strong>Especializacion:</strong> <jsp:getProperty name="empleado" property="especializacion" /></li>
             </ul>
         </c:if>
