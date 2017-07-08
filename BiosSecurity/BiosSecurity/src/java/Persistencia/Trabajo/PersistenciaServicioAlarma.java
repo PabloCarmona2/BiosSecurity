@@ -226,7 +226,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
          try{
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio WHERE ServicioAlarmas.NumServicio = ?;");
+            consulta = conexion.prepareStatement("SELECT * FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio WHERE ServicioAlarmas.NumServicio = ? AND Servicios.BajaLogica = false;");
             
             consulta.setInt(1, numeroServicio);
             
@@ -357,7 +357,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
 
             consulta = conexion.createStatement();
             
-            resultadoConsulta = consulta.executeQuery("SELECT * FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio");
+            resultadoConsulta = consulta.executeQuery("SELECT * FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio AND Servicios.BajaLogica = false;");
             
             List<ServicioAlarma> servicios = new ArrayList<ServicioAlarma>();
             

@@ -62,6 +62,7 @@ create table Servicios (
     Monitoreo boolean not null,
     Propiedad bigint not null,
     Cliente bigint not null,
+    BajaLogica boolean not null,
     primary key (NumServicio),
     foreign key (Propiedad) references Propiedades(IdProp),
     foreign key (Cliente) references Propiedades(Cliente)
@@ -204,32 +205,32 @@ VALUES(NULL);#13
 INSERT INTO Dispositivos(DescripcionUbicacion)
 VALUES(NULL);#14
 
-INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
-VALUES(20161010, true, 1, 7);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
+VALUES(20161010, true, 1, 7, false);
 INSERT INTO ServicioVideoVigilancia(Terminal, NumServicio)
 VALUES(true, 1);
-INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
-VALUES(20161010, false, 1, 8);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
+VALUES(20161010, false, 1, 8, false);
 INSERT INTO ServicioVideoVigilancia(Terminal, NumServicio)
 VALUES(true, 2);
-INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
-VALUES(20161010, true, 2, 7);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
+VALUES(20161010, true, 2, 7, false);
 INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
 VALUES(123456, 3);
-INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
-VALUES(20161010, true, 1, 9);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
+VALUES(20161010, true, 1, 9, false);
 INSERT INTO ServicioVideoVigilancia(Terminal, NumServicio)
 VALUES(true, 4);
-INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
-VALUES(20161010, true, 1, 10);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
+VALUES(20161010, true, 1, 10, false);
 INSERT INTO ServicioVideoVigilancia(Terminal, NumServicio)
 VALUES(true, 5);
-INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
-VALUES(20161010, true, 2, 9);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
+VALUES(20161010, true, 2, 9, false);
 INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
 VALUES(1267533, 6);
-INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
-VALUES(20170610, true, 1, 8);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
+VALUES(20170610, true, 1, 8, false);
 INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
 VALUES(1267533, 7);
 
@@ -1122,9 +1123,9 @@ cuerpo:BEGIN
 	START TRANSACTION; 
 	
 	SET mensajeError = 'No se pudo dar de alta el servicio correctamente!';
-	
     
-	INSERT INTO Servicios (Fecha, Monitoreo, Propiedad, Cliente) VALUES(pFecha, pMonitoreo, idprop, pCliente);
+    
+	INSERT INTO Servicios (Fecha, Monitoreo, Propiedad, Cliente, BajaLogica) VALUES(pFecha, pMonitoreo, idprop, pCliente, false);
     
 	SET mensajeError = 'No se pudo dar de alta el servicio de alarma correctamente!.';
 	
@@ -1218,25 +1219,48 @@ cuerpo:BEGIN
     
     
     SET transaccionActiva = 1;
+    SELECT * FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio WHERE ServicioAlarmas.NumServicio = 3;
     
-	START TRANSACTION; 
-    #SET pError = 'No se pudo desinstalar la alarma correctamente!.';
-	SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
+    START TRANSACTION; 
     
-	UPDATE Alarmas
-    SET Servicio = null, Tecnico = null
-    WHERE Alarmas.Servicio = pNumServicio;
+    IF EXISTS (SELECT * FROM LineaRecibo WHERE Servicio = pNumServicio)
+    THEN
     
-	SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
+		SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
+    
+		UPDATE Alarmas
+		SET Servicio = null, Tecnico = null
+		WHERE Alarmas.Servicio = pNumServicio;
+        
+        SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
+    	
+		UPDATE biossecurity.servicios
+		SET BajaLogica = true
+		WHERE NumServicio = pNumServicio;
+        
+    END IF;
+    IF NOT EXISTS (SELECT * FROM LineaRecibo WHERE Servicio = pNumServicio)
+    THEN
+    
+		
+		SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
+    
+		UPDATE Alarmas
+		SET Servicio = null, Tecnico = null
+		WHERE Alarmas.Servicio = pNumServicio;
+        
+		SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
 	
-    DELETE FROM biossecurity.servicioalarmas
-    WHERE servicioalarmas.NumServicio = pNumservicio;
-	 
+		DELETE FROM biossecurity.servicioalarmas
+		WHERE servicioalarmas.NumServicio = pNumservicio;
     
-	SET mensajeError = 'No se pudo eliminar el servicio de alarma correctamente!.';
+		SET mensajeError = 'No se pudo eliminar el servicio de alarma correctamente!.';
 	
-	DELETE FROM biossecurity.servicios
-    WHERE servicios.NumServicio = pNumservicio;
+		DELETE FROM biossecurity.servicios
+		WHERE servicios.NumServicio = pNumservicio;
+        
+    END IF;
+	
 	
 	COMMIT;
     
@@ -1255,7 +1279,7 @@ BEGIN
 
 SELECT *
 FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio
-WHERE Servicios.Cliente = pCliente AND Fecha < pfecha;
+WHERE Servicios.Cliente = pCliente AND Fecha < pfecha AND Servicios.BajaLogica = false;
 
 END//
 
@@ -1273,7 +1297,7 @@ BEGIN
 
 SELECT *
 FROM ServicioVideoVigilancia INNER JOIN Servicios ON ServicioVideoVigilancia.NumServicio = Servicios.NumServicio
-WHERE Servicios.Cliente = pCliente AND Fecha < pfecha;
+WHERE Servicios.Cliente = pCliente AND Fecha < pfecha AND Servicios.BajaLogica = false;
 
 END//
 
@@ -1304,7 +1328,7 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo dar de alta el servicio correctamente!';
 	
     
-	INSERT INTO Servicios (Fecha, Monitoreo, Propiedad, Cliente) VALUES(pFecha, pMonitoreo, idprop, pCliente);
+	INSERT INTO Servicios (Fecha, Monitoreo, Propiedad, Cliente, BajaLogica) VALUES(pFecha, pMonitoreo, idprop, pCliente, false);
     
 	SET mensajeError = 'No se pudo dar de alta el servicio de alarma correctamente!.';
 	
@@ -1352,24 +1376,46 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
 	
+    IF EXISTS (SELECT * FROM LineaRecibo WHERE Servicio = pNumServicio)
+    THEN
     
-    #SET pError = 'No se pudo desinstalar la alarma correctamente!.';
-	SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
+		SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
     
-	UPDATE Camaras
-    SET Servicio = null, Tecnico = null, Exterior = null
-    WHERE Camaras.Servicio = pNumServicio;
+		UPDATE Camaras
+		SET Servicio = null, Tecnico = null, Exterior = null
+		WHERE Camaras.Servicio = pNumServicio;
+		
+		SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
+		
+		UPDATE biossecurity.servicios
+		SET BajaLogica = true
+		WHERE NumServicio = pNumServicio;
+        
+	END IF;
+    IF NOT EXISTS (SELECT * FROM LineaRecibo WHERE Servicio = pNumServicio)
+    THEN
     
-	SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
+		SET mensajeError = 'No se pudo desinstalar los dispositivos correctamente!';
+    
+		UPDATE Camaras
+		SET Servicio = null, Tecnico = null, Exterior = null
+		WHERE Camaras.Servicio = pNumServicio;
+    
+		SET mensajeError = 'No se pudo eliminar el servicio correctamente!';
 	
-    DELETE FROM biossecurity.serviciovideovigilancia
-    WHERE serviciovideovigilancia.NumServicio = pNumservicio;
+		DELETE FROM biossecurity.serviciovideovigilancia
+		WHERE serviciovideovigilancia.NumServicio = pNumservicio;
 	 
     
-	SET mensajeError = 'No se pudo eliminar el servicio de videovigilancia correctamente!.';
+		SET mensajeError = 'No se pudo eliminar el servicio de videovigilancia correctamente!.';
 	
-	DELETE FROM biossecurity.servicios
-    WHERE servicios.NumServicio = pNumservicio;
+		DELETE FROM biossecurity.servicios
+		WHERE servicios.NumServicio = pNumservicio;
+        
+    END IF;
+    
+    #SET pError = 'No se pudo desinstalar la alarma correctamente!.';
+	
 	
 	COMMIT;
     
