@@ -193,7 +193,7 @@ public class ControladorInstalaciones extends Controlador {
     public void instalar_post(HttpServletRequest request, HttpServletResponse response) {
         
         try{
-            if(request.getParameter("numServicio") != null && request.getParameter("dispositivo") != null){
+            if(request.getParameter("numServicio") != null && request.getParameter("numInventario") != null){
                 
                 Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
                 
