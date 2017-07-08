@@ -53,8 +53,7 @@ create table Propiedades (
 create table Dispositivos (
 	NumInventario bigint auto_increment not null,
     DescripcionUbicacion varchar(100),
-    primary key (NumInventario),
-    BajaLogica boolean not null
+    primary key (NumInventario)
 );
 
 create table Servicios (
@@ -86,7 +85,6 @@ create table Alarmas (
     Servicio bigint,
     NumInventario bigint not null,
     Tecnico bigint,
-    BajaLogica boolean not null,
 	foreign key (Servicio) references ServicioAlarmas(NumServicio),
     foreign key (NumInventario) references Dispositivos(NumInventario),
     foreign key (Tecnico) references Tecnicos(Cedula),
@@ -98,7 +96,6 @@ create table Camaras (
     Servicio bigint,
     NumInventario bigint not null,
     Tecnico bigint,
-    BajaLogica boolean not null,
 	foreign key (Servicio) references ServicioVideoVigilancia(NumServicio),
     foreign key (NumInventario) references Dispositivos(NumInventario),
     foreign key (Tecnico) references Tecnicos(Cedula),
@@ -178,34 +175,34 @@ VALUES(2, 'Supermercado', 'calle 4267', 9);
 INSERT INTO Propiedades
 VALUES(1, 'tienda', 'calle 1223467', 10);
 
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#1
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#2
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#3
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#4
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#5
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#6
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#7
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#8
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#9
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#10
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#11
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#12
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#13
-INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-VALUES(NULL, false);#14
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#1
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#2
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#3
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#4
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#5
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#6
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#7
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#8
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#9
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#10
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#11
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#12
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#13
+INSERT INTO Dispositivos(DescripcionUbicacion)
+VALUES(NULL);#14
 
 INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
 VALUES(20161010, true, 1, 7);
@@ -238,33 +235,33 @@ VALUES(1267533, 7);
 
 
 INSERT INTO Alarmas
-VALUES(3, 1, 2, false);
+VALUES(3, 1, 2);
 INSERT INTO Alarmas
-VALUES(3, 2, 2, false);
+VALUES(3, 2, 2);
 INSERT INTO Alarmas
-VALUES(6, 3, 3, false);
+VALUES(6, 3, 3);
 INSERT INTO Alarmas
-VALUES(6, 4, 3, false);
+VALUES(6, 4, 3);
 INSERT INTO Camaras
-VALUES(false, 1, 5, 3, false);
+VALUES(false, 1, 5, 3);
 INSERT INTO Camaras
-VALUES(true, 2, 6, 2, false);
+VALUES(true, 2, 6, 2);
 INSERT INTO Camaras
-VALUES(true, 4, 7, 3, false);
+VALUES(true, 4, 7, 3);
 INSERT INTO Camaras
-VALUES(false, 5, 8, 2, false);
+VALUES(false, 5, 8, 2);
 INSERT INTO Alarmas
-VALUES(NULL, 9, NULL, false);
+VALUES(NULL, 9, NULL);
 INSERT INTO Alarmas
-VALUES(NULL, 10, NULL, false);
+VALUES(NULL, 10, NULL);
 INSERT INTO Alarmas
-VALUES(NULL, 11, NULL, false);
+VALUES(NULL, 11, NULL);
 INSERT INTO Camaras
-VALUES(NULL, NULL, 12, NULL, false);
+VALUES(NULL, NULL, 12, NULL);
 INSERT INTO Camaras
-VALUES(NULL, NULL, 13, NULL, false);
+VALUES(NULL, NULL, 13, NULL);
 INSERT INTO Camaras
-VALUES(NULL, NULL, 14, NULL, false);
+VALUES(NULL, NULL, 14, NULL);
 
 INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
 VALUES(20161030, 10000, 7, 5, false);
@@ -344,8 +341,8 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo agregar el dispositivo correctamente!';
 	
     
-	INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-    VALUES(descripcion, false);
+	INSERT INTO Dispositivos(DescripcionUbicacion)
+    VALUES(descripcion);
     
     SET idDispositivo = (SELECT NumInventario
     FROM Dispositivos
@@ -354,7 +351,7 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo agregar la camara correctamente!.';
 	
 	INSERT INTO Camaras
-	VALUES(exterior, servicio, idDispositivo, tecnico, false);
+	VALUES(exterior, servicio, idDispositivo, tecnico);
 	
 	COMMIT;
     
@@ -506,35 +503,9 @@ cuerpo:BEGIN
 			LEAVE cuerpo;
 	END IF;
     
-    IF EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario AND BajaLogica = 1) 
-    THEN
-			SET pError = 'La camara que desea eliminar ya esta dada de baja!';
-            
-			LEAVE cuerpo;
-	END IF;
-    
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
-    
-    IF EXISTS(SELECT * FROM Camaras WHERE NumInventario = numeroInventario AND Servicio != null)
-    THEN
-			SET mensajeError = 'No se pudo dar de baja la camara indicada!';
-            
-			UPDATE Camaras
-            SET BajaLogica = 1
-            WHERE NumInventario = numeroInventario;
-            
-            
-			SET mensajeError = 'No se pudo dar de baja el dispositivo indicado!';
-            
-            UPDATE Dispositivos
-            SET BajaLogica = 1
-            WHERE NumInventario = numeroInventario;
-            
-            
-            
-	ELSE 
          
             SET mensajeError = 'No se pudo eliminar la camara indicada!';
             
@@ -546,8 +517,6 @@ cuerpo:BEGIN
             DELETE FROM Dispositivos
             WHERE NumInventario = numeroInventario;
            
-        
-	END IF;
     
 	COMMIT;
     
@@ -586,8 +555,8 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo agregar el dispositivo correctamente!';
 	
     
-	INSERT INTO Dispositivos(DescripcionUbicacion, BajaLogica)
-    VALUES(descripcion, false);
+	INSERT INTO Dispositivos(DescripcionUbicacion)
+    VALUES(descripcion);
     
     SET idDispositivo = (SELECT NumInventario
     FROM Dispositivos
@@ -596,7 +565,7 @@ cuerpo:BEGIN
 	SET mensajeError = 'No se pudo agregar la alarma correctamente!.';
 	
 	INSERT INTO Alarmas
-	VALUES(servicio, idDispositivo, tecnico, false);
+	VALUES(servicio, idDispositivo, tecnico);
 	
 	COMMIT;
     
@@ -747,47 +716,21 @@ cuerpo:BEGIN
 			LEAVE cuerpo;
 	END IF;
     
-    IF EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario AND BajaLogica = 1) 
-    THEN
-			SET pError = 'La alarma que desea eliminar ya esta dada de baja!';
-            
-			LEAVE cuerpo;
-	END IF;
-    
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
     
-    
-    IF EXISTS(SELECT * FROM Alarmas WHERE NumInventario = numeroInventario AND Servicio != null)
-    THEN
-			SET mensajeError = 'No se pudo dar de baja el dispositivo indicado!';
-            
-            UPDATE Dispositivos
-            SET BajaLogica = 1
-            WHERE NumInventario = numeroInventario;
-            
-            SET mensajeError = 'No se pudo dar de baja la camara indicada!';
-            
-			UPDATE Camaras
-            SET BajaLogica = 1
-            WHERE NumInventario = numeroInventario;
-            
-	ELSE 
          
             SET mensajeError = 'No se pudo eliminar la camara indicada!';
             
-			DELETE FROM Camaras
+			DELETE FROM Alarmas
             WHERE NumInventario = numeroInventario;
             
-			SET mensajeError = 'No se pudo dar eliminar el dispositivo indicado!';
+			SET mensajeError = 'No se pudo eliminar el dispositivo indicado!';
             
             DELETE FROM Dispositivos
             WHERE NumInventario = numeroInventario;
            
-        
-	END IF;
-	
     
 	COMMIT;
     
