@@ -165,7 +165,7 @@ public class ControladorTecnico extends Controlador {
 
             cargarMensaje("¡ERROR! La fecha ingresada no tiene el formato correcto.", request);
             
-            mostrarVista("agregarCobrador", request, response);
+            mostrarVista("agregarTecnico", request, response);
             
             return;
         }
@@ -356,7 +356,7 @@ public class ControladorTecnico extends Controlador {
 
             cargarMensaje("¡ERROR! La fecha ingresada no tiene el formato correcto.", request);
             
-            mostrarVista("agregarCobrador", request, response);
+            mostrarVista("agregarTecnico", request, response);
             
             return;
         }

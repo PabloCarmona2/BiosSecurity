@@ -155,7 +155,7 @@ public class ControladorAdministrador extends Controlador {
 
             cargarMensaje("¡ERROR! La fecha ingresada no tiene el formato correcto.", request);
             
-            mostrarVista("agregarCobrador", request, response);
+            mostrarVista("agregarAdministrador", request, response);
             
             return;
         }
@@ -339,7 +339,7 @@ public class ControladorAdministrador extends Controlador {
 
             cargarMensaje("¡ERROR! La fecha ingresada no tiene el formato correcto.", request);
             
-            mostrarVista("agregarCobrador", request, response);
+            mostrarVista("agregarAdministrador", request, response);
             
             return;
         }
