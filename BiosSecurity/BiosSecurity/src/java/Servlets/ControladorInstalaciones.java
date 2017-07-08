@@ -168,11 +168,14 @@ public class ControladorInstalaciones extends Controlador {
         try{
             
             Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
+            request.getSession().removeAttribute("servicio");
             
             if(servicio instanceof ServicioAlarma){
+                request.setAttribute("servicio", servicio);
                 mostrarVista("instalarAlarma", request, response);
             }
             else if(servicio instanceof ServicioVideoVigilancia){
+                request.setAttribute("servicio", servicio);
                 mostrarVista("instalarCamara", request, response);
             }else{
                 cargarMensaje("¡ERROR! Tipo de servicio invalido.", request);
@@ -184,8 +187,6 @@ public class ControladorInstalaciones extends Controlador {
             cargarMensaje("¡ERROR! se produjo un error al buscar el servicio", request);
             mostrarVista("index", request, response);
         }
-        
-        mostrarVista("instalar", request, response);
         
     }
     
