@@ -250,7 +250,9 @@ public class ControladorInstalaciones extends Controlador {
                         return;
                     }
                 }catch(Exception ex){
+                     
                     cargarMensaje("¡ERROR! Se produjo un error al instalar el dispositivo.", request);
+                     mostrarVista("index", request, response);
                 }
                 
 //                
