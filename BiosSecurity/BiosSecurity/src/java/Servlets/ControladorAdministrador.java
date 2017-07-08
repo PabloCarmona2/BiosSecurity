@@ -141,11 +141,32 @@ public class ControladorAdministrador extends Controlador {
         
         String clave = request.getParameter("clave");
         
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 
         Date fIngreso = new Date();
         
         String fechaIngresada = request.getParameter("fIngreso");
+        String charEvaluar = "-";
+        
+        if(fechaIngresada.length() != 10){
+               
+            cargarMensaje("¡ERROR! Debe respetar el formato indicado, (ej: mes 1 = 01, dia 5 = 05).", request);
+            
+            mostrarVista("agregarAdministrador", request, response);
+            
+            return;
+            
+        }
+        
+        if(fechaIngresada.charAt(4) != charEvaluar.charAt(0)){
+            
+            cargarMensaje("¡ERROR! Debe respetar el formato indicado, comience con el año.", request);
+            
+            mostrarVista("agregarAdministrador", request, response);
+            
+            return;
+            
+        }
 
         try {
 
@@ -325,11 +346,31 @@ public class ControladorAdministrador extends Controlador {
         
         String clave = request.getParameter("clave");
         
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 
         Date fIngreso = new Date();
         
         String fechaIngresada = request.getParameter("fIngreso");
+        String charEvaluar = "-";
+        
+        if(fechaIngresada.length() != 10){
+               
+            cargarMensaje("¡ERROR! Debe respetar el formato indicado, (ej: mes 1 = 01, dia 5 = 05).", request);
+            
+            mostrarVista("modificarAdministrador", request, response);
+            
+            return;
+            
+        }
+        if(fechaIngresada.charAt(4) != charEvaluar.charAt(0)){
+            
+            cargarMensaje("¡ERROR! Debe respetar el formato indicado, comience con el año.", request);
+            
+            mostrarVista("modificarAdministrador", request, response);
+            
+            return;
+            
+        }
 
         try {
 

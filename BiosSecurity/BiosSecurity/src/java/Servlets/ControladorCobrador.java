@@ -158,11 +158,31 @@ public class ControladorCobrador extends Controlador {
         
         
             
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 
         Date fIngreso = new Date();
         
         String fechaIngresada = request.getParameter("fIngreso");
+        String charEvaluar = "-";
+        
+        if(fechaIngresada.length() != 10){
+               
+            cargarMensaje("¡ERROR! Debe respetar el formato indicado, (ej: mes 1 = 01, dia 5 = 05).", request);
+            
+            mostrarVista("agregarCobrador", request, response);
+            
+            return;
+            
+        }
+        if(fechaIngresada.charAt(4) != charEvaluar.charAt(0)){
+            
+            cargarMensaje("¡ERROR! Debe respetar el formato indicado, comience con el año.", request);
+            
+            mostrarVista("agregarCobrador", request, response);
+            
+            return;
+            
+        }
 
         try {
 
@@ -345,11 +365,31 @@ public class ControladorCobrador extends Controlador {
         
         String clave = request.getParameter("clave");
         
-        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy/MM/dd");
+        SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
 
         Date fIngreso = new Date();
         
         String fechaIngresada = request.getParameter("fIngreso");
+        String charEvaluar = "-";
+        
+        if(fechaIngresada.length() != 10){
+               
+            cargarMensaje("¡ERROR! Debe respetar el formato indicado, (ej: mes 1 = 01, dia 5 = 05).", request);
+            
+            mostrarVista("modificarCobrador", request, response);
+            
+            return;
+            
+        }
+        if(fechaIngresada.charAt(4) != charEvaluar.charAt(0)){
+            
+            cargarMensaje("¡ERROR! Debe respetar el formato indicado, comience con el año.", request);
+            
+            mostrarVista("modificarCobrador", request, response);
+            
+            return;
+            
+        }
 
         try {
 
