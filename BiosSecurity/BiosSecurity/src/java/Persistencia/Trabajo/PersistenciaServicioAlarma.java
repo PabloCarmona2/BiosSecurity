@@ -262,7 +262,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
         }
      }
     
-    public List<ServicioAlarma> ListaXCliente(Cliente cliente) throws Exception{
+    public List<ServicioAlarma> ListaXCliente(Cliente cliente, Date pfecha) throws Exception{
         
         try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -279,9 +279,13 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareCall("{ CALL ServicioAlarmaXCliente(?)  }");
+            consulta = conexion.prepareCall("{ CALL ServicioAlarmaXCliente(?, ?)  }");
+            
+            Date fechaJava = pfecha;
+            java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
             
             consulta.setInt(1, cliente.getCedula());
+            consulta.setDate(2, fecha);
             
             resultadoConsulta = consulta.executeQuery();
             
@@ -290,7 +294,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
             ServicioAlarma servicio = null;
             
             int numServicio;
-            Date fecha;
+            Date fechaServicio;
             Boolean monitoreo;
             Propiedad propiedad;
             int codigoAnulacion;
@@ -300,14 +304,14 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
             while(resultadoConsulta.next()){
                 
                 numServicio = resultadoConsulta.getInt("NumServicio");
-                fecha = resultadoConsulta.getDate("Fecha");
+                fechaServicio = resultadoConsulta.getDate("Fecha");
                 monitoreo = resultadoConsulta.getBoolean("Monitoreo");
                 propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"), cliente.getCedula());
                 codigoAnulacion = resultadoConsulta.getInt("CodAnulacion");
                 
                 dispositivos = PersistenciaAlarma.GetInstancia().ListarXServicio(numServicio);
                 
-                servicio = new ServicioAlarma(numServicio, fecha, monitoreo, propiedad, dispositivos, codigoAnulacion);
+                servicio = new ServicioAlarma(numServicio, fechaServicio, monitoreo, propiedad, dispositivos, codigoAnulacion);
                 
                 servicios.add(servicio);
             }

@@ -8,6 +8,7 @@ package Persistencia.Interfaces;
 import DataTypes.Cliente;
 import DataTypes.Propiedad;
 import DataTypes.Servicio;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  */
 public interface IPersistenciaCliente {
       Cliente Buscar(int cedula) throws Exception;
-      HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception;
+      HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados(Date fecha) throws Exception;
       List<Cliente> Listar()throws Exception;
       void Modificar(Cliente cliente) throws Exception;
       

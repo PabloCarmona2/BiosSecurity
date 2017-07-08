@@ -132,7 +132,7 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
             }
     }
     
-    public List<ServicioVideoVigilancia> ListaXCliente(Cliente cliente) throws Exception{
+    public List<ServicioVideoVigilancia> ListaXCliente(Cliente cliente, Date pfecha) throws Exception{
         
         try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
@@ -149,9 +149,13 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareCall("{ CALL ServicioCamaraXCliente(?)  }");
+            consulta = conexion.prepareCall("{ CALL ServicioCamaraXCliente(?, ?)  }");
+            
+            Date fechaJava = pfecha;
+            java.sql.Date fecha = new java.sql.Date(fechaJava.getTime());
             
             consulta.setInt(1, cliente.getCedula());
+            consulta.setDate(2, fecha);
             
             resultadoConsulta = consulta.executeQuery();
             
@@ -160,7 +164,7 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
             ServicioVideoVigilancia servicio = null;
             
             int numServicio;
-            Date fecha;
+            Date fechaServicio;
             Boolean monitoreo;
             Propiedad propiedad;
             Boolean terminal;
@@ -170,14 +174,14 @@ public class PersistenciaServicioVideovigilancia implements IPersistenciaServici
             while(resultadoConsulta.next()){
                 
                 numServicio = resultadoConsulta.getInt("NumServicio");
-                fecha = resultadoConsulta.getDate("Fecha");
+                fechaServicio = resultadoConsulta.getDate("Fecha");
                 monitoreo = resultadoConsulta.getBoolean("Monitoreo");
                 propiedad = PersistenciaPropiedad.GetInstancia().Buscar(resultadoConsulta.getInt("Propiedad"), cliente.getCedula());
                 terminal = resultadoConsulta.getBoolean("Terminal");
                 
                 dispositivos = PersistenciaCamara.GetInstancia().ListarXServicio(numServicio);
                 
-                servicio = new ServicioVideoVigilancia(numServicio, fecha, monitoreo, propiedad, dispositivos, terminal);
+                servicio = new ServicioVideoVigilancia(numServicio, fechaServicio, monitoreo, propiedad, dispositivos, terminal);
                 
                 servicios.add(servicio);
             }

@@ -11,6 +11,7 @@ import Logica.Interfaces.ILogicaCliente;
 import static Logica.Trabajo.LogicaPropiedad.Validar;
 import Persistencia.FabricaPersistencia;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -90,10 +91,9 @@ public class LogicaCliente implements ILogicaCliente{
         }
     }
     
-    public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
+    public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados(Date fecha) throws Exception{
        try{
-         
-             return FabricaPersistencia.getPersistenciaCliente().ClientesYServiciosOrdenados();
+             return FabricaPersistencia.getPersistenciaCliente().ClientesYServiciosOrdenados(fecha);
         
        }catch(Exception ex){
             throw new Exception(ex.getMessage());

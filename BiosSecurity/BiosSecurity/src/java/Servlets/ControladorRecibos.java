@@ -22,11 +22,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Vector;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -75,8 +77,29 @@ public class ControladorRecibos extends Controlador {
             cargarMensaje("¡ERROR! al intentar realizar esta accion!.", request);
         }
            
-            String fecha = new SimpleDateFormat("MMMM").format(new Date());
-            request.setAttribute("mes", fecha);
+            Date fechaActual = new Date();
+            
+            Calendar calendario = Calendar.getInstance();
+            calendario.setTime(fechaActual);
+            
+            Integer dia = calendario.get(Calendar.DAY_OF_MONTH);
+            Integer mes = calendario.get(Calendar.MONTH) + 1;
+            
+            Vector<Integer> meses = new Vector<Integer>();
+            
+            Integer mesParaVector = 1;
+            
+            while(mesParaVector != mes){
+                
+                meses.add(mesParaVector);
+                mesParaVector++;
+                
+            }
+            if(dia > 25){
+                meses.add(mes);
+            }
+            
+            request.setAttribute("meses", meses);
             
             mostrarVista("generacionRecibos", request, response);
             
@@ -91,8 +114,9 @@ public class ControladorRecibos extends Controlador {
         try{
 
             String rutaAbsoluta = getServletContext().getRealPath("/WEB-INF/precio/Precios.txt");
+            Integer mes = Integer.parseInt(request.getParameter("meselejido"));
             
-            FabricaLogica.GetLogicaRecibo().GenerarRecibos(rutaAbsoluta);
+            FabricaLogica.GetLogicaRecibo().GenerarRecibos(rutaAbsoluta, mes);
         
             cargarMensaje("¡Recibos generados con éxito!", request.getSession());
 
@@ -116,12 +140,23 @@ public class ControladorRecibos extends Controlador {
 
                     response.sendRedirect("login");
             }
+            
+            if(request.getParameter("numRecibo") == null){
+                
+                cargarMensaje("No ha seleccionado ningun recibo para cobrar!.", request.getSession());
+
+                response.sendRedirect("recibos");
+
+                return;
+                
+            }
 
             } catch(Exception ex){
                cargarMensaje("¡ERROR! se produjo un error al mostrar el sitio", request);
 
                mostrarVista("index", request, response);
-           }
+            }
+            request.getSession().setAttribute("numRecibo", request.getParameter("numRecibo"));
             mostrarVista("cobrarRecibo", request, response);
     }
     
@@ -129,7 +164,8 @@ public class ControladorRecibos extends Controlador {
         
         try{
             
-            Recibo recibo = FabricaLogica.GetLogicaRecibo().Buscar(Integer.parseInt(request.getParameter("numRecibo")));
+            Recibo recibo = FabricaLogica.GetLogicaRecibo().Buscar(Integer.parseInt((String)request.getSession().getAttribute("numRecibo")));
+            request.getSession().removeAttribute("numRecibo");
             
             if(recibo != null){
                 
@@ -141,6 +177,7 @@ public class ControladorRecibos extends Controlador {
                     
                     return;
                 }
+                
                 recibo.setCobrado(true);
                 
                 Cobrador cobrador = (Cobrador)request.getSession().getAttribute("empleadoLogueado");
@@ -151,9 +188,9 @@ public class ControladorRecibos extends Controlador {
                 
                 cargarMensaje("¡Recibo cobrado con éxito!", request.getSession());
 
-                response.sendRedirect("recibos");
+                response.sendRedirect("recibos?accion=recibosacobrar");
                 
-            }else {
+            } else {
                 
                 cargarMensaje("El recibo que desea cobrar no existe!.", request);
                     
@@ -224,7 +261,7 @@ public class ControladorRecibos extends Controlador {
                 }
                 
             request.getSession().setAttribute("barrios", barrios);
-            request.setAttribute("recibosGenerales", recibos);
+            request.setAttribute("recibos", recibos);
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los recibos.", request);

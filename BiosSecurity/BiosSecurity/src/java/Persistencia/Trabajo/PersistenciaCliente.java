@@ -128,7 +128,7 @@ public class PersistenciaCliente implements IPersistenciaCliente{
         }
     }
     
-    public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados() throws Exception{
+    public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados(Date fecha) throws Exception{
         try  {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
@@ -150,8 +150,8 @@ public class PersistenciaCliente implements IPersistenciaCliente{
             
             for(Cliente c : clientes){
                 
-                List<ServicioAlarma> serviciosA = PersistenciaServicioAlarma.GetInstancia().ListaXCliente(c);
-                List<ServicioVideoVigilancia> serviciosV = PersistenciaServicioVideovigilancia.GetInstancia().ListaXCliente(c);
+                List<ServicioAlarma> serviciosA = PersistenciaServicioAlarma.GetInstancia().ListaXCliente(c, fecha);
+                List<ServicioVideoVigilancia> serviciosV = PersistenciaServicioVideovigilancia.GetInstancia().ListaXCliente(c, fecha);
                 
                 List<Servicio> servicios = new ArrayList<Servicio>();
                 

@@ -230,6 +230,11 @@ INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
 VALUES(20161010, true, 2, 9);
 INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
 VALUES(1267533, 6);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente)
+VALUES(20170610, true, 1, 8);
+INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
+VALUES(1267533, 7);
+
 
 INSERT INTO Alarmas
 VALUES(3, 1, 2, false);
@@ -260,8 +265,8 @@ VALUES(NULL, NULL, 13, NULL, false);
 INSERT INTO Camaras
 VALUES(NULL, NULL, 14, NULL, false);
 
-/*INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-VALUES(20170630, 10000, 7, 5, false);
+INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
+VALUES(20161030, 10000, 7, 5, false);
 
 INSERT INTO LineaRecibo
 VALUES(5000, 1, 1);
@@ -269,13 +274,13 @@ INSERT INTO LineaRecibo
 VALUES(5000, 1, 3);
 
 INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-VALUES(20170630, 10000, 8, 5, false);
+VALUES(20161030, 10000, 8, 5, false);
 
 INSERT INTO LineaRecibo
 VALUES(10000, 2, 2);
 
 INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-VALUES(20170630, 10000, 9, 5, false);
+VALUES(20161030, 10000, 9, 5, false);
 
 INSERT INTO LineaRecibo
 VALUES(5000, 3, 4);
@@ -283,10 +288,10 @@ INSERT INTO LineaRecibo
 VALUES(5000, 3, 6);
 
 INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-VALUES(20170630, 10000, 10, 5, false);
+VALUES(20161030, 10000, 10, 5, false);
 
 INSERT INTO LineaRecibo
-VALUES(10000, 4, 5);*/
+VALUES(10000, 4, 5);
 
 #
 
@@ -1301,12 +1306,12 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE ServicioAlarmaXCliente(pCliente bigint)
+CREATE PROCEDURE ServicioAlarmaXCliente(pCliente bigint, pfecha DateTime)
 BEGIN
 
 SELECT *
 FROM ServicioAlarmas INNER JOIN Servicios ON ServicioAlarmas.NumServicio = Servicios.NumServicio
-WHERE Servicios.Cliente = pCliente;
+WHERE Servicios.Cliente = pCliente AND Fecha < pfecha;
 
 END//
 
@@ -1319,12 +1324,12 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE PROCEDURE ServicioCamaraXCliente(pCliente bigint)
+CREATE PROCEDURE ServicioCamaraXCliente(pCliente bigint, pfecha DateTime)
 BEGIN
 
 SELECT *
 FROM ServicioVideoVigilancia INNER JOIN Servicios ON ServicioVideoVigilancia.NumServicio = Servicios.NumServicio
-WHERE Servicios.Cliente = pCliente;
+WHERE Servicios.Cliente = pCliente AND Fecha < pfecha;
 
 END//
 
@@ -1778,8 +1783,6 @@ END//
 DELIMITER ;
 
 #CALL AltaPropiedad('casa', 'Calle 12456', 10, @salida);
-
-
 
 #---------------------------------SP Cobradores---------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------

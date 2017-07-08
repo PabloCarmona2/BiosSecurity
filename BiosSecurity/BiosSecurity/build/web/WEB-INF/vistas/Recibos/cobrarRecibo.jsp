@@ -13,13 +13,16 @@
 
 <t:PaginaMaestra titulo="Cobro de Recibo">
     <jsp:body>
+        <c:if test="${!empty numRecibo}">
+            
+            <form method="post">
+                <p><input type="text" name="numRecibo" value="${!empty numRecibo ? numRecibo : param.numRecibo}" readonly="readonly"</p>
+
+                <p><input type="submit" name="accion" value="Cobrar" /></p>
+            </form>
+                
+        </c:if>
         
-        <h2>Cobrar un recibo mediante su numero de recibo.</h2>
-        <form method="post">
-            <p><input type="text" name="numRecibo" value="${param.numRecibo}"</p>
-        
-            <p><input type="submit" name="accion" value="Cobrar" /></p>
-        </form>
         
         <p><a href="recibos">Volver...</a></p>
         

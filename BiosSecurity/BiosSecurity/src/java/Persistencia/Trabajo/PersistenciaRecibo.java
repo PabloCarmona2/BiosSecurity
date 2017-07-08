@@ -122,7 +122,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
 
-            consulta = conexion.prepareStatement("SELECT * FROM CabezalRecibo INNER JOIN Clientes ON CabezalRecibo.Cliente = Clientes.Cedula Where Clientes.Barrio=?;");
+            consulta = conexion.prepareStatement("SELECT * FROM CabezalRecibo INNER JOIN Clientes ON CabezalRecibo.Cliente = Clientes.Cedula Where Clientes.Barrio=? AND CabezalRecibo.Cobrado = false;");
             
             consulta.setString(1, zona);
             

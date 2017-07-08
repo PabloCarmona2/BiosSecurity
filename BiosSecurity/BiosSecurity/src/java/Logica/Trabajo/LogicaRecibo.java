@@ -15,7 +15,9 @@ import DataTypes.ServicioVideoVigilancia;
 import Logica.FabricaLogica;
 import Logica.Interfaces.ILogicaRecibo;
 import Persistencia.FabricaPersistencia;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -68,14 +70,44 @@ public class LogicaRecibo implements ILogicaRecibo{
         }
     }
     
-    public void GenerarRecibos(String rutaPrecios) throws Exception{
+    public void GenerarRecibos(String rutaPrecios, int pMes) throws Exception{
             try{
-            
-            HashMap<Cliente, List<Servicio>> coleccion = FabricaLogica.GetLogicaCliente().ClientesYServiciosOrdenados();
             
             List<Recibo> recibos = new ArrayList<Recibo>();
             
-            Date hoy = new Date();
+            Date fechaActual = new Date();
+            
+            SimpleDateFormat formatoDelTexto = new SimpleDateFormat("yyyy-MM-dd");
+            
+            Calendar calendario = Calendar.getInstance();
+            calendario.setTime(fechaActual);
+            
+            Integer año = calendario.get(Calendar.YEAR);
+            Integer dia = 1;
+            Integer mes = pMes - 1;
+            
+            Calendar calendarioIntermedio = Calendar.getInstance();
+            
+            calendarioIntermedio.set(año, mes, dia);
+            
+            int ultimoDiaMes = calendarioIntermedio.getActualMaximum(Calendar.DAY_OF_MONTH);
+            
+            calendarioIntermedio.set(año, mes, ultimoDiaMes);
+            
+            String strFecha = año + "-" + ( mes + 1) + "-" + ultimoDiaMes;
+            
+            Date fecha = new Date();
+            
+            try {
+
+                fecha = formatoDelTexto.parse(strFecha);
+
+            } catch (Exception ex) {
+
+                throw new Exception("Error al obtener la fecha del recibo");
+            }
+            
+            HashMap<Cliente, List<Servicio>> coleccion = LogicaCliente.GetInstancia().ClientesYServiciosOrdenados(fecha);
             
             if(coleccion != null){
                 
@@ -93,7 +125,7 @@ public class LogicaRecibo implements ILogicaRecibo{
                     cabezal.setCliente(registro.getKey());
                     cabezal.setCobrado(false);
                     cabezal.setCobrador(null);
-                    cabezal.setFecha(hoy);
+                    cabezal.setFecha(fecha);
                     cabezal.setNumRecibo(null);
                     cabezal.setTotal(0);
                     cabezal.setLineas(new ArrayList<LineaRecibo>());
@@ -103,6 +135,7 @@ public class LogicaRecibo implements ILogicaRecibo{
                     
                     
                     for(Servicio s : registro.getValue()){
+                        
                         double importe = 0;
                         
                         LineaRecibo linea = new LineaRecibo();
@@ -111,14 +144,48 @@ public class LogicaRecibo implements ILogicaRecibo{
                         
                         Precios precios = FabricaLogica.GetLogicaPrecio().Obtener(rutaPrecios);
                         
-                        importe += (s instanceof ServicioAlarma? precios.getBaseAlarmas() : precios.getBaseCamaras());
+                        Calendar calendarioServicios = Calendar.getInstance();
+                        calendarioServicios.setTime(s.getFecha());
                         
-                        int cantidadDispositivos = (s instanceof ServicioAlarma? ((ServicioAlarma)s).getAlarmas().size() : ((ServicioVideoVigilancia)s).getCamaras().size());
+                        if(calendarioServicios.get(Calendar.MONTH) == calendarioIntermedio.get(Calendar.MONTH)){
+                            if(calendarioServicios.get(Calendar.YEAR) == calendarioIntermedio.get(Calendar.YEAR)){
+                                
+                                int totalDias = calendarioServicios.getActualMaximum(Calendar.DAY_OF_MONTH);
+                                int diaContratado = calendarioServicios.get(Calendar.DAY_OF_MONTH);
+
+                                int diasCobrados = (totalDias - diaContratado);
+
+                                importe += (s instanceof ServicioAlarma? ((precios.getBaseAlarmas() / totalDias) * diasCobrados) : ((precios.getBaseCamaras() / totalDias) * diasCobrados));
+
+                                int cantidadDispositivos = (s instanceof ServicioAlarma? ((ServicioAlarma)s).getAlarmas().size() : ((ServicioVideoVigilancia)s).getCamaras().size());
+
+                                importe += (s instanceof ServicioAlarma? (cantidadDispositivos * precios.getAdicionalAlarma()) : (cantidadDispositivos * precios.getAdicionalCamara()));
+
+                                importe += (s instanceof ServicioAlarma? (importe * Double.parseDouble("0." + precios.getTasaAlarmas())) : (importe * Double.parseDouble("0." + precios.getTasaCamaras())));
+                            
+                            }else{
+                                
+                                importe += (s instanceof ServicioAlarma? precios.getBaseAlarmas() : precios.getBaseCamaras());
                         
-                        importe += (s instanceof ServicioAlarma? (cantidadDispositivos * precios.getAdicionalAlarma()) : (cantidadDispositivos * precios.getAdicionalCamara()));
+                                int cantidadDispositivos = (s instanceof ServicioAlarma? ((ServicioAlarma)s).getAlarmas().size() : ((ServicioVideoVigilancia)s).getCamaras().size());
+
+                                importe += (s instanceof ServicioAlarma? (cantidadDispositivos * precios.getAdicionalAlarma()) : (cantidadDispositivos * precios.getAdicionalCamara()));
+
+                                importe += (s instanceof ServicioAlarma? (importe * Double.parseDouble("0." + precios.getTasaAlarmas())) : (importe * Double.parseDouble("0." + precios.getTasaCamaras())));
                         
-                        importe += (s instanceof ServicioAlarma? (importe * Double.parseDouble("0." + precios.getTasaAlarmas())) : (importe * Double.parseDouble("0." + precios.getTasaCamaras())));
-                        
+                            }
+                            
+                        }else{
+                                
+                            importe += (s instanceof ServicioAlarma? precios.getBaseAlarmas() : precios.getBaseCamaras());
+
+                            int cantidadDispositivos = (s instanceof ServicioAlarma? ((ServicioAlarma)s).getAlarmas().size() : ((ServicioVideoVigilancia)s).getCamaras().size());
+
+                            importe += (s instanceof ServicioAlarma? (cantidadDispositivos * precios.getAdicionalAlarma()) : (cantidadDispositivos * precios.getAdicionalCamara()));
+
+                            importe += (s instanceof ServicioAlarma? (importe * Double.parseDouble("0." + precios.getTasaAlarmas())) : (importe * Double.parseDouble("0." + precios.getTasaCamaras())));
+
+                        }
                         total += importe;
                         
                         linea.setImporte(importe);

@@ -9,6 +9,7 @@ import DataTypes.Cliente;
 import DataTypes.Recibo;
 import DataTypes.Servicio;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,7 +18,7 @@ import java.util.List;
  * @author Geronimo
  */
 public interface ILogicaRecibo {
-    void GenerarRecibos(String rutaPrecios) throws Exception;
+    void GenerarRecibos(String rutaPrecios, int mes) throws Exception;
     void Cobrar(Recibo recibo) throws Exception;
     Recibo Buscar(int numRecibo) throws Exception;
     List<Recibo> RecibosaCobrar(String zona) throws Exception;

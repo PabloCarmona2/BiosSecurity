@@ -37,6 +37,7 @@
                     <td class="texto-centro">${recibo.cliente.nombre}</td>
                     <td class="texto-centro">${recibo.total}</td>
                     <td class="texto-centro">${recibo.fecha}</td>
+                    <td><a href="recibos?accion=cobrar&numRecibo=${recibo.numRecibo}"><img src="imagenes/cobrar.png" alt="Cobrar" title="Cobrar..." ></a></td>
                 </tr>
             </c:forEach>
         </table>
