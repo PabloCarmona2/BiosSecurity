@@ -16,8 +16,8 @@
             <p>Desea confirmar la desinstalacion del dispositivo : <strong>${dispositivo.numInventario}</strong> de tipo: (${dispositivo.getClass().simpleName}) del servicio: <strong>${servicio.numServicio}</strong>?</p>
             
             <form method="post" accept-charset="ISO-8859-1">
-                <input type="hidden" name="servicio" value="${servicio}" />
-                <input type="hidden" name="dispositivo" value="${dispositivo}" />
+                <input type="hidden" name="servicio" value="${servicio.numServicio}" />
+                <input type="hidden" name="dispositivo" value="${dispositivo.numInventario}" />
                 <input type="submit" name="accion" value="Desinstalar" />
             </form>
         </c:if>

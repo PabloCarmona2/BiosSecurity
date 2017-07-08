@@ -322,9 +322,9 @@ public class ControladorInstalaciones extends Controlador {
     public void desinstalar_post(HttpServletRequest request, HttpServletResponse response) {
         
         try{
-            if(request.getParameter("numServicio") != null && request.getParameter("dispositivo") != null){
+            if(request.getParameter("servicio") != null && request.getParameter("dispositivo") != null){
                 
-                Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("numServicio")));
+                Servicio servicio = FabricaLogica.GetLogicaServicio().Buscar(Integer.parseInt(request.getParameter("servicio")));
                 Dispositivo dispositivo = FabricaLogica.GetLogicaDispositivo().Buscar(Integer.parseInt(request.getParameter("dispositivo")));
                 
                 if(servicio instanceof ServicioAlarma){
