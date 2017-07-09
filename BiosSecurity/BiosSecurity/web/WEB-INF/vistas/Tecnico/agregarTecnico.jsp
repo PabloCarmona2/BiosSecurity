@@ -53,11 +53,7 @@
                 <tr>
                     <td>Fecha de Ingreso (aaaa-mm-dd):</td>
                     <td>
-<<<<<<< HEAD
                         <input type="text" name="fIngreso" value="${param.fIngreso}" />
-=======
-                        <input type="date" name="fIngreso" value="${!empty empleado ? empleado.fIngreso : param.fIngreso}" />
->>>>>>> b2e872ffcc08d6efc3fbc71252b4284dc4431700
                     </td>
                 </tr>
                 <tr>
