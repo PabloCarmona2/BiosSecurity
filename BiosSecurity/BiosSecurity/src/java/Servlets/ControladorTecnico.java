@@ -64,18 +64,19 @@ public class ControladorTecnico extends Controlador {
             
             if(empleados.isEmpty() || !(empleados.toArray()[0] instanceof Tecnico)){
                 
+                cargarMensaje("No se encontro ningun empleado con la cedula" + (request.getParameter("buscar")) + ".", request);
                 empleados = FabricaLogica.GetLogicaEmpleado().Listar("tecnico", "");
                 request.getSession().setAttribute("empleadosTodosT", empleados);
                 
             }else{
-                
+                cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
                 request.getSession().setAttribute("empleadosTodosT", empleados);
             
             }
             
             
             request.setAttribute("empleados", empleados);
-            cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
+            
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los tecnicos.", request);

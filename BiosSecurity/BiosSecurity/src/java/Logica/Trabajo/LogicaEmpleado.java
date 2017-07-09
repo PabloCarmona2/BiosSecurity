@@ -192,21 +192,62 @@ public class LogicaEmpleado implements ILogicaEmpleado{
                 
                 if(tipo.equalsIgnoreCase("admin")){
                     
-                    Administrador admin = (Administrador)this.Buscar(Integer.parseInt(criterio));
-                    administradores.add(admin);
-                    empleados.addAll(administradores);
-
+                    Administrador admin = null;
+                    Empleado emp = this.Buscar(Integer.parseInt(criterio));
+                    
+                    if(emp != null){
+                        if(emp instanceof Administrador){
+                            admin = (Administrador)emp;
+                        administradores.add(admin);
+                        empleados.addAll(administradores);
+                        }else{
+                            administradores.add(admin);
+                        empleados.addAll(administradores);
+                        }
+                        
+                    }else{
+                        administradores.add(admin);
+                        empleados.addAll(administradores);
+                    }
+                    
                 }else if(tipo.equalsIgnoreCase("tecnico")){
                     
-                    Tecnico tec = (Tecnico)this.Buscar(Integer.parseInt(criterio));
-                    tecnicos.add(tec);
-                    empleados.addAll(tecnicos);
+                    Tecnico tec = null;
+                    Empleado emp = this.Buscar(Integer.parseInt(criterio));
+                    
+                    if(emp != null){
+                        if(emp instanceof Tecnico){
+                            tec = (Tecnico)emp;
+                            tecnicos.add(tec);
+                            empleados.addAll(tecnicos);
+                        }else{
+                            tecnicos.add(tec);
+                        empleados.addAll(tecnicos);
+                        }
+                    }else{
+                        tecnicos.add(tec);
+                        empleados.addAll(tecnicos);
+                    }
+                    
                 }
                 else if(tipo.equalsIgnoreCase("cobrador")){
 
-                    Cobrador cob = (Cobrador)this.Buscar(Integer.parseInt(criterio));
-                    cobradores.add(cob);
-                    empleados.addAll(cobradores);
+                    Cobrador cob = null;
+                    Empleado emp = this.Buscar(Integer.parseInt(criterio));
+                    
+                    if(emp != null){
+                        if(emp instanceof Cobrador){
+                            cob = (Cobrador)emp;
+                            cobradores.add(cob);
+                            empleados.addAll(cobradores);
+                        }else{
+                            cobradores.add(cob);
+                            empleados.addAll(cobradores);
+                        }
+                    }else{
+                        cobradores.add(cob);
+                        empleados.addAll(cobradores);
+                    }
 
                 }
                 

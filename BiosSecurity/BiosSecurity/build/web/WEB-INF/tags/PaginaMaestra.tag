@@ -20,9 +20,10 @@
     </head>
     <body>
         <div class="cabezal">
-            <h1>Bios Security</h1> <p style="float:right">
+            <img src="imagenes/Banner.png" alt="Bios Security">
+            
             <c:if test="${!empty empleadoLogueado}">
-                <a href="login?accion=logout">LOGOUT</a></p>
+                <p style="float:right" style="color: whitesmoke"><a href="login?accion=logout">LOGOUT</a></p>
             </c:if>
             
             <h2>${titulo}</h2>

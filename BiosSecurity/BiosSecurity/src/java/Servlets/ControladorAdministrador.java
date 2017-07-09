@@ -66,17 +66,19 @@ public class ControladorAdministrador extends Controlador {
             
             if(empleados.isEmpty() || !(empleados.toArray()[0] instanceof Administrador)){
                 
+                cargarMensaje("No se encontro ningun empleado con la cedula" + (request.getParameter("buscar")) + ".", request);
                 empleados = FabricaLogica.GetLogicaEmpleado().Listar("admin", "");
                 request.getSession().setAttribute("empleadosTodos", empleados);
                 
             }else{
                 
+                cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
                 request.getSession().setAttribute("empleadosTodos", empleados);
             
             }
             
             request.setAttribute("empleados", empleados);
-            cargarMensaje("Cantidad de empleados: " + empleados.size(), request);
+            
             
         } catch (Exception ex) {
             cargarMensaje("¡ERROR! Se produjo un error al mostrar los administradores.", request);
