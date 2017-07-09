@@ -71,7 +71,7 @@
             </table>
         </form>
       
-        <p><a href="cobrador">Volver...</a></p>
+        <p><a href="cobradores">Volver...</a></p>
         <t:Mensaje />
         
     </jsp:body>
