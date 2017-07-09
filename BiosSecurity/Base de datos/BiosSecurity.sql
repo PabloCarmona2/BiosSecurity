@@ -267,7 +267,7 @@ INSERT INTO Camaras
 VALUES(NULL, NULL, 14, NULL);
 
 INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-VALUES(20161030, 10000, 7, 5, false);
+VALUES(20161030, 10000, 7, null, false);
 
 INSERT INTO LineaRecibo
 VALUES(5000, 1, 1);
@@ -275,13 +275,13 @@ INSERT INTO LineaRecibo
 VALUES(5000, 1, 3);
 
 INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-VALUES(20161030, 10000, 8, 5, false);
+VALUES(20161030, 10000, 8, null, false);
 
 INSERT INTO LineaRecibo
 VALUES(10000, 2, 2);
 
 INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-VALUES(20161030, 10000, 9, 5, false);
+VALUES(20161030, 10000, 9, null, false);
 
 INSERT INTO LineaRecibo
 VALUES(5000, 3, 4);
@@ -289,7 +289,7 @@ INSERT INTO LineaRecibo
 VALUES(5000, 3, 6);
 
 INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-VALUES(20161030, 10000, 10, 5, false);
+VALUES(20161030, 10000, 10, null, false);
 
 INSERT INTO LineaRecibo
 VALUES(10000, 4, 5);
@@ -960,7 +960,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure GenerarCabezalRecibo(fecha datetime, total double, cliente bigint, cobrador bigint, cobrado boolean, OUT pError VARCHAR(500))
+CREATE procedure GenerarCabezalRecibo(pfecha datetime, total double, cliente bigint, cobrador bigint, cobrado boolean, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -976,13 +976,22 @@ cuerpo:BEGIN
 		SET pError = mensajeError;
 	END;
     
+    IF EXISTS(SELECT * FROM CabezalRecibo WHERE Fecha = pfecha)
+    THEN
+		
+        SET pError = 'Ya se generaron los recibos para este mes!.';
+        
+        LEAVE cuerpo;
+    
+    END IF;
+    
     SET sinErrores = 1;
 	
 	SET mensajeError = 'No se pudo agregar el recibo correctamente!';
 	
     
 	INSERT INTO CabezalRecibo(Fecha, Total, Cliente,Cobrador, Cobrado)
-    VALUES(fecha, total, cliente, cobrador, cobrado);
+    VALUES(pfecha, total, cliente, cobrador, cobrado);
     
     SET sinErrores = 0;
 	
@@ -1028,7 +1037,10 @@ cuerpo:BEGIN
 	
 END//
 
+
+
 DELIMITER ;
+
 
 #-----------------------------------------------------------------------------------------------------------------------------
 #-----------------------------------------------------------------------------------------------------------------------------
