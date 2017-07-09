@@ -105,7 +105,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
             }
         }
     }
-    //SELECT * FROM CabezalRecibo INNER JOIN Clientes ON CabezalRecibo.Cliente = Clientes.Cedula Where Clientes.Barrio=?
+    
     public List<Recibo> RecibosaCobrar(String zona) throws Exception{
         
                 try {
@@ -253,7 +253,7 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                 conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
                 //conexion.setAutoCommit(false);
                 
-                consulta = conexion.prepareCall("{ CALL AltaReciboConLineas(?, ?, ?, ?, ?, ?, ?, ?) }");
+                consulta = conexion.prepareCall("{ CALL GenerarCabezalRecibo(?, ?, ?, ?, ?, ?) }");
             
                 String error = null;
                 
@@ -267,19 +267,19 @@ public class PersistenciaRecibo implements IPersistenciaRecibo{
                     consulta.setInt(3, r.getCliente().getCedula());
                     consulta.setNull(4, java.sql.Types.INTEGER);
                     consulta.setBoolean(5, false);
-                    consulta.registerOutParameter(8, java.sql.Types.VARCHAR);
+                    consulta.registerOutParameter(6, java.sql.Types.VARCHAR);
                     
                     conexion.setAutoCommit(false);
                     
+                    consulta.executeUpdate();
+                    
                     for(LineaRecibo l : r.getLineas()){
                         
-                        consulta.setDouble(6, l.getImporte());
-                        consulta.setInt(7, l.getServicio().getNumServicio());
+                        PersistenciaLineaRecibo.GetInstancia().RegitrarEnRecibo(l, conexion);
                         
-                        consulta.executeUpdate();
                     }
                     
-                    error = consulta.getString(8);
+                    error = consulta.getString(6);
 
                     if(error != null){
                         throw new Exception("ERROR: " + error);

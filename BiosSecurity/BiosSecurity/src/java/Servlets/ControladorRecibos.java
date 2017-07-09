@@ -123,7 +123,7 @@ public class ControladorRecibos extends Controlador {
             response.sendRedirect("recibos");
             
            } catch(Exception ex){
-               cargarMensaje("¡ERROR! se produjo un error al realizar la accion.", request);
+               cargarMensaje("¡ERROR! se produjo un error al realizar la accion." + ex.getMessage(), request);
 
                mostrarVista("index", request, response);
            }

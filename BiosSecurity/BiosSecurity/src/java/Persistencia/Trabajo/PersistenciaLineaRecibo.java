@@ -29,32 +29,50 @@ public class PersistenciaLineaRecibo {
         return _instancia;
     }
     
-//    public void RegitrarEnRecibo(LineaRecibo linea) throws Exception{
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
-//        } catch (Exception ex) {
-//            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
-//        }
-//        
-//        try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
-//                CallableStatement consulta = conexion.prepareCall("{ CALL RegistrarLineaEnRecibo(?, ?, ?) }")) {
-//           
-//            consulta.setDouble(1, linea.getImporte());
-//            consulta.setInt(2, linea.getServicio().getNumServicio());
-//            consulta.registerOutParameter(3, java.sql.Types.VARCHAR);
-//            
-//            consulta.executeUpdate();
-//            
-//            String error = consulta.getString(3);
-//            
-//            if(error != null){
-//                throw new Exception("ERROR: " + error);
-//            }
-//            
-//        }catch(Exception ex){
-//            throw new Exception(ex.getMessage());
-//        }      
-//    }
+    public void RegitrarEnRecibo(LineaRecibo linea, Connection pconexion) throws Exception{
+        
+        Connection conexion = null;
+        CallableStatement consulta = null;
+        try{
+           
+            conexion = pconexion;
+           
+            consulta = conexion.prepareCall("{ CALL RegistrarLineaEnRecibo(?, ?, ?) }");
+                    
+            consulta.setDouble(1, linea.getImporte());
+            consulta.setInt(2, linea.getServicio().getNumServicio());
+            consulta.registerOutParameter(3, java.sql.Types.VARCHAR);
+            
+            consulta.executeUpdate();
+            
+            String error = consulta.getString(3);
+            
+            if(error != null){
+                throw new Exception("ERROR: " + error);
+            }
+            
+        }catch(Exception ex){
+            try {
+                if (conexion != null) {
+                    conexion.rollback();
+                }
+            } catch (Exception exR) {
+                throw new Exception(exR.getMessage());
+            }
+
+            throw new Exception(ex.getMessage());
+
+        }finally {
+
+            try {
+                if (consulta != null) {
+                    consulta.close();
+                } 
+            } catch (Exception ex) {
+                throw new Exception("¡ERROR! Ocurrió un error al cerrar los recursos.");
+            }
+        }     
+    }
     public List<LineaRecibo> ListarLineas(int numeroRecibo) throws Exception{
         ResultSet resultadoConsulta=null;
         Connection conexion=null;
