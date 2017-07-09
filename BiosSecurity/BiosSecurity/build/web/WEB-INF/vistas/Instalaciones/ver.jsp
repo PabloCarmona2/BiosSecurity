@@ -25,7 +25,7 @@
            
             <table class="listado">
             <tr>
-                <th>NUMERO DE INVENTARIO</th><th>TIPO</th><th></th>
+                <th>NUMERO DE INVENTARIO</th><th>TIPO</th><th>INSTALADOR</th><th></th>
             </tr>
             <c:if test="${servicio.getClass().simpleName == 'ServicioAlarma'}">
                         
@@ -35,6 +35,8 @@
                         <td class="texto-centro">${dispositivo.numInventario}</td>
 
                         <td class="texto-centro">${dispositivo.getClass().simpleName}</td>
+                        
+                        <td class="texto-centro">${dispositivo.instalador.cedula}(${dispositivo.instalador.nombre})</td>
 
                         <td>
                             <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/desinstalar.png" alt="Desinstalar" title="Desinstalar..." ></a>
@@ -51,6 +53,8 @@
                         <td class="texto-centro">${dispositivo.numInventario}</td>
 
                         <td class="texto-centro">${dispositivo.getClass().simpleName}</td>
+                        
+                        <td class="texto-centro">${dispositivo.instalador.cedula}(${dispositivo.instalador.nombre})</td>
 
                         <td>
                             <a href="instalaciones?accion=desinstalar&numServicio=${servicio.numServicio}&dispositivo=${dispositivo.numInventario}"><img src="imagenes/desinstalar.png" alt="Desinstalar" title="Desinstalar..." ></a>

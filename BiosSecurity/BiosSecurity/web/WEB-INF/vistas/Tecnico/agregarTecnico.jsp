@@ -22,20 +22,20 @@
                 <tr>
                     <td>Cédula:</td>
                     <td>
-                        <input type="text" name="cedula" value="${!empty empleado ? empleado.cedula : param.cedula}" id="cedula" />
+                        <input type="text" name="cedula" value="${param.cedula}" id="cedula" />
                     </td>
                 </tr>
                 <tr>
                     <td>Nombre:</td>
                     <td>
-                        <input type="text" name="nombre" value="${!empty empleado ? empleado.nombre : param.nombre}" id="nombre" />
+                        <input type="text" name="nombre" value="${param.nombre}" id="nombre" />
                     </td>
                 </tr>
 
-                <c:set var="sueldo" scope="page" value="${!empty empleado ? empleado.sueldo : param.sueldo}" />
+                <c:set var="sueldo" scope="page" value="${param.sueldo}" />
 
                 <c:catch var="ex">
-                    <fmt:formatNumber type="number" pattern="0.00" value="${!empty empleado ? empleado.sueldo : param.sueldo}" var="sueldo" scope="page" />
+                    <fmt:formatNumber type="number" pattern="0.00" value="${param.sueldo}" var="sueldo" scope="page" />
                 </c:catch>
 
                 <tr>
@@ -47,13 +47,13 @@
                 <tr>
                     <td>Clave:</td>
                     <td>
-                        <input type="text" name="clave" value="${!empty empleado ? empleado.clave : param.clave}" />
+                        <input type="text" name="clave" value="${param.clave}" />
                     </td>
                 </tr>
                 <tr>
                     <td>Fecha de Ingreso (aaaa-mm-dd):</td>
                     <td>
-                        <input type="text" name="fIngreso" value="${!empty empleado ? empleado.fIngreso : param.fIngreso}" />
+                        <input type="text" name="fIngreso" value="${param.fIngreso}" />
                     </td>
                 </tr>
                 <tr>

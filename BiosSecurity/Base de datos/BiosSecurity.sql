@@ -16,6 +16,7 @@ create table Tecnicos (
 	Ecamaras boolean not null,
     Ealarmas boolean not null,
     Cedula bigint not null,
+    BajaLogica boolean not null,
     foreign key (Cedula) references Empleados(Cedula),
     primary key (Cedula)
 );
@@ -23,6 +24,7 @@ create table Tecnicos (
 create table Cobradores (
 	Transporte varchar(20),
     Cedula bigint not null,
+    BajaLogica boolean not null,
     foreign key (Cedula) references Empleados(Cedula),
     primary key (Cedula)
 );
@@ -138,19 +140,19 @@ VALUES (4);
 INSERT INTO Empleados
 VALUES (2, 'aaaaaben', 1111,20101010, 1000);
 INSERT INTO Tecnicos
-VALUES (false, true,2);
+VALUES (false, true,2, false);
 INSERT INTO Empleados
 VALUES (3, 'roberto', 1111,20101010, 1000);
 INSERT INTO Tecnicos
-VALUES (true, false,3);
+VALUES (true, false,3, false);
 INSERT INTO Empleados
 VALUES (5, 'jose', 1111,20101010, 1000);
 INSERT INTO Cobradores
-VALUES ('camioneta',5);
+VALUES ('camioneta',5, false);
 INSERT INTO Empleados
 VALUES (6, 'roberto', 1111,20101010, 1000);
 INSERT INTO Cobradores
-VALUES ('auto',6);
+VALUES ('auto',6, false);
 
 INSERT INTO Clientes
 VALUES(7, 'martin', 'Goes', 'calle 1234', '111111');
@@ -753,7 +755,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AltaTecnico(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, peAlarmas boolean, peCamaras boolean, OUT pError VARCHAR(500))
+CREATE procedure AltaTecnico(pCedula bigint, pNombre VARCHAR(25), pClave VARCHAR(20), pfIngreso datetime, psueldo double, peAlarmas boolean, peCamaras boolean, OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -769,28 +771,50 @@ cuerpo:BEGIN
 	END;
     
     
-    IF EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula)
+    IF EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula AND BajaLogica = false)
     THEN
 		SET pError = 'Ya existe el tecnico que desea ingresar en el sistema!';
             
 		LEAVE cuerpo;
     END IF;
     
-    
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
-	
-	SET mensajeError = 'No se pudo agregar el empleado correctamente!';
-	
     
-	INSERT INTO Empleados
-    VALUES(pCedula, nombre, clave, fIngreso, sueldo);
     
-	SET mensajeError = 'No se pudo agregar el tecnico correctamente!.';
+    IF EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula AND BajaLogica = true)
+    THEN
+		SET mensajeError = 'No se pudo agregar el empleado correctamente!';
 	
-	INSERT INTO Tecnicos
-	VALUES(peCamaras, peAlarmas, pCedula);
+		UPDATE Empleados
+        SET Nombre = pNombre, Clave = pClave, FIngreso = pfIngreso, Sueldo = psueldo
+		WHERE Cedula = pCedula;
+    
+		SET mensajeError = 'No se pudo agregar el tecnico correctamente!.';
+	
+		UPDATE Tecnicos
+		SET Ecamaras = peCamaras, Ealarmas = peAlarmas, BajaLogica = false
+		WHERE Cedula = pCedula;
+    
+    END IF;
+    
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula)
+    THEN
+		
+		SET mensajeError = 'No se pudo agregar el empleado correctamente!';
+	
+		
+		INSERT INTO Empleados
+		VALUES(pCedula, nombre, clave, fIngreso, sueldo);
+    
+		SET mensajeError = 'No se pudo agregar el tecnico correctamente!.';
+	
+		INSERT INTO Tecnicos
+		VALUES(peCamaras, peAlarmas, pCedula, false);
+        
+    END IF;
+    
 	
 	COMMIT;
     
@@ -820,7 +844,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula)
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula AND BajaLogica = false)
     THEN
 		SET pError = 'No existe el tecnico que desea modificar en el sistema!';
             
@@ -875,7 +899,7 @@ cuerpo:BEGIN
 	END;
     
     
-    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula)
+    IF NOT EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula AND BajaLogica = false)
     THEN
 		SET pError = 'El tecnico que desea eliminar no existe en el sistema!';
             
@@ -887,17 +911,37 @@ cuerpo:BEGIN
     
 	START TRANSACTION; 
     
+    IF EXISTS(SELECT * FROM Alarmas WHERE Tecnico = pCedula)
+    THEN
+        
+		SET mensajeError = 'No se pudo eliminar el tecnico correctamente!.';
+		
+		UPDATE Tecnicos
+		SET BajaLogica = true
+		WHERE Cedula = pCedula;
+    
+    ELSEIF EXISTS(SELECT * FROM Camaras WHERE Tecnico = pCedula)
+    THEN
+        
+		SET mensajeError = 'No se pudo eliminar el tecnico correctamente!.';
+		
+		UPDATE Tecnicos
+		SET BajaLogica = true
+		WHERE Cedula = pCedula;
+    
+    ELSE
+        
+		SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
 	
-	SET mensajeError = 'No se pudo eliminar el tecnico correctamente!';
-	
-    DELETE FROM Tecnicos WHERE Tecnicos.Cedula = pCedula;
+		DELETE FROM Tecnicos WHERE Tecnicos.Cedula = pCedula;
 	 
     
-	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
+		SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
 	
-	DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
+		DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
     
-	
+    END IF;
+    
 	COMMIT;
     
     SET transaccionActiva = 0;
@@ -1779,7 +1823,7 @@ DELIMITER ;
 
 DELIMITER //
 
-CREATE procedure AgregarCobrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, Transporte varchar(20), OUT pError VARCHAR(500))
+CREATE procedure AgregarCobrador(pCedula bigint, pNombre VARCHAR(25), pClave VARCHAR(20), pfIngreso datetime, psueldo double, pTransporte varchar(20), OUT pError VARCHAR(500))
 cuerpo:BEGIN
 
 	DECLARE mensajeError VARCHAR(500);
@@ -1797,17 +1841,38 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
+    
+    IF EXISTS(SELECT * FROM Cobradores WHERE Cedula = pCedula AND BajaLogica = true)
+    THEN
+		SET mensajeError = 'No se pudo agregar el empleado correctamente!';
 	
-	SET mensajeError = 'No se pudo agregar el empleado correctamente!';
+		UPDATE Empleados
+        SET Nombre = pNombre, Clave = pClave, FIngreso = pfIngreso, Sueldo = psueldo
+		WHERE Cedula = pCedula;
+    
+		SET mensajeError = 'No se pudo agregar el cobrador correctamente!.';
+	
+		UPDATE Cobradores
+		SET Transporte = pTransporte, BajaLogica = false
+		WHERE Cedula = pCedula;
+    
+    END IF;
+    
+    IF NOT EXISTS(SELECT * FROM Cobradores WHERE Cedula = pCedula)
+    THEN
+		
+		SET mensajeError = 'No se pudo agregar el empleado correctamente!';
 	
     
-	INSERT INTO biossecurity.empleados
-    VALUES(pCedula, nombre, clave, fIngreso, sueldo);
+		INSERT INTO biossecurity.empleados
+		VALUES(pCedula, nombre, clave, fIngreso, sueldo);
     
-	SET mensajeError = 'No se pudo agregar el cobrador correctamente!.';
+		SET mensajeError = 'No se pudo agregar el cobrador correctamente!.';
 	
-	INSERT INTO biossecurity.cobradores
-	VALUES(Transporte, pCedula);
+		INSERT INTO biossecurity.cobradores
+		VALUES(Transporte, pCedula, false);
+        
+    END IF;
 	
 	COMMIT;
     
@@ -1892,15 +1957,29 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
+    
+    IF EXISTS(SELECT * FROM cabezalrecibo WHERE Cobrador = pCedula)
+    THEN
+        
+		SET mensajeError = 'No se pudo eliminar el cobrador correctamente!.';
+		
+		UPDATE Cobradores
+		SET BajaLogica = true
+		WHERE Cedula = pCedula;
+    
+    ELSE
+        
+		SET mensajeError = 'No se pudo eliminar el cobrador correctamente!';
 	
-	SET mensajeError = 'No se pudo eliminar el cobrador correctamente!';
-	
-    DELETE FROM biossecurity.cobradores WHERE cobradores.Cedula = pCedula;
+		DELETE FROM biossecurity.cobradores WHERE cobradores.Cedula = pCedula;
 	 
     
-	SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
+		SET mensajeError = 'No se pudo eliminar el empleado correctamente!.';
 	
-	DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
+		DELETE FROM Empleados WHERE Empleados.Cedula = pCedula;
+    
+    END IF;
+	
 	
 	COMMIT;
     

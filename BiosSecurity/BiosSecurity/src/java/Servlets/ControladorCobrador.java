@@ -414,6 +414,7 @@ public class ControladorCobrador extends Controlador {
             
             cargarMensaje("¡Cobrador modificado con éxito!", request.getSession());
             
+            request.removeAttribute("empleado");
             
             response.sendRedirect("cobradores");
             
@@ -505,6 +506,7 @@ public class ControladorCobrador extends Controlador {
             
             cargarMensaje("¡Empleado eliminado con éxito!", request.getSession());
             
+            request.removeAttribute("empleado");
             
             response.sendRedirect("cobradores");
             

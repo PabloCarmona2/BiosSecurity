@@ -426,7 +426,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡Tecnico modificado con éxito!", request.getSession());
             
-            
+            request.removeAttribute("empleado");
             response.sendRedirect("tecnicos");
             
         } catch (Exception ex) {
@@ -519,6 +519,7 @@ public class ControladorTecnico extends Controlador {
             
             cargarMensaje("¡Empleado eliminado con éxito!", request.getSession());
             
+            request.removeAttribute("empleado");
             
             response.sendRedirect("tecnicos");
             
