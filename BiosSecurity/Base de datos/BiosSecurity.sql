@@ -773,7 +773,7 @@ cuerpo:BEGIN
     
     IF EXISTS(SELECT * FROM Tecnicos WHERE Cedula = pCedula AND BajaLogica = false)
     THEN
-		SET pError = 'Ya existe el tecnico que desea ingresar en el sistema!';
+		SET pError = 'Ya existe un tecnico en el sistema con esta cedula!.';
             
 		LEAVE cuerpo;
     END IF;
@@ -1500,9 +1500,9 @@ cuerpo:BEGIN
 		SET pError = mensajeError;
 	END;
     
-	IF EXISTS(SELECT * FROM Administradores WHERE Cedula = pCedula AND BajaLogica = false)
+	IF EXISTS(SELECT * FROM Administradores WHERE Cedula = pCedula)
     THEN
-		SET pError = 'Ya existe el administrador que desea ingresar en el sistema!';
+		SET pError = 'Ya existe un administrador en el sistema con esta cedula!.';
             
 		LEAVE cuerpo;
     END IF;
@@ -1530,6 +1530,9 @@ cuerpo:BEGIN
 END//
 
 DELIMITER ;
+
+#CALL AgregarAdministrador(1, 'carlorio', '1212as', '20170210', 12345, @salida);
+
 DELIMITER //
 
 CREATE procedure ModificarAdministrador(pCedula bigint, nombre VARCHAR(25), clave VARCHAR(20), fIngreso datetime, sueldo double, OUT pError varchar(500))
@@ -1806,6 +1809,15 @@ cuerpo:BEGIN
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 
+    
+    IF EXISTS(SELECT * FROM Cobradores WHERE Cedula = pCedula AND BajaLogica = false)
+    THEN
+		
+        SET pError = 'Ya existe un cobrador en el sistema con esta cedula!.';
+        
+        LEAVE cuerpo;
+    
+    END IF;
     
     IF EXISTS(SELECT * FROM Cobradores WHERE Cedula = pCedula AND BajaLogica = true)
     THEN
