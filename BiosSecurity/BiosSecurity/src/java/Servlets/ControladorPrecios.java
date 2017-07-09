@@ -144,7 +144,7 @@ public class ControladorPrecios extends Controlador {
             return;
             
         }
-        String rutaRelativa = "/Precios.txt";
+        String rutaRelativa = "/WEB-INF/precio/Precios.txt";
         String rutaAbsoluta = getServletContext().getRealPath(rutaRelativa);
         
         Precios precios = new Precios(baseAlarmas, baseCamaras, adicionalAlarma, adicionalCamara, monitoreoAlarmas, monitoreoCamaras);
