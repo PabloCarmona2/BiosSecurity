@@ -35,7 +35,6 @@
                 <c:if test="${empleado.eAlarmas == false && empleado.eCamaras == false}">
                     <li><strong>Especializacion:</strong> Ninguna</li>
                 </c:if>
-                <li><strong>Especializacion:</strong> <jsp:getProperty name="empleado" property="especializacion" /></li>
             </ul>
         </c:if>
         
