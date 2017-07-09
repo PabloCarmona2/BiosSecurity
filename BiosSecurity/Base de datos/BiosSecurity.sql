@@ -1102,6 +1102,7 @@ CALL RegistrarLineaEnRecibo(500, 2, @salida);*/
 
 #-------------------------------------SP SERVICIOS ALARMA-----------------------------
 
+
 DELIMITER //
 
 CREATE procedure AltaServicioAlarma(pFecha datetime, pMonitoreo boolean, idprop bigint, pCliente bigint, codanulacion bigint, OUT pError VARCHAR(500))
@@ -1119,6 +1120,14 @@ cuerpo:BEGIN
 		SET pError = mensajeError;
 	END;
     
+    IF EXISTS(SELECT * FROM servicios INNER JOIN servicioalarmas ON servicios.NumServicio = servicioalarmas.NumServicio WHERE servicios.Cliente = pCliente AND servicios.Propiedad = idProp)
+    THEN
+    
+		SET pError = 'Esta propiedad ya tiene un servicio de alarmas instalado.';
+        
+        LEAVE cuerpo;
+    
+    END IF;
     
     SET transaccionActiva = 1;
     
@@ -1305,7 +1314,9 @@ END//
 
 DELIMITER ;
 
+
 DELIMITER //
+
 
 CREATE procedure AltaServicioVideo(pFecha datetime, pMonitoreo boolean, idprop bigint, pCliente bigint, terminal boolean, OUT pError VARCHAR(500)) 
 cuerpo:BEGIN
@@ -1321,6 +1332,16 @@ cuerpo:BEGIN
 		
 		SET pError = mensajeError;
 	END;
+    
+    
+    IF EXISTS(SELECT * FROM servicios INNER JOIN serviciovideovigilancia ON servicios.NumServicio = serviciovideovigilancia.NumServicio WHERE servicios.Cliente = pCliente AND servicios.Propiedad = idProp)
+    THEN
+    
+		SET pError = 'Esta propiedad ya tiene un servicio de video vigilancia instalado.';
+        
+        LEAVE cuerpo;
+    
+    END IF;
     
     
     SET transaccionActiva = 1;

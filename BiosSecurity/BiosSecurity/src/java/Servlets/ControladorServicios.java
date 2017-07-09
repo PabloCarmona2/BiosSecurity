@@ -242,7 +242,7 @@ public class ControladorServicios extends Controlador {
                     
                 }catch(Exception ex){
                     
-                    throw new Exception("¡ERROR! al dar de alta el servicio");
+                    throw new Exception(ex.getMessage());
                     
                 }
                 
@@ -297,7 +297,7 @@ public class ControladorServicios extends Controlador {
                     
                 }catch(Exception ex){
                     
-                    throw new Exception("¡ERROR! al dar de alta el servicio");
+                    throw new Exception(ex.getMessage());
                     
                 }
             }
