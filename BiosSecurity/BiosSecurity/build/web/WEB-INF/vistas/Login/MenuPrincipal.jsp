@@ -15,6 +15,17 @@
     <jsp:body>
         
         <c:if test="${empleadoLogueado.getClass().simpleName == 'Administrador'}">
+            
+            <p>El dia del mes actual es : ${diaActual}</p>
+            
+                <c:if test="${diaActual > 25}">
+                    <p><strong>Ya puede generar los recibos correspondientes a este mes!.</strong></p>
+                </c:if>
+                <c:if test="${diaActual <= 25}">
+                    <p><strong>Todavia no puede generar los recibos correspondientes a este mes!.</strong></p>
+                </c:if>
+            
+            
             <ul>
                 <li><a href="administrador">Control de Administradores</a></li>
                 <li><a href="tecnicos">Control de Tecnicos</a></li>

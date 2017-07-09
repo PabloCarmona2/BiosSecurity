@@ -58,7 +58,7 @@
                                     <option value="${mes}">Diciembre</option>
                                 </c:when>
                             </c:choose>
-                      </c:forEach>
+                        </c:forEach>
                 </select>
             
                 <p><input type="submit" name="accion" value="Generar" /></p>

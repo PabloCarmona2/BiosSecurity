@@ -95,6 +95,7 @@ public class ControladorRecibos extends Controlador {
                 mesParaVector++;
                 
             }
+            
             if(dia > 25){
                 meses.add(mes);
             }

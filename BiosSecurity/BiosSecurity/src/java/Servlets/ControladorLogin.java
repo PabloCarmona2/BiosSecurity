@@ -8,6 +8,8 @@ package Servlets;
 import DataTypes.Empleado;
 import Logica.FabricaLogica;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,6 +45,15 @@ public class ControladorLogin extends Controlador{
         }
         
         if(request.getSession().getAttribute("empleadoLogueado") != null){
+            Date fechaActual = new Date();
+            
+            Calendar calendario = Calendar.getInstance();
+            calendario.setTime(fechaActual);
+            
+            Integer dia = calendario.get(Calendar.DAY_OF_MONTH);
+            
+            request.getSession().setAttribute("diaActual", dia);
+            
             mostrarVista("MenuPrincipal", request, response);
         }else{
             mostrarVista("login", request, response);
@@ -79,7 +90,14 @@ public class ControladorLogin extends Controlador{
             Empleado empleado = FabricaLogica.GetLogicaEmpleado().LoginEmpleado(cedula, clave);
             if (empleado != null) {
                 request.getSession().setAttribute("empleadoLogueado", empleado);
-                
+                Date fechaActual = new Date();
+
+                Calendar calendario = Calendar.getInstance();
+                calendario.setTime(fechaActual);
+
+                Integer dia = calendario.get(Calendar.DAY_OF_MONTH);
+
+                request.getSession().setAttribute("diaActual", dia);
                 cargarMensaje("¡Login exitoso!", request);
                 mostrarVista("MenuPrincipal", request, response);
             } else {
