@@ -1499,7 +1499,14 @@ cuerpo:BEGIN
 		
 		SET pError = mensajeError;
 	END;
-
+    
+	IF EXISTS(SELECT * FROM Administradores WHERE Cedula = pCedula AND BajaLogica = false)
+    THEN
+		SET pError = 'Ya existe el administrador que desea ingresar en el sistema!';
+            
+		LEAVE cuerpo;
+    END IF;
+    
     SET transaccionActiva = 1;
     
 	START TRANSACTION; 

@@ -43,7 +43,7 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
         try {
             Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         Connection conexion = null;
@@ -120,9 +120,9 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
     
     public void eliminarServicioAlarma(ServicioAlarma servicio)throws Exception{
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
                 CallableStatement consulta = conexion.prepareCall("{ CALL EliminarServicioAlarma(?, ?) }")) {   
@@ -142,9 +142,9 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
     }
     public void editarServicioAlarma(ServicioAlarma unServicio)throws Exception{
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
                 CallableStatement consulta = conexion.prepareCall("{ CALL EditarServicioAlarma(?, ?, ?, ?, ?, ?, ?) }")) {
@@ -218,10 +218,10 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
           Connection conexion = null;
           PreparedStatement consulta = null;
           ResultSet resultadoConsulta;
-         try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+         try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
          try{
             conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -264,10 +264,10 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
     
     public List<ServicioAlarma> ListaXCliente(Cliente cliente, Date pfecha) throws Exception{
         
-        try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
       
         
@@ -340,10 +340,10 @@ public class PersistenciaServicioAlarma implements IPersistenciaServicioAlarma{
     
     public List<ServicioAlarma> Listar() throws Exception{
         
-        try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
       
         

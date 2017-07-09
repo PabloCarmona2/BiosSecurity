@@ -159,9 +159,9 @@ public class ControladorPrecios extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al agregar el administrador.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al setear los precios." + ex.getMessage(), request);
             
-            mostrarVista("agregarAdministrador", request, response);
+            mostrarVista("index", request, response);
             
         }
     }

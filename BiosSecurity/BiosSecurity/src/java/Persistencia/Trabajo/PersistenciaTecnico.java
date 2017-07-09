@@ -36,9 +36,9 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
     public Tecnico Buscar(int cedula) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         Connection conexion = null;
@@ -100,9 +100,9 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
     public void Agregar(Tecnico tecnico) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -136,9 +136,9 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
     public void Modificar(Tecnico tecnico) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -172,9 +172,9 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
     public void Eliminar(Tecnico tecnico) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -199,9 +199,9 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
     public List<Tecnico> ListarTecnicos() throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -249,10 +249,10 @@ public class PersistenciaTecnico implements IPersistenciaTecnico{
         PreparedStatement consulta = null;
         ResultSet resultadoConsulta;
         
-         try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try{

@@ -32,9 +32,9 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
     
     public Propiedad Buscar(int id, int pCliente) throws Exception{
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         Connection conexion = null;
@@ -91,9 +91,9 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
     
     public Propiedad BuscarUltimaXCliente(int pCliente) throws Exception{
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         Connection conexion = null;
@@ -150,9 +150,9 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
     
     public Propiedad BuscarXServicio(int numServicio) throws Exception{
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         Connection conexion = null;
@@ -210,9 +210,9 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
     
     public List<Propiedad> ListarXCliente(Cliente cliente) throws Exception{
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         Connection conexion = null;
@@ -270,10 +270,11 @@ public class PersistenciaPropiedad implements IPersistenciaPropiedad{
     public void Modificar(Propiedad casa) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
+        
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
                 CallableStatement consulta = conexion.prepareCall("{ CALL ModificarPropiedad(?, ?, ?, ?, ?) }")) {
            

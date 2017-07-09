@@ -43,10 +43,10 @@ public class PersistenciaCliente implements IPersistenciaCliente{
           ResultSet resultadoConsulta;
           Cliente cli=null;
         
-         try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
       
        try{
@@ -92,10 +92,10 @@ public class PersistenciaCliente implements IPersistenciaCliente{
     
     public List<Cliente> Listar()throws Exception{
         
-        try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -129,10 +129,10 @@ public class PersistenciaCliente implements IPersistenciaCliente{
     }
     
     public HashMap<Cliente, List<Servicio>> ClientesYServiciosOrdenados(Date fecha) throws Exception{
-        try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         Connection conexion = null;
@@ -194,9 +194,9 @@ public class PersistenciaCliente implements IPersistenciaCliente{
     public void Modificar(Cliente cliente) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");

@@ -34,6 +34,11 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
     }
     
     public Administrador Buscar(int cedula)throws Exception{
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
+        } catch (Exception ex) {
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+        }
         
           Administrador admin=null;
         
@@ -88,9 +93,9 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
     public void Agregar(Administrador admin) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -119,9 +124,9 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
     public void Modificar(Administrador admin) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -151,9 +156,9 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
     public void Eliminar(Administrador admin) throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");
@@ -181,10 +186,10 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
         PreparedStatement consulta = null;
         ResultSet resultadoConsulta;
         
-         try  {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+        try {
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try{
@@ -230,9 +235,9 @@ public class PersistenciaAdministrador implements IPersistenciaAdministrador {
     public List<Administrador> ListarAdministrador() throws Exception{
         
         try {
-            Class.forName("com.mysql.jdbc.Driver")/*.newInstance()*/;
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
         } catch (Exception ex) {
-            System.out.println("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
+            throw new Exception("¡ERROR! Ocurrió un error al instanciar el driver de MySQL.");
         }
         
         try(Connection conexion = DriverManager.getConnection("jdbc:mysql://localhost:3306/BiosSecurity", "root", "root");

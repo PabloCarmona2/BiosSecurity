@@ -212,7 +212,7 @@ public class ControladorTecnico extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al agregar el tecnico.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al agregar el tecnico." + ex.getMessage(), request);
             
             mostrarVista("agregarTecnico", request, response);
             
@@ -432,7 +432,7 @@ public class ControladorTecnico extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado." + ex.getMessage(), request);
             
             mostrarVista("modificarTecnico", request, response);
             
@@ -525,7 +525,7 @@ public class ControladorTecnico extends Controlador {
             response.sendRedirect("tecnicos");
             
         } catch (Exception ex) {
-            cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado." + ex.getMessage(), request);
             
             mostrarVista("eliminarTecnico", request, response);
         }

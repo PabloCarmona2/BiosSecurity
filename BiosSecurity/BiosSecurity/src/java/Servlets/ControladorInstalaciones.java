@@ -251,11 +251,10 @@ public class ControladorInstalaciones extends Controlador {
                     }
                 }catch(Exception ex){
                      
-                    cargarMensaje("¡ERROR! Se produjo un error al instalar el dispositivo.", request);
+                    cargarMensaje("¡ERROR! Se produjo un error al instalar el dispositivo." + ex.getMessage(), request);
                      mostrarVista("index", request, response);
                 }
-                
-//                
+                 
                 
             }
         }catch(Exception ex){
@@ -350,7 +349,7 @@ public class ControladorInstalaciones extends Controlador {
                 
             }
         }catch(Exception ex){
-            cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo." + ex.getMessage(), request);
         }
     }
 }

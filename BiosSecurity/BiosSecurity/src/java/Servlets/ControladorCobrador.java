@@ -212,7 +212,7 @@ public class ControladorCobrador extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al agregar el cobrador.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al agregar el cobrador." + ex.getMessage(), request);
             
             mostrarVista("agregarCobrador", request, response);
             
@@ -421,7 +421,7 @@ public class ControladorCobrador extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado." + ex.getMessage(), request);
             
             mostrarVista("modificarCobrador", request, response);
             
@@ -512,7 +512,7 @@ public class ControladorCobrador extends Controlador {
             response.sendRedirect("cobradores");
             
         } catch (Exception ex) {
-            cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado." + ex.getMessage(), request);
             
             mostrarVista("eliminarCobrador", request, response);
         }

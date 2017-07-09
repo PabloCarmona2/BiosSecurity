@@ -307,7 +307,7 @@ public class ControladorServicios extends Controlador {
             response.sendRedirect("servicios");
             
         }catch(Exception ex){
-            cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo." + ex.getMessage(), request);
             mostrarVista("index", request, response);
         }
     }
@@ -383,7 +383,7 @@ public class ControladorServicios extends Controlador {
                 
             }
         }catch(Exception ex){
-            cargarMensaje("¡ERROR! Se produjo un error al intentar desactivar el servicio.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al intentar desactivar el servicio." + ex.getMessage(), request);
         }
     }
     
@@ -504,7 +504,7 @@ public class ControladorServicios extends Controlador {
             response.sendRedirect("servicios?accion=procesarpropiedad");
             
         }catch(Exception ex){
-            cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al procesar el cliente." + ex.getMessage(), request);
             mostrarVista("index", request, response);
         }
     }
@@ -611,7 +611,7 @@ public class ControladorServicios extends Controlador {
             response.sendRedirect("servicios?accion=registrarservicio");
             
         }catch(Exception ex){
-            cargarMensaje("¡ERROR! Se produjo un error al intentar instalar el dispositivo.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al intentar procesar la propiedad." + ex.getMessage(), request);
             mostrarVista("index", request, response);
         }
     }

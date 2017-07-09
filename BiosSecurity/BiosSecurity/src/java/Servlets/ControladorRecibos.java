@@ -200,7 +200,7 @@ public class ControladorRecibos extends Controlador {
             }
         }catch(Exception ex){
             
-            cargarMensaje("¡ERROR! Se produjo un error al intentar generar los recibos.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al intentar generar los recibos." + ex.getMessage(), request);
         
         }
     }
@@ -226,7 +226,7 @@ public class ControladorRecibos extends Controlador {
             request.setAttribute("zona",barrio);
             
         } catch (Exception ex) {
-            cargarMensaje("¡ERROR! Se produjo un error al mostrar los recibos.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al mostrar los recibos." + ex.getMessage(), request);
         }
         
         mostrarVista("listarRecibosPorZona", request, response);

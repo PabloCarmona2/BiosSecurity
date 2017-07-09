@@ -196,7 +196,7 @@ public class ControladorAdministrador extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al agregar el administrador.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al agregar el administrador." + ex.getMessage(), request);
             
             mostrarVista("agregarAdministrador", request, response);
             
@@ -400,7 +400,7 @@ public class ControladorAdministrador extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al modificar el empleado." + ex.getMessage(), request);
             
             mostrarVista("modificarAdministrador", request, response);
             
@@ -497,7 +497,7 @@ public class ControladorAdministrador extends Controlador {
             response.sendRedirect("administrador");
             
         } catch (Exception ex) {
-            cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al eliminar el empleado." + ex.getMessage(), request);
             
             mostrarVista("eliminarAdministrador", request, response);
         }

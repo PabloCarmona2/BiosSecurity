@@ -196,7 +196,7 @@ public class ControladorDispositivo extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al agregar el dispositivo.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al agregar el dispositivo." + ex.getMessage(), request);
             
             mostrarVista("agregar", request, response);
             
@@ -288,7 +288,7 @@ public class ControladorDispositivo extends Controlador {
             response.sendRedirect("dispositivos");
             
         } catch (Exception ex) {
-            cargarMensaje("¡ERROR! Se produjo un error al eliminar el dispositivo.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al eliminar el dispositivo." + ex.getMessage(), request);
             
             mostrarVista("eliminar", request, response);
         }

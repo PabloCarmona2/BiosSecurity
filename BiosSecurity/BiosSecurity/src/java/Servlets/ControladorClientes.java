@@ -328,7 +328,7 @@ public class ControladorClientes extends Controlador {
             
         } catch (Exception ex) {
             
-            cargarMensaje("¡ERROR! Se produjo un error al modificar la propiedad.", request);
+            cargarMensaje("¡ERROR! Se produjo un error al modificar la propiedad." + ex.getMessage(), request);
             
             mostrarVista("modificarPropiedad", request, response);
             
