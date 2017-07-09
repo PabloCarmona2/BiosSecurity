@@ -15,9 +15,13 @@
     <jsp:body>
         <fmt:setLocale value="en-US" />
         
+        <t:Mensaje />
+        
         <form>
             <p><input type="text" name="buscar" value="${param.buscar}" id="buscar" /> <input type="submit" value="Buscar" /></p>
         </form>
+        
+        <p><a href="login">Volver...</a></p>
         
         <table class="listado">
             <tr>
@@ -61,9 +65,6 @@
             </c:forEach>
         </table>
         
-        <p><a href="login">Volver...</a></p>
-        
-        <t:Mensaje />
         
         <script>
             document.getElementById('buscar').focus();

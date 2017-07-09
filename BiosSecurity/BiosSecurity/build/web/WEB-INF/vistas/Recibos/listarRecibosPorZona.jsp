@@ -12,6 +12,15 @@
 <t:PaginaMaestra titulo="Administradores">
     <jsp:body>
         <fmt:setLocale value="en-US" />
+        
+        <t:Mensaje />
+        
+        <form>
+            <p><input type="text" name="buscar" value="${param.buscar}" id="buscar" /> <input type="submit" value="Buscar" /></p>
+        </form>
+        
+        <p><a href="recibos">Volver...</a></p>
+        
         <form method="post" accept-charset="ISO-8859-1">
             <select name="recibosacobrar">
                 <option selected>Seleccione un barrio</option>
@@ -42,13 +51,5 @@
             </c:forEach>
         </table>
         
-        <p><a href="recibos">Volver...</a></p>
-     
-        <t:Mensaje />
-        
-        <script>
-            document.getElementById('buscar').focus();
-            document.getElementById('buscar').select();
-        </script>
     </jsp:body>
 </t:PaginaMaestra>
