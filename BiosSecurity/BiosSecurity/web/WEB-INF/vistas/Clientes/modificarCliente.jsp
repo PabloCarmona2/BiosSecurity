@@ -56,11 +56,7 @@
         </table>
     </form>
 
-    <script>
-        document.getElementById('${idFoco}').focus();
-        document.getElementById('${idFoco}').select();
-    </script>
-        <p><a href="administrador">Volver...</a></p>  
+        <p><a href="clientes">Volver...</a></p>  
         <t:Mensaje />
         
     </jsp:body>

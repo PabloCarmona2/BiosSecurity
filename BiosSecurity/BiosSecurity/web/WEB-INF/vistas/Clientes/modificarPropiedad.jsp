@@ -53,10 +53,6 @@
             </table>
         </form>
 
-        <script>
-            document.getElementById('${idFoco}').focus();
-            document.getElementById('${idFoco}').select();
-        </script>
         <p><a href="clientes">Volver...</a></p>
         <t:Mensaje />
         

@@ -31,7 +31,7 @@
                     <td class="texto-derecha">${cliente.dirCobro}</td>
                     <td class="texto-derecha">${cliente.telefono}</td>
                     <td>
-                        <a href="clientes?accion=ver&cedula=${cliente.cedula}"><img src="imagenes/listar.png" alt="Ver" title="Ver..." ></a>&nbsp;&nbsp;
+                        <a href="clientes?accion=ver&cedula=${cliente.cedula}"><img src="imagenes/listar.png" alt="Ver" title="Ver propiedades..." ></a>&nbsp;&nbsp;
                         <a href="clientes?accion=modificarcliente&cedula=${cliente.cedula}"><img src="imagenes/modificar.png" alt="Modificar" title="Modificar..." ></a>
                     </td>
                 </tr>
