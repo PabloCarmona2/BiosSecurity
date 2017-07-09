@@ -22,11 +22,11 @@
         <div class="cabezal">
             <img src="imagenes/Banner.png" alt="Bios Security">
             
+            <h2>${titulo}</h2>
             <c:if test="${!empty empleadoLogueado}">
+                <h3 style="color: white">Tipo de sesion: ${empleadoLogueado.getClass().simpleName} - Usuario: ${empleadoLogueado.nombre} (${empleadoLogueado.cedula})</h3>
                 <p style="float:right" style="color: whitesmoke"><a href="login?accion=logout">LOGOUT</a></p>
             </c:if>
-            
-            <h2>${titulo}</h2>
         </div>
         
         <jsp:doBody />
