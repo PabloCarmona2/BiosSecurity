@@ -235,6 +235,10 @@ INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
 VALUES(20170610, true, 1, 8, false);
 INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
 VALUES(1267533, 7);
+INSERT INTO Servicios(Fecha, Monitoreo, Propiedad, Cliente, BajaLogica)
+VALUES(20170510, true, 2, 8, false);
+INSERT INTO ServicioAlarmas(CodAnulacion, NumServicio)
+VALUES(1267533, 8);
 
 
 INSERT INTO Alarmas
